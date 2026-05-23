@@ -1,0 +1,12 @@
+* text=auto eol=lf
+
+*.cs text charset=utf-8
+*.csproj text charset=utf-8
+*.props text charset=utf-8
+*.md text charset=utf-8
+*.ps1 text charset=utf-8
+*.sln text charset=utf-8
+*.json text charset=utf-8
+*.yml text charset=utf-8
+*.yaml text charset=utf-8
+*.mdc text charset=utf-8

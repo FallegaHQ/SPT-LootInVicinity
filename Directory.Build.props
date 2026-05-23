@@ -1,0 +1,10 @@
+<Project>
+    <PropertyGroup>
+        <!-- Override in Directory.Build.props.user if your install path differs -->
+        <TarkovDir Condition="'$(TarkovDir)' == ''">D:\Games\Escape from Tarkov</TarkovDir>
+        <TarkovManagedDir>$(TarkovDir)\EscapeFromTarkov_Data\Managed</TarkovManagedDir>
+        <TarkovBepInExDir>$(TarkovDir)\BepInEx</TarkovBepInExDir>
+        <TarkovPluginsDir>$(TarkovBepInExDir)\plugins</TarkovPluginsDir>
+        <DeployToPlugins>true</DeployToPlugins>
+    </PropertyGroup>
+</Project>

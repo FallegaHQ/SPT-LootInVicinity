@@ -1,0 +1,8 @@
+<Project>
+  <!-- Copy to Directory.Build.props.user to override the game install path and other properties -->
+  <PropertyGroup>
+    <TarkovDir>D:\Games\Escape from Tarkov</TarkovDir>
+    <!-- Copies DLL to BepInEx/plugins/<AssemblyName> -->
+    <DeployToPlugins>false</DeployToPlugins>
+  </PropertyGroup>
+</Project>

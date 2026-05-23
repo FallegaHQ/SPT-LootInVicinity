@@ -1,0 +1,197 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <RootNamespace>Softwyx.LootInVicinity</RootNamespace>
+        <AssemblyName>Softwyx-LootInVicinity</AssemblyName>
+        <Company>https://softwyx.com</Company>
+        <LangVersion>latest</LangVersion>
+        <Nullable>disable</Nullable>
+        <Configurations>Debug;Release;Package</Configurations>
+        <!-- Patch is auto-incremented on each build (see scripts/IncrementVersion.ps1). Edit major/minor here. -->
+        <Version>2.15.98</Version>
+        <!-- Set -p:IncrementVersionOnBuild=false to skip auto-bump (e.g. rebuild without changing version). -->
+        <IncrementVersionOnBuild Condition="'$(IncrementVersionOnBuild)' == ''">true</IncrementVersionOnBuild>
+        <AssemblyVersion>$(Version)</AssemblyVersion>
+        <FileVersion>$(Version)</FileVersion>
+        <Deterministic>true</Deterministic>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <OutputPath>bin\$(Configuration)\</OutputPath>
+        <!-- Set true in Directory.Build.props.user after you copy/rename this template -->
+        <DeployToPlugins>true</DeployToPlugins>
+        <!-- Source: src/ (see docs/README.md). SDK includes src/**/*.cs automatically. -->
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+        <Optimize>false</Optimize>
+        <DebugType>portable</DebugType>
+        <DebugSymbols>true</DebugSymbols>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)'=='Package'">
+        <Optimize>true</Optimize>
+        <DebugType>pdbonly</DebugType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="0Harmony" HintPath="$(TarkovBepInExDir)\core\0Harmony.dll" Private="false"/>
+        <Reference Include="BepInEx" HintPath="$(TarkovBepInExDir)\core\BepInEx.dll" Private="false"/>
+        <Reference Include="spt-common" HintPath="$(TarkovPluginsDir)\spt\spt-common.dll" Private="false"/>
+        <Reference Include="spt-reflection" HintPath="$(TarkovPluginsDir)\spt\spt-reflection.dll" Private="false"/>
+        <Reference Include="Assembly-CSharp" HintPath="$(TarkovManagedDir)\Assembly-CSharp.dll" Private="false"/>
+        <Reference Include="Comfort" HintPath="$(TarkovManagedDir)\Comfort.dll" Private="false"/>
+        <Reference Include="Sirenix.Serialization" HintPath="$(TarkovManagedDir)\Sirenix.Serialization.dll"
+                   Private="false"/>
+        <Reference Include="Sirenix.Utilities" HintPath="$(TarkovManagedDir)\Sirenix.Utilities.dll" Private="false"/>
+        <Reference Include="UnityEngine" HintPath="$(TarkovManagedDir)\UnityEngine.dll" Private="false"/>
+        <Reference Include="UnityEngine.UI" HintPath="$(TarkovManagedDir)\UnityEngine.UI.dll" Private="false"/>
+        <Reference Include="UnityEngine.CoreModule" HintPath="$(TarkovManagedDir)\UnityEngine.CoreModule.dll"
+                   Private="false"/>
+        <Reference Include="UnityEngine.IMGUIModule" HintPath="$(TarkovManagedDir)\UnityEngine.IMGUIModule.dll"
+                   Private="false"/>
+        <Reference Include="UnityEngine.PhysicsModule" HintPath="$(TarkovManagedDir)\UnityEngine.PhysicsModule.dll"
+                   Private="false"/>
+    </ItemGroup>
+
+    <Target Name="IncrementPatchVersion"
+            BeforeTargets="PrepareForBuild"
+            Condition="'$(DesignTimeBuild)' != 'true' AND '$(IncrementVersionOnBuild)' == 'true'">
+        <Exec WorkingDirectory="$(MSBuildProjectDirectory)"
+              ConsoleToMSBuild="true"
+              StandardOutputImportance="low"
+              Command="powershell.exe -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\scripts\IncrementVersion.ps1&quot; -ProjectDir &quot;$(MSBuildProjectDirectory)&quot;">
+            <Output TaskParameter="ConsoleOutput" ItemName="_IncrementVersionOutput"/>
+        </Exec>
+        <PropertyGroup>
+            <Version>@(_IncrementVersionOutput)</Version>
+            <AssemblyVersion>$(Version)</AssemblyVersion>
+            <FileVersion>$(Version)</FileVersion>
+        </PropertyGroup>
+        <Message Importance="high" Text="Built version $(Version) (patch auto-incremented)."/>
+    </Target>
+
+    <Target Name="ValidateTarkovInstall" BeforeTargets="ResolveAssemblyReferences">
+        <Error
+                Condition="!Exists('$(TarkovManagedDir)\Assembly-CSharp.dll')"
+                Text="EFT assemblies not found. Set TarkovDir in Directory.Build.props (current: $(TarkovDir))."/>
+        <Error
+                Condition="!Exists('$(TarkovBepInExDir)\core\BepInEx.dll')"
+                Text="BepInEx not found. Set TarkovDir in Directory.Build.props (current: $(TarkovDir))."/>
+    </Target>
+
+    <PropertyGroup>
+        <ModPluginDir>$(TarkovPluginsDir)\$(AssemblyName)</ModPluginDir>
+        <ModConfigPath>$(TarkovBepInExDir)\config\com.softwyx.lootinvicinity.cfg</ModConfigPath>
+        <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    </PropertyGroup>
+
+    <!-- Set DeployToPlugins=false in Directory.Build.props.user to skip. -->
+    <Target Name="CopyToPlugins" AfterTargets="Build" Condition="'$(DeployToPlugins)'=='true'">
+
+        <PropertyGroup Condition="Exists('$(TarkovPluginsDir)') and Exists('$(ModConfigPath)')">
+            <_ModHadConfig>true</_ModHadConfig>
+        </PropertyGroup>
+
+        <!-- Create plugin directory -->
+        <Message
+                Importance="high"
+                Text="========================================================================="
+                Condition="Exists('$(TarkovPluginsDir)')"/>
+
+        <MakeDir
+                Directories="$(ModPluginDir)"
+                Condition="Exists('$(TarkovPluginsDir)')"/>
+
+        <Message
+                Importance="high"
+                Text="Created plugin directory: $(ModPluginDir)"
+                Condition="Exists('$(TarkovPluginsDir)')"/>
+
+        <!-- Deploy DLL -->
+        <Message
+                Importance="high"
+                Text="========================================================================="
+                Condition="'$(DeployToPlugins)'=='true' and Exists('$(TarkovPluginsDir)')"/>
+
+        <Copy
+                SourceFiles="$(TargetPath)"
+                DestinationFolder="$(ModPluginDir)"
+                SkipUnchangedFiles="true"
+                Condition="'$(DeployToPlugins)'=='true' and Exists('$(TarkovPluginsDir)')"/>
+
+        <Message
+                Importance="high"
+                Text="Deployed $(TargetFileName) -> $(ModPluginDir)"
+                Condition="'$(DeployToPlugins)'=='true' and Exists('$(TarkovPluginsDir)')"/>
+
+        <!-- Deploy PDB only for Debug -->
+        <Message
+                Importance="high"
+                Text="========================================================================="
+                Condition="
+            '$(Configuration)' == 'Debug'
+            and Exists('$(TarkovPluginsDir)')
+            and Exists('$(TargetDir)$(TargetName).pdb')"/>
+
+        <Copy
+                SourceFiles="$(TargetDir)$(TargetName).pdb"
+                DestinationFolder="$(ModPluginDir)"
+                SkipUnchangedFiles="false"
+                Condition="
+            '$(Configuration)' == 'Debug'
+            and Exists('$(TarkovPluginsDir)')
+            and Exists('$(TargetDir)$(TargetName).pdb')"/>
+
+        <Message
+                Importance="high"
+                Text="Deployed debug symbols: $(TargetName).pdb"
+                Condition="
+            '$(Configuration)' == 'Debug'
+            and Exists('$(TarkovPluginsDir)')
+            and Exists('$(TargetDir)$(TargetName).pdb')"/>
+
+        <!-- Remove old plugin copy -->
+        <Message
+                Importance="high"
+                Text="========================================================================="
+                Condition="'$(DeployToPlugins)'=='true' and Exists('$(TarkovPluginsDir)\$(TargetFileName)')"/>
+
+        <Delete
+                Files="$(TarkovPluginsDir)\$(TargetFileName)"
+                Condition="'$(DeployToPlugins)'=='true' and Exists('$(TarkovPluginsDir)\$(TargetFileName)')"/>
+
+        <Message
+                Importance="high"
+                Text="Removed old plugin copy: $(TarkovPluginsDir)\$(TargetFileName)"
+                Condition="'$(DeployToPlugins)'=='true' and Exists('$(TarkovPluginsDir)\$(TargetFileName)')"/>
+
+        <!-- Remove config -->
+        <Message
+                Importance="high"
+                Text="========================================================================="
+                Condition="'$(_ModHadConfig)' == 'true'"/>
+
+        <Delete
+                Files="$(ModConfigPath)"
+                Condition="Exists('$(TarkovPluginsDir)') and Exists('$(ModConfigPath)')"/>
+
+        <Message
+                Importance="high"
+                Text="Removed config (fresh defaults on next launch): $(ModConfigPath)"
+                Condition="'$(_ModHadConfig)' == 'true'"/>
+
+        <!-- Missing plugins dir -->
+        <Message
+                Importance="high"
+                Text="========================================================================="
+                Condition="!Exists('$(TarkovPluginsDir)')"/>
+
+        <Warning
+                Text="Plugins folder not found: $(TarkovPluginsDir)"
+                Condition="!Exists('$(TarkovPluginsDir)')"/>
+
+    </Target>
+
+    <Target Name="PackageMod" AfterTargets="Build" Condition="'$(Configuration)'=='Package'">
+        <Exec Command="powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File &quot;$(ProjectDir)\scripts\package.ps1&quot;"/>
+    </Target>
+</Project>
