@@ -5,17 +5,15 @@ namespace Softwyx.LootInVicinity.Loot;
 
 internal static class PlayerCenterOfMass{
     /// <summary>
-    /// Origin for the main vicinity scan sphere in <see cref="Loot.VicinityLootScanner"/>.
-    /// Uses <see cref="Player.InteractionRay"/> when available, else <see cref="GetBodyMidpointOrigin"/>.
+    /// Origin for the main vicinity scan sphere in <see cref="VicinityLootScanner"/>.
+    /// Body midpoint so overlap covers loot around the player, not only along the interaction ray.
     /// </summary>
     /// <param name="player"></param>
     /// <returns>
     /// World position for overlap queries. <see cref="Vector3.zero"/> when <paramref name="player"/> is null.
     /// </returns>
     public static Vector3 GetMainScanSphereOrigin(Player player){
-        if(!player) return Vector3.zero;
-
-        return TryGetInteractionRayOrigin(player, out var rayOrigin) ? rayOrigin : GetBodyMidpointOrigin(player);
+        return GetBodyMidpointOrigin(player);
     }
 
     /// <summary>

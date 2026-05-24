@@ -11,7 +11,7 @@ namespace Softwyx.LootInVicinity.Loot;
 internal static class VicinityLootScanner{
     private const float MinMainScanRadius = 3f;
     private const float KneeScanRadius    = 1.5f;
-    private const int   MaxColliderBuffer = 128;
+    private const int   MaxColliderBuffer = 512;
 
     private static readonly Collider[]     ColliderBuffer = new Collider[MaxColliderBuffer];
     private static readonly List<LootItem> SphereResults  = new(MaxColliderBuffer);
@@ -57,6 +57,29 @@ internal static class VicinityLootScanner{
         foreach(var loot in SphereResults)
             if(loot)
                 candidates.Add(loot);
+
+        if(candidates.Count > 1) SortByDistanceFrom(mainOrigin, candidates);
+    }
+
+    private static void SortByDistanceFrom(Vector3 origin, List<LootItem> candidates){
+        candidates.Sort(
+                        (a, b) => {
+                            var da = DistanceSqrFromOrigin(origin, a);
+                            var db = DistanceSqrFromOrigin(origin, b);
+
+                            return da.CompareTo(db);
+                        }
+                       );
+    }
+
+    private static float DistanceSqrFromOrigin(Vector3 origin, LootItem loot){
+        if(!loot) return float.MaxValue;
+
+        var collider = loot.GetComponent<Collider>() ?? loot.GetComponentInChildren<Collider>();
+
+        var samplePoint = collider ? collider.ClosestPoint(origin) : loot.TrackableTransform.position;
+
+        return (samplePoint - origin).sqrMagnitude;
     }
 
     private static void CollectSphere(
@@ -92,7 +115,7 @@ internal static class VicinityLootScanner{
 
             if(loot.Item == null || !seenItemIds.Add(loot.Item.Id)) continue;
 
-            if(!TryAcceptLoot(player, loot, origin, radiusSqr, profileId, requireLineOfSight)) continue;
+            if(!TryAcceptLoot(player, loot, collider, origin, radiusSqr, profileId, requireLineOfSight)) continue;
 
             output.Add(loot);
         }
@@ -104,17 +127,21 @@ internal static class VicinityLootScanner{
     /// </summary>
     /// <param name="player"></param>
     /// <param name="loot"></param>
+    /// <param name="hitCollider">Collider from the overlap pass; used for distance and line of sight.</param>
     /// <param name="origin">Centre of the scan sphere for this pass.</param>
     /// <param name="radiusSqr">Squared radius for <paramref name="origin"/>.</param>
     /// <param name="profileId"></param>
     /// <param name="requireLineOfSight">When true, requires <see cref="LineOfSight.CanSeeLoot"/>.</param>
     /// <returns>Whether this loot pile should be listed from the current scan pass.</returns>
     private static bool TryAcceptLoot(
-        Player player, LootItem loot, Vector3 origin, float radiusSqr, string profileId, bool requireLineOfSight
+        Player player, LootItem loot, Collider hitCollider, Vector3 origin, float radiusSqr, string profileId,
+        bool   requireLineOfSight
     ){
         if(loot is Corpse) return false;
 
         if(!loot.isActiveAndEnabled || loot.Item == null) return false;
+
+        if(!Settings.ShowQuestItemsInVicinity.Value && loot.Item.QuestItem) return false;
 
         if(!loot.IsValidForProfile(profileId)) return false;
 
@@ -124,15 +151,16 @@ internal static class VicinityLootScanner{
         && weapon.Repairable.Durability == 0f)
             return false;
 
-        var lootPoint = loot.TrackableTransform.position;
-        var delta     = lootPoint - origin;
+        var losCollider = hitCollider ?? loot.GetComponent<Collider>() ?? loot.GetComponentInChildren<Collider>();
+        var samplePoint = losCollider ? losCollider.ClosestPoint(origin) : loot.TrackableTransform.position;
+        var delta       = samplePoint - origin;
 
         if(delta.sqrMagnitude > radiusSqr) return false;
 
-        if(!requireLineOfSight) return true;
+        if(!requireLineOfSight || loot.Item.QuestItem) return true;
 
-        var collider = loot.GetComponent<Collider>() ?? loot.GetComponentInChildren<Collider>();
+        var lootPoint = loot.TrackableTransform.position;
 
-        return collider && LineOfSight.CanSeeLoot(player, collider, lootPoint);
+        return losCollider && LineOfSight.CanSeeLoot(player, losCollider, lootPoint);
     }
 }

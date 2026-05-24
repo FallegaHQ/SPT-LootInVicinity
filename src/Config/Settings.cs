@@ -19,6 +19,7 @@ internal static class Settings{
     public static ConfigEntry<int>   MaxItemsInPanel;
     public static ConfigEntry<bool>  HidePanelWhenEmpty;
     public static ConfigEntry<bool>  RouteQuestItemsToTaskStash;
+    public static ConfigEntry<bool>  ShowQuestItemsInVicinity;
 
     private static ConfigEntry<string> _panelTitle;
     private static ConfigEntry<bool>   _appendItemCountToTitle;
@@ -109,7 +110,7 @@ internal static class Settings{
                                                    "Scan radius (m)",
                                                    3f,
                                                    new ConfigDescription(
-                                                                         "Main sphere at body center (minimum 3 m). Knee sphere is separate and always ignores line of sight.",
+                                                                         "Main sphere at body center (minimum 3 m).",
                                                                          new AcceptableValueRange<float>(3f, 6f),
                                                                          BasicFloat()
                                                                         )
@@ -153,6 +154,19 @@ internal static class Settings{
                                                                         Basic()
                                                                        )
                                                                   )
+                         );
+
+        ConfigEntries.Add(
+                          ShowQuestItemsInVicinity = config.Bind(
+                                                                 QuestSectionTitle,
+                                                                 "Show quest items in vicinity",
+                                                                 true,
+                                                                 new ConfigDescription(
+                                                                      "When disabled, quest items are omitted from the nearby loot scan and panel. When enabled, quest items ignore main-scan line of sight.",
+                                                                      null,
+                                                                      Basic()
+                                                                     )
+                                                                )
                          );
 
         RecalcOrder();
