@@ -9,14 +9,18 @@
   Archive layout: extract at game root so BepInEx\plugins\<AssemblyName>\<AssemblyName>.dll lines up.
 #>
 $ErrorActionPreference = 'Stop'
-Set-Location $PSScriptRoot
+$projectDir = $PSScriptRoot
+if (-not (Test-Path (Join-Path $projectDir '*.csproj'))) {
+    $projectDir = Split-Path $PSScriptRoot -Parent
+}
+Set-Location $projectDir
 
-$packageDir = Join-Path $PSScriptRoot 'Package'
-$artifactDir = Join-Path $PSScriptRoot 'bin\Package'
+$packageDir = Join-Path $projectDir 'Package'
+$artifactDir = Join-Path $projectDir 'bin\Package'
 $stagingBepInEx = Join-Path $packageDir 'BepInEx'
 $stagingPlugins = Join-Path $stagingBepInEx 'plugins'
 
-$csproj = Get-ChildItem -Path $PSScriptRoot -Filter '*.csproj' | Where-Object { $_.Name -notmatch 'inspect|Inspect|Probe' } | Select-Object -First 1
+$csproj = Get-ChildItem -Path $projectDir -Filter '*.csproj' | Where-Object { $_.Name -notmatch 'inspect|Inspect|Probe' } | Select-Object -First 1
 if (-not $csproj)
 {
     throw 'No mod .csproj found in project root.'
@@ -57,13 +61,13 @@ New-Item -ItemType Directory -Path $stagingModDir -Force | Out-Null
 
 Copy-Item -Path $dllPath -Destination (Join-Path $stagingModDir "$modName.dll") -Force
 
-$readmeSrc = Join-Path $PSScriptRoot 'README.md'
+$readmeSrc = Join-Path $projectDir 'README.md'
 if (Test-Path -LiteralPath $readmeSrc)
 {
     Copy-Item -LiteralPath $readmeSrc -Destination (Join-Path $stagingModDir 'README.md') -Force
 }
 
-$attributionSrc = Join-Path $PSScriptRoot 'TEMPLATE-ATTRIBUTION.md'
+$attributionSrc = Join-Path $projectDir 'TEMPLATE-ATTRIBUTION.md'
 if (Test-Path -LiteralPath $attributionSrc)
 {
     Copy-Item -LiteralPath $attributionSrc -Destination (Join-Path $stagingModDir 'TEMPLATE-ATTRIBUTION.md') -Force
