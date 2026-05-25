@@ -49,7 +49,7 @@ internal static class VicinityCylinderOverlap{
     /// <param name="radius"></param>
     /// <param name="height"></param>
     /// <returns></returns>
-    private static bool IsInsideCylinder(Vector3 point, Vector3 center, Vector3 up, float radius, float height){
+    internal static bool IsInsideCylinder(Vector3 point, Vector3 center, Vector3 up, float radius, float height){
         var delta     = point - center;
         var axialDist = Vector3.Dot(delta, up);
 

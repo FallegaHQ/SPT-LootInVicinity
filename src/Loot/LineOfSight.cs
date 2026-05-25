@@ -1,14 +1,19 @@
+using System;
+using System.Collections.Generic;
 using EFT;
+using EFT.Interactive;
 using UnityEngine;
 
 namespace Softwyx.LootInVicinity.Loot;
 
 internal static class LineOfSight{
+    private static readonly RaycastHit[] InteractiveHits = new RaycastHit[32];
+
     /// <summary>
     /// Line of sight for main scan. Uses <see cref="GameWorld.LootMaskObstruction"/> then
-    /// <see cref="NearestHitRaycast.GetNearestHit(UnityEngine.Vector3,UnityEngine.Vector3,out UnityEngine.RaycastHit,float,int)"/>
-    /// on <see cref="GameWorld.InteractiveLootMaskWPlayer"/>.
-    /// Nearest hit must be <paramref name="lootCollider"/> or its parent or child.
+    /// interactive ray hits on <see cref="GameWorld.InteractiveLootMaskWPlayer"/>.
+    /// Nearest blocking hit must be <paramref name="lootCollider"/> or its parent or child.
+    /// Other <see cref="LootItem"/> piles and <see cref="Corpse"/> do not block.
     /// </summary>
     /// <param name="player"></param>
     /// <param name="lootCollider"></param>
@@ -23,22 +28,57 @@ internal static class LineOfSight{
         if(GameWorld.LootMaskObstruction != 0 && Physics.Linecast(eye, lootPoint, GameWorld.LootMaskObstruction))
             return false;
 
-        var distance = Vector3.Distance(eye, lootPoint);
+        var delta    = lootPoint - eye;
+        var distance = delta.magnitude;
 
-        if(!NearestHitRaycast.GetNearestHit(
-                                            eye,
-                                            lootPoint,
-                                            out var hit,
-                                            distance,
-                                            GameWorld.InteractiveLootMaskWPlayer
-                                           ))
-            return true; // nothing interactive between eye and loot
+        if(distance <= 0.0001f) return true;
 
-        if(!hit.collider) return true;
+        var direction = delta / distance;
+        var hitCount = Physics.RaycastNonAlloc(
+                                               eye,
+                                               direction,
+                                               InteractiveHits,
+                                               distance,
+                                               GameWorld.InteractiveLootMaskWPlayer,
+                                               QueryTriggerInteraction.Collide
+                                              );
 
-        // Hit collider may be on a parent or child of the LootItem collider we were given.
-        return hit.collider == lootCollider
-            || hit.collider.transform.IsChildOf(lootCollider.transform)
-            || lootCollider.transform.IsChildOf(hit.collider.transform);
+        if(hitCount <= 0) return true;
+
+        Array.Sort(InteractiveHits, 0, hitCount, RaycastHitDistanceComparer.Instance);
+
+        for(var i = 0; i < hitCount; i++){
+            var hitCollider = InteractiveHits[i].collider;
+
+            if(!hitCollider) continue;
+
+            if(IsTargetLootCollider(hitCollider, lootCollider)) return true;
+
+            if(IsOtherLootOrCorpse(hitCollider, lootCollider)) continue;
+
+            return false;
+        }
+
+        return true;
+    }
+
+    private static bool IsTargetLootCollider(Collider hit, Collider lootCollider){
+        return hit == lootCollider
+            || hit.transform.IsChildOf(lootCollider.transform)
+            || lootCollider.transform.IsChildOf(hit.transform);
+    }
+
+    private static bool IsOtherLootOrCorpse(Collider hit, Collider targetLootCollider){
+        if(IsTargetLootCollider(hit, targetLootCollider)) return false;
+
+        return hit.GetComponentInParent<LootItem>() != null;
+    }
+
+    private sealed class RaycastHitDistanceComparer : IComparer<RaycastHit>{
+        public static readonly RaycastHitDistanceComparer Instance = new();
+
+        public int Compare(RaycastHit a, RaycastHit b){
+            return a.distance.CompareTo(b.distance);
+        }
     }
 }

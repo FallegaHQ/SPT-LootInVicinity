@@ -63,7 +63,7 @@ public class LootInVicinityPlugin : BaseUnityPlugin{
 internal static class PluginInfo{
     public const  string PLUGIN_GUID    = "com.softwyx.lootinvicinity";
     public const  string PLUGIN_NAME    = "Loot In Vicinity";
-    public const  string PLUGIN_VERSION = "2.15.124";
+    public const  string PLUGIN_VERSION = "2.15.131";
     private const string LOGPrefix      = "LIV";
 
     public static string Format(string message){

@@ -5,11 +5,8 @@ namespace Softwyx.LootInVicinity.Loot;
 
 /// <summary>Player-space anchors for vicinity scan cylinders and line-of-sight origin.</summary>
 internal static class PlayerCenterOfMass{
-    private const float MainBelowFeetMeters       = 0.5f;
-    private const float MainAboveHeadMeters       = 1f;
-    private const float FeetPocketRadiusMeters    = 1f;
-    private const float FeetPocketCenterAboveFeet = 0.2f;
-    private const float FeetPocketHeightMeters    = 1f;
+    private const float MainBelowFeetMeters = 0.5f;
+    private const float MainAboveHeadMeters = 1f;
 
     /// <summary>
     /// Vertical axis for <see cref="VicinityCylinderOverlap"/> queries on
@@ -34,26 +31,6 @@ internal static class PlayerCenterOfMass{
     /// <param name="height">Extent along <paramref name="up"/> between the caps.</param>
     public static void GetMainScanCylinder(Player player, out Vector3 center, out Vector3 up, out float height){
         GetCylinderFromFeetAndHead(player, MainBelowFeetMeters, MainAboveHeadMeters, out center, out up, out height);
-    }
-
-    /// <summary>
-    /// Feet-pocket scan cylinder: 1 m radius, 1 m tall, center 0.2 m above
-    /// <see cref="GetFeetPosition"/>.
-    /// </summary>
-    /// <param name="player"></param>
-    /// <param name="center">Center of the feet-pocket volume.</param>
-    /// <param name="up">Cylinder axis from <see cref="GetPlayerUp"/>.</param>
-    /// <param name="radius">Fixed 1 m.</param>
-    /// <param name="height">Fixed 1 m.</param>
-    public static void GetFeetPocketCylinder(
-        Player player, out Vector3 center, out Vector3 up, out float radius, out float height
-    ){
-        var feet = GetFeetPosition(player);
-
-        up     = GetPlayerUp(player);
-        center = feet + up * FeetPocketCenterAboveFeet;
-        radius = FeetPocketRadiusMeters;
-        height = FeetPocketHeightMeters;
     }
 
     /// <summary>

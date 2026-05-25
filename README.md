@@ -39,21 +39,41 @@ You can edit that file when the game is **closed**, or use **Configuration Manag
 1. Enter a **raid**.
 2. Open **inventory** (usually **Tab**) **without** opening a world container (body, crate, etc.).
 3. On the **right**, you should see the **Nearby Items** panel (title may differ if you changed it in config).
-4. You can **drag**, **quick move** the **loot** and so on...
+4. **Drag** or **quick move** loot like any other stash.
 
-**Radius**, line of sight, and other scan rules are controlled in the **Loot detection** section of the config.
+Which items appear is set under **3. Scanning** in the config (see below).
 
 ---
 
 ## Settings
 
-- **Enabled** -- master switch. Off = mod does nothing.
-- **Loot radius / floor pickup / line of sight** -- how loot is detected around you.
-- **Quest items** -- options for quest items and the task pouch (read the descriptions in the config file).
-- **Debug** -- file logging and extra diagnostics. By default these are **off** so raids stay quiet on disk; turn them
-  on only if you need to collect logs required to report bugs.
+Open **Configuration Manager** in-game, or edit `BepInEx\config\com.softwyx.lootinvicinity.cfg` while the game is *
+*closed**.
 
-Rename or delete the config file **with the game closed** if you want a fresh set of defaults.
+**1. General**
+
+- **Enabled** -- master switch.
+
+**2. Inventory panel**
+
+- **Panel title**, **Hide panel when empty**, **Append item count to title** -- how the right column looks.
+
+**3. Scanning**
+
+- **Scan radius (m)** -- how far around you the list reaches (3 to 6 m). There is always a **1 m** wide zone at your
+  feet where items can show up even when they are under other loot or even under the ground.
+- **Main scan requires line of sight** -- when on, loot farther out in that radius must be in clear view (walls still
+  block). Other loot piles and bodies on the ground do **not** count as blocking. The **1 m** zone at your feet ignores
+  this setting.
+- **Max items in panel** -- cap on how many rows show each time you open Tab inventory.
+
+**4. Quest items**
+
+- **Show quest items in vicinity** -- whether quest loot appears in the nearby list.
+- **Route quest items to task stash** -- when on, moving quest loot from the panel sends it to the quest stash instead
+  of your pockets.
+
+Delete the config file with the game **closed** to reset all defaults (or reset manually in-game).
 
 ---
 
@@ -62,7 +82,7 @@ Rename or delete the config file **with the game closed** if you want a fresh se
 These are behaviours players have reported; they may vary with game version or other mods.
 
 1. **Quest items in the Nearby list** -- Drag previews (green/red outlines) sometimes **do not match** where a quest
-   item can actually go (for example armour vs backpack). **Quick move** (e.g. **Ctrl + click**, depending on your 
+   item can actually go (for example armour vs backpack). **Quick move** (e.g. **Ctrl + click**, depending on your
    setup) is often more reliable than drag for those items.
 
 2. **Mods that change inventory, stash, quick move, or loot** -- Compatibility is **best effort**. If something breaks
@@ -110,13 +130,13 @@ putting it out there.
 
 ## Support the author
 
-Maintenance and compatibility work takes time. If this mod saves you frustration in raids, consider *
-*[supporting on GitHub Sponsors](https://github.com/sponsors/FallegaHQ)**. There is no paywall--everything stays free
-under the license below.
+Maintenance and compatibility work takes time. If this mod saves you frustration in raids, consider 
+**[supporting on GitHub Sponsors](https://github.com/sponsors/FallegaHQ)**. There is no paywall--everything stays free
+under the licence below.
 
 ---
 
-## License
+## Licence
 
 This project is licensed under the **Mozilla Public License 2.0** (MPL-2.0). See the [`LICENSE`](LICENSE) file for the
 full text.
