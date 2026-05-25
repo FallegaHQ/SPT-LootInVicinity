@@ -50,8 +50,8 @@ You can edit that file when the game is **closed**, or use **Configuration Manag
 - **Enabled** -- master switch. Off = mod does nothing.
 - **Loot radius / floor pickup / line of sight** -- how loot is detected around you.
 - **Quest items** -- options for quest items and the task pouch (read the descriptions in the config file).
-- **Debug** -- file logging and extra diagnostics. By default these are **off** so raids stay quiet on disk; turn them on
-  only if you need to collect logs required to report bugs.
+- **Debug** -- file logging and extra diagnostics. By default these are **off** so raids stay quiet on disk; turn them
+  on only if you need to collect logs required to report bugs.
 
 Rename or delete the config file **with the game closed** if you want a fresh set of defaults.
 
@@ -61,9 +61,9 @@ Rename or delete the config file **with the game closed** if you want a fresh se
 
 These are behaviours players have reported; they may vary with game version or other mods.
 
-1. **Quest items in the Nearby list** -- Drag previews (green/red outlines) sometimes **do not match** where a quest item
-   can actually go (for example armour vs backpack). **Quick move** (e.g. **Ctrl + click**, depending on your setup) is
-   often more reliable than drag for those items.
+1. **Quest items in the Nearby list** -- Drag previews (green/red outlines) sometimes **do not match** where a quest
+   item can actually go (for example armour vs backpack). **Quick move** (e.g. **Ctrl + click**, depending on your 
+   setup) is often more reliable than drag for those items.
 
 2. **Mods that change inventory, stash, quick move, or loot** -- Compatibility is **best effort**. If something breaks
    after adding another mod, try with only Loot In Vicinity + SPT essentials to narrow it down.
@@ -89,7 +89,7 @@ You get faster help if you include detail. **Copy/paste this checklist** and fil
 6. **Logs** -- With the game **closed**:
     - `BepInEx\LogOutput.log` (and `FullLogOutput.log` if someone asks for it)
 
-**Where to send it** -- Use the **comments section, or issue tracker of the repo** which should be listed where you 
+**Where to send it** -- Use the **comments section, or issue tracker of the repo** which should be listed where you
 **downloaded** the mod. Never email me about mods.
 
 Do **not** send passwords, full Windows usernames, or unrelated personal files. I will try my best to remove any
@@ -99,8 +99,8 @@ personal data whenever I see it but my availability is not guaranteed!
 
 ## Thanks
 
-People across the **SPT** and **modding** scenes shared ideas, repros, and "what if you tried..." moments that shaped this
-plugin. That help mattered.
+People across the **SPT** and **modding** scenes shared ideas, repros, and "what if you tried..." moments that shaped
+this plugin. That help mattered.
 
 Bits of implementation are the usual mix: inspiration from forum threads, other public mods, and long sessions with
 dnSpy. If something looks **suspiciously familiar**, assume I **borrowed the good parts** on purpose, thank you for

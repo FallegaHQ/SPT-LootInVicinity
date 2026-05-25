@@ -10,7 +10,8 @@
 #>
 $ErrorActionPreference = 'Stop'
 $projectDir = $PSScriptRoot
-if (-not (Test-Path (Join-Path $projectDir '*.csproj'))) {
+if (-not (Test-Path (Join-Path $projectDir '*.csproj')))
+{
     $projectDir = Split-Path $PSScriptRoot -Parent
 }
 Set-Location $projectDir
