@@ -110,7 +110,7 @@ internal static class Settings{
                                                    "Scan radius (m)",
                                                    3f,
                                                    new ConfigDescription(
-                                                                         "Main sphere at body center (minimum 3 m).",
+                                                                         "Main scan radius (minimum 3 m).",
                                                                          new AcceptableValueRange<float>(3f, 6f),
                                                                          BasicFloat()
                                                                         )
@@ -123,7 +123,7 @@ internal static class Settings{
                                                                    "Main scan requires line of sight",
                                                                    true,
                                                                    new ConfigDescription(
-                                                                        "When enabled, the main scan sphere only lists loot you can see (no walls/obstacles). The knee sphere never uses line of sight.",
+                                                                        "When enabled, the main scan cylinder only lists loot you can see (no walls/obstacles).",
                                                                         null,
                                                                         Advanced()
                                                                        )
@@ -162,7 +162,7 @@ internal static class Settings{
                                                                  "Show quest items in vicinity",
                                                                  true,
                                                                  new ConfigDescription(
-                                                                      "When disabled, quest items are omitted from the nearby loot scan and panel. When enabled, quest items ignore main-scan line of sight.",
+                                                                      "When disabled, quest items are omitted from the nearby loot scan and panel.",
                                                                       null,
                                                                       Basic()
                                                                      )
