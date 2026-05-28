@@ -1,3 +1,4 @@
+global using Softwyx.LootInVicinity.Localization;
 global using Softwyx.LootInVicinity.Config;
 global using Softwyx.LootInVicinity.Experience;
 global using Softwyx.LootInVicinity.Grid;

@@ -5,7 +5,6 @@ using EFT.InventoryLogic;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Softwyx.LootInVicinity.LivPlayer;
 
 namespace Softwyx.LootInVicinity.Session;
 

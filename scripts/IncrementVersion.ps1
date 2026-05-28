@@ -1,5 +1,4 @@
-# Increments the patch segment (third number) in Softwyx-LootInVicinity.csproj and src/LootInVicinityPlugin.cs.
-# Edit major/minor in the csproj manually; each dotnet build bumps patch (e.g. 2.16.0 -> 2.16.1).
+# Increments patch in the .csproj and regenerates src/PluginInfo.Version.g.cs (single version source).
 param(
     [Parameter(Mandatory = $true)]
     [string]$ProjectDir
@@ -7,21 +6,22 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$csprojPath = Join-Path $ProjectDir 'Softwyx-LootInVicinity.csproj'
-$pluginPath = Join-Path $ProjectDir 'src\LootInVicinityPlugin.cs'
-
-if (-not (Test-Path $csprojPath))
+$csproj = Get-ChildItem -Path $ProjectDir -Filter '*.csproj' -File | Select-Object -First 1
+if (-not $csproj)
 {
-    throw "Project file not found: $csprojPath"
-}
-if (-not (Test-Path $pluginPath))
-{
-    throw "Plugin file not found: $pluginPath"
+    throw "No .csproj found in $ProjectDir"
 }
 
+$csprojPath = $csproj.FullName
 $csprojText = [System.IO.File]::ReadAllText($csprojPath)
-$versionMatch = [regex]::Match($csprojText, '<Version>(\d+)\.(\d+)\.(\d+)</Version>')
 
+if ($csprojText -notmatch '<RootNamespace>([^<]+)</RootNamespace>')
+{
+    throw 'RootNamespace not found in csproj.'
+}
+$rootNamespace = $Matches[1].Trim()
+
+$versionMatch = [regex]::Match($csprojText, '<Version>(\d+)\.(\d+)\.(\d+)</Version>')
 if (-not $versionMatch.Success)
 {
     throw "Could not find <Version>major.minor.patch</Version> in $csprojPath"
@@ -42,13 +42,15 @@ $csprojText = [regex]::Replace(
 )
 [System.IO.File]::WriteAllText($csprojPath, $csprojText, $utf8NoBom)
 
-$pluginText = [System.IO.File]::ReadAllText($pluginPath)
-$pluginText = [regex]::Replace(
-        $pluginText,
-        'PLUGIN_VERSION = "\d+\.\d+\.\d+"',
-        "PLUGIN_VERSION = `"$newVersion`"",
-        1
-)
-[System.IO.File]::WriteAllText($pluginPath, $pluginText, $utf8NoBom)
+$versionFile = Join-Path $ProjectDir 'src\PluginInfo.Version.g.cs'
+$versionContent = @"
+namespace $rootNamespace;
+
+internal static partial class PluginInfo
+{
+    public const string PLUGIN_VERSION = "$newVersion";
+}
+"@
+[System.IO.File]::WriteAllText($versionFile, $versionContent, $utf8NoBom)
 
 Write-Output $newVersion

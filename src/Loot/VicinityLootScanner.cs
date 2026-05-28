@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using EFT;
 using EFT.Interactive;
 using EFT.InventoryLogic;
-using Softwyx.LootInVicinity.LivPlayer;
 using UnityEngine;
 
 namespace Softwyx.LootInVicinity.Loot;

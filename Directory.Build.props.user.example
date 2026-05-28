@@ -1,8 +1,31 @@
 <Project>
-  <!-- Copy to Directory.Build.props.user to override the game install path and other properties -->
+  <!--
+    Copy to Directory.Build.props.user (gitignored) and adjust for your machine.
+    Do not commit Directory.Build.props.user, *.pfx, or anything under certs/.
+  -->
   <PropertyGroup>
     <TarkovDir>D:\Games\Escape from Tarkov</TarkovDir>
-    <!-- Copies DLL to BepInEx/plugins/<AssemblyName> -->
-    <DeployToPlugins>false</DeployToPlugins>
+    <!-- Debug builds deploy when true; Release/Package do not deploy by default -->
+    <DeployToPlugins>true</DeployToPlugins>
+  </PropertyGroup>
+
+  <!-- Code signing — on by default for Release/Package (see Directory.Build.props) -->
+  <PropertyGroup>
+    <!-- Set false to skip Authenticode signing on release builds -->
+    <!-- <SignAssembly>false</SignAssembly> -->
+
+    <!-- Optional: reuse the same key via PFX (repo-relative path OK) -->
+    <!-- <SigningPfxPath>certs\Softwyx.LootInVicinity.pfx</SigningPfxPath> -->
+    <!-- <SigningPfxPassword></SigningPfxPassword> -->
+
+    <!-- When no PFX exists, search/create in this store with SigningCertSubject from Directory.Build.props -->
+    <!-- <SigningCertStore>Cert:\CurrentUser\My</SigningCertStore> -->
+
+    <!-- First auto-create export (optional; private key — never commit) -->
+    <!-- <SigningPfxExportPath>certs\Softwyx.LootInVicinity.pfx</SigningPfxExportPath> -->
+
+    <!-- Override default timestamp server, or set empty to skip timestamping -->
+    <!-- <SigningTimestampUrl>http://timestamp.digicert.com</SigningTimestampUrl> -->
+    <!-- <SigningTimestampUrl></SigningTimestampUrl> -->
   </PropertyGroup>
 </Project>

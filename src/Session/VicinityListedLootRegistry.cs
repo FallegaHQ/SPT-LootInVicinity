@@ -1,4 +1,3 @@
-using EFT;
 using EFT.Interactive;
 using EFT.InventoryLogic;
 using System.Collections.Generic;

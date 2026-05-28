@@ -8,7 +8,7 @@
         <Nullable>disable</Nullable>
         <Configurations>Debug;Release;Package</Configurations>
         <!-- Patch is auto-incremented on each build (see scripts/IncrementVersion.ps1). Edit major/minor here. -->
-        <Version>2.15.131</Version>
+        <Version>2.15.137</Version>
         <!-- Set -p:IncrementVersionOnBuild=false to skip auto-bump (e.g. rebuild without changing version). -->
         <IncrementVersionOnBuild Condition="'$(IncrementVersionOnBuild)' == ''">true</IncrementVersionOnBuild>
         <AssemblyVersion>$(Version)</AssemblyVersion>
@@ -16,15 +16,19 @@
         <Deterministic>true</Deterministic>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <OutputPath>bin\$(Configuration)\</OutputPath>
-        <!-- Set true in Directory.Build.props.user after you copy/rename this template -->
-        <DeployToPlugins>true</DeployToPlugins>
-        <!-- Source: src/ (see docs/README.md). SDK includes src/**/*.cs automatically. -->
+        <DeployToPlugins Condition="'$(DeployToPlugins)' == '' and '$(Configuration)'=='Debug'">true</DeployToPlugins>
+        <DeployToPlugins Condition="'$(DeployToPlugins)' == '' and '$(Configuration)'!='Debug'">false</DeployToPlugins>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)'=='Debug'">
         <Optimize>false</Optimize>
         <DebugType>portable</DebugType>
         <DebugSymbols>true</DebugSymbols>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)'=='Release'">
+        <Optimize>true</Optimize>
+        <DebugType>pdbonly</DebugType>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)'=='Package'">
@@ -39,6 +43,7 @@
         <Reference Include="spt-reflection" HintPath="$(TarkovPluginsDir)\spt\spt-reflection.dll" Private="false"/>
         <Reference Include="Assembly-CSharp" HintPath="$(TarkovManagedDir)\Assembly-CSharp.dll" Private="false"/>
         <Reference Include="Comfort" HintPath="$(TarkovManagedDir)\Comfort.dll" Private="false"/>
+        <Reference Include="Newtonsoft.Json" HintPath="$(TarkovManagedDir)\Newtonsoft.Json.dll" Private="false"/>
         <Reference Include="Sirenix.Serialization" HintPath="$(TarkovManagedDir)\Sirenix.Serialization.dll"
                    Private="false"/>
         <Reference Include="Sirenix.Utilities" HintPath="$(TarkovManagedDir)\Sirenix.Utilities.dll" Private="false"/>
@@ -67,6 +72,7 @@
             <FileVersion>$(Version)</FileVersion>
         </PropertyGroup>
         <Message Importance="high" Text="Built version $(Version) (patch auto-incremented)."/>
+        <Message Importance="high" Text="========================================================================="/>
     </Target>
 
     <Target Name="ValidateTarkovInstall" BeforeTargets="ResolveAssemblyReferences">
@@ -85,10 +91,16 @@
     </PropertyGroup>
 
     <!-- Set DeployToPlugins=false in Directory.Build.props.user to skip. -->
-    <Target Name="CopyToPlugins" AfterTargets="Build" Condition="'$(DeployToPlugins)'=='true'">
+    <Target Name="CopyToPlugins"
+            AfterTargets="Build"
+            Condition="'$(DeployToPlugins)'=='true' and '$(Configuration)'=='Debug'">
 
         <PropertyGroup Condition="Exists('$(TarkovPluginsDir)') and Exists('$(ModConfigPath)')">
             <_ModHadConfig>true</_ModHadConfig>
+        </PropertyGroup>
+
+        <PropertyGroup Condition="'$(DeployToPlugins)'=='true' and Exists('$(TarkovPluginsDir)\$(TargetFileName)')">
+            <_HadFlatPlugin>true</_HadFlatPlugin>
         </PropertyGroup>
 
         <!-- Create plugin directory -->
@@ -117,6 +129,17 @@
                 DestinationFolder="$(ModPluginDir)"
                 SkipUnchangedFiles="true"
                 Condition="'$(DeployToPlugins)'=='true' and Exists('$(TarkovPluginsDir)')"/>
+
+        <ItemGroup
+                Condition="'$(DeployToPlugins)'=='true' and Exists('$(TarkovPluginsDir)') and Exists('$(MSBuildProjectDirectory)\locales')">
+            <_LocaleFiles Include="$(MSBuildProjectDirectory)\locales\**\*"/>
+        </ItemGroup>
+
+        <Copy
+                SourceFiles="@(_LocaleFiles)"
+                DestinationFiles="@(_LocaleFiles->'$(ModPluginDir)\locales\%(RecursiveDir)%(Filename)%(Extension)')"
+                SkipUnchangedFiles="true"
+                Condition="'$(DeployToPlugins)'=='true' and Exists('$(TarkovPluginsDir)') and '@(_LocaleFiles)' != ''"/>
 
         <Message
                 Importance="high"
@@ -149,20 +172,20 @@
             and Exists('$(TarkovPluginsDir)')
             and Exists('$(TargetDir)$(TargetName).pdb')"/>
 
-        <!-- Remove old plugin copy -->
+        <!-- Remove old flat plugin copy -->
         <Message
                 Importance="high"
                 Text="========================================================================="
-                Condition="'$(DeployToPlugins)'=='true' and Exists('$(TarkovPluginsDir)\$(TargetFileName)')"/>
+                Condition="'$(_HadFlatPlugin)' == 'true'"/>
 
         <Delete
                 Files="$(TarkovPluginsDir)\$(TargetFileName)"
-                Condition="'$(DeployToPlugins)'=='true' and Exists('$(TarkovPluginsDir)\$(TargetFileName)')"/>
+                Condition="'$(_HadFlatPlugin)' == 'true'"/>
 
         <Message
                 Importance="high"
-                Text="Removed old plugin copy: $(TarkovPluginsDir)\$(TargetFileName)"
-                Condition="'$(DeployToPlugins)'=='true' and Exists('$(TarkovPluginsDir)\$(TargetFileName)')"/>
+                Text="Removed old flat plugin copy: $(TarkovPluginsDir)\$(TargetFileName)"
+                Condition="'$(_HadFlatPlugin)' == 'true'"/>
 
         <!-- Remove config -->
         <Message

@@ -1,0 +1,32 @@
+<Project>
+
+    <!-- Runs after Build, before deploy/package so the signed DLL is what ships. -->
+    <Target Name="SignAssembly"
+            AfterTargets="Build"
+            BeforeTargets="CopyToPlugins;PackageMod"
+            Condition="'$(SignAssembly)' == 'true' and $([System.String]::Copy(';$(SignAssemblyConfigurations);').Contains(';$(Configuration);'))">
+
+        <PropertyGroup>
+            <_SigningScript>$(SigningScriptPath)</_SigningScript>
+            <_SigningPfxPath Condition="'$(SigningPfxPath)' != '' and !$([System.IO.Path]::IsPathRooted('$(SigningPfxPath)'))">$(MSBuildThisFileDirectory)$(SigningPfxPath)</_SigningPfxPath>
+            <_SigningPfxPath Condition="'$(_SigningPfxPath)' == ''">$(SigningPfxPath)</_SigningPfxPath>
+            <_SigningPfxExportPath Condition="'$(SigningPfxExportPath)' != '' and !$([System.IO.Path]::IsPathRooted('$(SigningPfxExportPath)'))">$(MSBuildThisFileDirectory)$(SigningPfxExportPath)</_SigningPfxExportPath>
+            <_SigningPfxExportPath Condition="'$(_SigningPfxExportPath)' == ''">$(SigningPfxExportPath)</_SigningPfxExportPath>
+        </PropertyGroup>
+
+        <Error Condition="!Exists('$(_SigningScript)')"
+               Text="SignAssembly is enabled but signing script was not found: $(_SigningScript)"/>
+
+        <Message Importance="high" Text="========================================================================="/>
+        <Message Importance="high" Text="Signing assembly ($(Configuration)): $(TargetFileName)"/>
+
+        <Exec WorkingDirectory="$(MSBuildProjectDirectory)"
+              ConsoleToMSBuild="true"
+              EnvironmentVariables="RAD_SIGNING_PFX_PASSWORD=$(SigningPfxPassword)"
+              Command="powershell.exe -NoProfile -ExecutionPolicy Bypass -File &quot;$(_SigningScript)&quot; -AssemblyPath &quot;$(TargetPath)&quot; -CertSubject &quot;$(SigningCertSubject)&quot; -CertStore &quot;$(SigningCertStore)&quot; -PfxPath &quot;$(_SigningPfxPath)&quot; -PfxExportPath &quot;$(_SigningPfxExportPath)&quot; -TimestampUrl &quot;$(SigningTimestampUrl)&quot;"/>
+
+        <Message Importance="high" Text="========================================================================="/>
+
+    </Target>
+
+</Project>

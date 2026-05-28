@@ -3,7 +3,6 @@ using BepInEx.Logging;
 using Softwyx.LootInVicinity.Patches;
 using SPT.Reflection.Patching;
 using System.Collections;
-using Softwyx.LootInVicinity.LivPlayer;
 
 namespace Softwyx.LootInVicinity;
 
@@ -17,8 +16,11 @@ public class LootInVicinityPlugin : BaseUnityPlugin{
         Instance = this;
         Log      = Logger;
 
+        if(!PreloadDefaultLocale()) return;
+
         Settings.Init(Config);
 
+        EnablePatch<LocaleApplicationLanguagePatch>("LocaleApplicationLanguagePatch");
         EnablePatch<RaidStartedPatch>("RaidStartedPatch");
         EnablePatch<RaidEndPatch>("RaidEndPatch");
         EnablePatch<LootPanelOpenPatch>("LootPanelOpenPatch");
@@ -30,7 +32,15 @@ public class LootInVicinityPlugin : BaseUnityPlugin{
         EnablePatch<VicinityItemUiQuickFindPatch>("VicinityItemUiQuickFindPatch");
         EnablePatch<QuestItemMovePatch>("QuestItemMovePatch");
 
-        Log.LogInfo($"{PluginInfo.PLUGIN_NAME} v{PluginInfo.PLUGIN_VERSION} loaded.");
+        Log.LogInfo(PluginInfo.Format($"{PluginInfo.PLUGIN_NAME} v{PluginInfo.PLUGIN_VERSION} loaded."));
+    }
+
+    private static bool PreloadDefaultLocale(){
+        if(LocaleLoader.PreloadDefaultLocale(out var error)) return true;
+
+        Log.LogError(PluginInfo.Format($"Locale preload failed: {error} Mod patches were not enabled."));
+
+        return false;
     }
 
     private static void EnablePatch<T>(string name) where T : ModulePatch, new(){
@@ -57,16 +67,5 @@ public class LootInVicinityPlugin : BaseUnityPlugin{
 
             yield return null;
         }
-    }
-}
-
-internal static class PluginInfo{
-    public const  string PLUGIN_GUID    = "com.softwyx.lootinvicinity";
-    public const  string PLUGIN_NAME    = "Loot In Vicinity";
-    public const  string PLUGIN_VERSION = "2.15.131";
-    private const string LOGPrefix      = "LIV";
-
-    public static string Format(string message){
-        return $"[{LOGPrefix}] {message}";
     }
 }

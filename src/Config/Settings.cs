@@ -33,9 +33,10 @@ internal static class Settings{
     }
 
     public static string FormatPanelTitle(int listedCount){
-        var title = _panelTitle?.Value ?? "Nearby Items";
+        var title = _panelTitle?.Value ?? LocaleLoader.Get(LocaleKeys.PanelTitle);
 
-        if(_appendItemCountToTitle?.Value == true && listedCount > 0) return $"{title} ({listedCount})";
+        if(_appendItemCountToTitle?.Value == true && listedCount > 0)
+            return LocaleLoader.Get(LocaleKeys.PanelTitleCount, title, listedCount);
 
         return title;
     }
@@ -69,7 +70,7 @@ internal static class Settings{
                           _panelTitle = config.Bind(
                                                     InventorySectionTitle,
                                                     "Panel title",
-                                                    "Nearby Items",
+                                                    LocaleLoader.TryGet(LocaleKeys.PanelTitle) ?? "Nearby Items",
                                                     new ConfigDescription(
                                                                           "Title for the right-hand vicinity panel (Tab inventory).",
                                                                           null,
@@ -138,7 +139,7 @@ internal static class Settings{
                                                         new ConfigDescription(
                                                                               "Maximum loot rows shown per Tab open.",
                                                                               new AcceptableValueRange<int>(1, 96),
-                                                                              Advanced()
+                                                                              ConfigIntegralUi.IntAttributes(true)
                                                                              )
                                                        )
                          );

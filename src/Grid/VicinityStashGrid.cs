@@ -1,7 +1,6 @@
 using EFT.InventoryLogic;
 using EFT.UI.DragAndDrop;
 using System.Collections.Generic;
-using Softwyx.LootInVicinity.LivPlayer;
 
 namespace Softwyx.LootInVicinity.Grid;
 

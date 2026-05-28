@@ -1,7 +1,5 @@
 using EFT.InventoryLogic;
-using EFT.UI;
 using System.Collections;
-using Softwyx.LootInVicinity.LivPlayer;
 
 namespace Softwyx.LootInVicinity.Take;
 

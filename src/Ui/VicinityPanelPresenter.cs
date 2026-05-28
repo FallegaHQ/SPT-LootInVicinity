@@ -1,11 +1,9 @@
 using EFT.Interactive;
 using EFT.InventoryLogic;
 using EFT.UI;
-using Softwyx.LootInVicinity.Loot;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Softwyx.LootInVicinity.LivPlayer;
 using UnityEngine;
 
 namespace Softwyx.LootInVicinity.Ui;

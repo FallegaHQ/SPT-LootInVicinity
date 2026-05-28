@@ -2,6 +2,18 @@ namespace Softwyx.LootInVicinity.Interop;
 
 /// <summary>Obfuscated Assembly-CSharp member names. Reference these instead of raw strings in mod logic.</summary>
 internal static class GameAssemblyNames{
+    internal static class LocaleManagerProperties{
+        public const string SelectedLanguage = "String_0";
+    }
+
+    internal static class LocaleManagerFields{
+        public const string LocaleTables = "Dictionary_4";
+    }
+
+    internal static class LocaleManagerMethods{
+        public const string UpdateApplicationLanguage = nameof(LocaleManagerClass.UpdateApplicationLanguage);
+    }
+
     internal static class ItemUiContextFields{
         public const string RightPaneCompoundItems = "compoundItem_0";
         public const string DragLayer              = "DragLayer";

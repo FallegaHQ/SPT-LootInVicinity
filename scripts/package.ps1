@@ -62,6 +62,12 @@ New-Item -ItemType Directory -Path $stagingModDir -Force | Out-Null
 
 Copy-Item -Path $dllPath -Destination (Join-Path $stagingModDir "$modName.dll") -Force
 
+$localesSrc = Join-Path $projectDir 'locales'
+if (Test-Path -LiteralPath $localesSrc)
+{
+    Copy-Item -LiteralPath $localesSrc -Destination $stagingModDir -Recurse -Force
+}
+
 $readmeSrc = Join-Path $projectDir 'README.md'
 if (Test-Path -LiteralPath $readmeSrc)
 {

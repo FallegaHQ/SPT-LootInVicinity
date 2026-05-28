@@ -4,3 +4,6 @@ obj/
 Package/
 *.user
 *.suo
+Directory.Build.props.user
+certs/
+*.pfx

@@ -1,11 +1,9 @@
-using EFT;
 using EFT.Interactive;
 using EFT.InventoryLogic;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Softwyx.LootInVicinity.LivPlayer;
 
 namespace Softwyx.LootInVicinity.Session;
 

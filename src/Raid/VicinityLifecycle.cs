@@ -1,5 +1,3 @@
-using Softwyx.LootInVicinity.LivPlayer;
-
 namespace Softwyx.LootInVicinity.Raid;
 
 internal static class VicinityLifecycle{

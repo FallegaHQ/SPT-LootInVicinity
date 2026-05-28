@@ -1,7 +1,6 @@
 using Comfort.Common;
 using EFT;
 using EFT.Interactive;
-using Softwyx.LootInVicinity.LivPlayer;
 
 namespace Softwyx.LootInVicinity.World;
 

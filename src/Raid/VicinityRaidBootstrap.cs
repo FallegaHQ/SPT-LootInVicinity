@@ -1,6 +1,5 @@
 using Comfort.Common;
 using EFT;
-using Softwyx.LootInVicinity.LivPlayer;
 
 namespace Softwyx.LootInVicinity.Raid;
 

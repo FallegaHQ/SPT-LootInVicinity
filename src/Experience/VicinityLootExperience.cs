@@ -1,6 +1,5 @@
 using EFT.InventoryLogic;
 using System;
-using Softwyx.LootInVicinity.LivPlayer;
 
 namespace Softwyx.LootInVicinity.Experience;
 

@@ -1,5 +1,3 @@
-using EFT.InventoryLogic;
-
 namespace Softwyx.LootInVicinity.Raid;
 
 /// <summary>Per-raid fake stash and trader controller used by the vicinity panel UI.</summary>
