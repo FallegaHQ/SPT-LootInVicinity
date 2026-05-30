@@ -117,6 +117,17 @@ internal static class VicinityUiReflection{
             _rightPaneField.SetValue(ItemUiContext.Instance, null);
     }
 
+    public static void SetRightPaneCompoundItem(CompoundItem stash){
+        if(stash == null || !EnsureItemsPanelFields() || !ItemUiContext.Instance) return;
+
+        _rightPaneField.SetValue(
+                                 ItemUiContext.Instance,
+                                 new[]{
+                                          stash
+                                      }
+                                );
+    }
+
     public static void BindGridViews(VicinityStashGrid grid, SimpleStashPanel simpleStashPanel){
         if(grid == null || simpleStashPanel == null || !EnsureItemsPanelFields()) return;
 

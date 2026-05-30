@@ -26,11 +26,13 @@ public class LootInVicinityPlugin : BaseUnityPlugin{
         EnablePatch<LootPanelOpenPatch>("LootPanelOpenPatch");
         EnablePatch<InventoryScreenClosePatch>("InventoryScreenClosePatch");
         EnablePatch<DestroyLootPatch>("DestroyLootPatch");
+        EnablePatch<BotItemTakerRefreshPatch>("BotItemTakerRefreshPatch");
         EnablePatch<VicinityListedQuickFindFlagsPatch>("VicinityListedQuickFindFlagsPatch");
         EnablePatch<VicinityInteractionsMovePatch>("VicinityInteractionsMovePatch");
         EnablePatch<VicinityQuickFindPatch>("VicinityQuickFindPatch");
         EnablePatch<VicinityItemUiQuickFindPatch>("VicinityItemUiQuickFindPatch");
         EnablePatch<QuestItemMovePatch>("QuestItemMovePatch");
+        EnablePatch<VicinityDiscardPatch>("VicinityDiscardPatch");
 
         Log.LogInfo(PluginInfo.Format($"{PluginInfo.PLUGIN_NAME} v{PluginInfo.PLUGIN_VERSION} loaded."));
     }

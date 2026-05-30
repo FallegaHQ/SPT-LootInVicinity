@@ -19,16 +19,20 @@ internal static class VicinityListedLootRegistry{
         return item != null && ListedToWorld.ContainsKey(item.Id);
     }
 
+    public static bool IsRegisteredWorldLoot(LootItem worldLoot){
+        if(!worldLoot) return false;
+
+        foreach(var registered in ListedToWorld.Values)
+            if(registered == worldLoot)
+                return true;
+
+        return false;
+    }
+
     public static bool TryGetWorldLoot(Item item, out LootItem worldLoot){
         worldLoot = null;
 
         return item != null && ListedToWorld.TryGetValue(item.Id, out worldLoot);
-    }
-
-    public static bool TryGetWorldLoot(string itemId, out LootItem worldLoot){
-        worldLoot = null;
-
-        return !string.IsNullOrEmpty(itemId) && ListedToWorld.TryGetValue(itemId, out worldLoot);
     }
 
     public static void Register(Item item, LootItem worldLoot){

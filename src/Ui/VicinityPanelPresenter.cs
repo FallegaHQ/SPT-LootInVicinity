@@ -34,7 +34,7 @@ internal static class VicinityPanelPresenter{
         private set;
     }
 
-    public static bool EnsureFieldsResolved(){
+    private static bool EnsureFieldsResolved(){
         if(VicinityUiReflection.EnsureItemsPanelFields()) return true;
 
         LootInVicinityPlugin.Log?.LogError(
@@ -116,7 +116,7 @@ internal static class VicinityPanelPresenter{
 
         if(maxItems > 0 && candidates.Count > maxItems) candidates.RemoveRange(maxItems, candidates.Count - maxItems);
 
-        if((candidates.Count == 0 && Settings.HidePanelWhenEmpty.Value)
+        if((candidates.Count == 0 && Settings.HidePanelWhenEmpty.Value && !Settings.AllowVicinityStaging.Value)
         || !UiAccess.CanAttachVicinityPanel(itemsPanel, null, inventoryController)){
             ClearAttachState();
         }
@@ -136,7 +136,9 @@ internal static class VicinityPanelPresenter{
             try{
                 yield return VicinityLootSession.PlaceCandidatesRoutine(candidates, _ => {});
 
-                var showPanel = VicinityLootSession.ListedCount > 0 || !Settings.HidePanelWhenEmpty.Value;
+                var showPanel = VicinityLootSession.ListedCount > 0
+                             || !Settings.HidePanelWhenEmpty.Value
+                             || Settings.AllowVicinityStaging.Value;
 
                 if(!showPanel){
                     ClearAttachState();
@@ -154,7 +156,7 @@ internal static class VicinityPanelPresenter{
                 yield return null;
 
                 try{
-                    var stashContext = CreateStashItemContext(sourceContext, stash);
+                    var stashContext = VicinityStashItemContext.Create(sourceContext, stash, simpleStashPanel);
 
                     if(stashContext == null){
                         ClearAttachState();
@@ -173,6 +175,8 @@ internal static class VicinityPanelPresenter{
                                           currentTab
                                          );
                     uiDisposableList?.AddDisposable(simpleStashPanel);
+
+                    VicinityUiReflection.SetRightPaneCompoundItem(stash);
 
                     VicinityUiReflection.ApplyPanelTitle(
                                                          simpleStashPanel,
@@ -263,26 +267,5 @@ internal static class VicinityPanelPresenter{
         _attachCoroutine   = null;
         _attachHost        = null;
         IsAttachInProgress = false;
-    }
-
-    private static ItemContextAbstractClass CreateStashItemContext(
-        ItemContextAbstractClass sourceContext, CompoundItem stash
-    ){
-        if(stash == null) return null;
-
-        if(sourceContext != null) return sourceContext.CreateChild(stash);
-
-        var inventory = VicinityLocalPlayer.Inventory;
-
-        if(inventory?.Equipment == null) return null;
-
-        var root = new RaidInventoryItemContext(
-                                                inventory.Equipment,
-                                                RaidInventoryItemContext.EItemType.Inventory,
-                                                inventory.FavoriteItemsStorage,
-                                                false
-                                               );
-
-        return root.CreateChild(stash);
     }
 }

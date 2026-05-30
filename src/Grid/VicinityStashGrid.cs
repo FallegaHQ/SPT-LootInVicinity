@@ -24,9 +24,11 @@ internal class VicinityStashGrid(string id, CompoundItem parentItem)
     }
 
     public override bool CheckCompatibility(Item item){
-        if(item == null) return false;
+        if(item == null || Contains(item)) return false;
 
-        return !Contains(item) && VicinityLootSession.IsShownInVicinityPanel(item);
+        if(VicinityLootSession.HasListedWorldBinding(item)) return VicinityLootSession.IsShownInVicinityPanel(item);
+
+        return Settings.AllowVicinityStaging.Value && base.CheckCompatibility(item);
     }
 
     internal LocationInGrid FindFreeSpaceForListing(Item item){
@@ -38,14 +40,20 @@ internal class VicinityStashGrid(string id, CompoundItem parentItem)
     }
 
     public override LocationInGrid FindFreeSpace(Item item){
-        if(item == null || !VicinityLootSession.IsShownInVicinityPanel(item)) return null;
+        if(item == null) return null;
 
-        return base.FindFreeSpace(item);
+        if(!VicinityLootSession.HasListedWorldBinding(item))
+            return Settings.AllowVicinityStaging.Value ? base.FindFreeSpace(item) : null;
+
+        return !VicinityLootSession.IsShownInVicinityPanel(item) ? null : base.FindFreeSpace(item);
     }
 
     public override ContainerAddEventResultStruct AddInternal(
         Item item, LocationInGrid location, bool simulate, bool ignoreRestrictions
     ){
+        if(UsesRealInventoryMove(item, ignoreRestrictions))
+            return base.AddInternal(item, location, simulate, ignoreRestrictions);
+
         if(location == null)
             return new ContainerAddEventResultStruct(new GridNullLocationInventoryError(item, null, this));
 
@@ -84,6 +92,8 @@ internal class VicinityStashGrid(string id, CompoundItem parentItem)
     }
 
     public override ContainerRemoveEventResultStruct RemoveInternal(Item item, bool simulate, bool ignoreRestrictions){
+        if(UsesRealInventoryRemove(item)) return base.RemoveInternal(item, simulate, ignoreRestrictions);
+
         if(!Contains(item)) return new ContainerRemoveEventResultStruct(new GridRemoveInventoryError(item, this));
 
         var locationInGrid = ItemCollection[item];
@@ -94,7 +104,7 @@ internal class VicinityStashGrid(string id, CompoundItem parentItem)
         return new ContainerRemoveEventResultStruct(new ContainerRemoveEventClass(item, fromAddress, simulate));
     }
 
-    public void DetachListedItem(Item item){
+    private void DetachListedItem(Item item){
         if(item == null || !Contains(item)) return;
 
         var locationInGrid = ItemCollection[item];
@@ -140,6 +150,32 @@ internal class VicinityStashGrid(string id, CompoundItem parentItem)
         }
     }
 
+    private static bool UsesRealInventoryMove(Item item, bool ignoreRestrictions){
+        if(!Settings.AllowVicinityStaging.Value || item == null) return false;
+
+        switch(ignoreRestrictions){
+            case true when VicinityLootSession.HasListedWorldBinding(item):
+            case true:
+                return false;
+        }
+
+        if(VicinityStagingRegistry.IsStaged(item)) return true;
+
+        var owner = item.CurrentAddress?.GetOwnerOrNull();
+
+        if(owner == VicinityRaidServices.VicinityTrader) return true;
+
+        return item.CurrentAddress == null || VicinityPlayerInventory.IsInLocalPlayerInventory(item);
+    }
+
+    private static bool UsesRealInventoryRemove(Item item){
+        if(!Settings.AllowVicinityStaging.Value || item == null) return false;
+
+        if(VicinityStagingRegistry.IsStaged(item)) return true;
+
+        return item.CurrentAddress?.GetOwnerOrNull() == VicinityRaidServices.VicinityTrader;
+    }
+
     private void PlaceItemInGrid(Item item, LocationInGrid location){
         method_9(item, location);
     }
@@ -156,12 +192,24 @@ internal class VicinityStashGrid(string id, CompoundItem parentItem)
         public override void Add(Item item, StashGridClass grid, LocationInGrid location){
             if(item == null) return;
 
+            if(UsesRealInventoryMove(item, false)){
+                base.Add(item, grid, location);
+
+                return;
+            }
+
             ItemLocations[item] = location;
             ItemList.Add(item);
         }
 
         public override void Remove(Item item, StashGridClass grid){
             if(item == null) return;
+
+            if(UsesRealInventoryRemove(item)){
+                base.Remove(item, grid);
+
+                return;
+            }
 
             ItemLocations.Remove(item);
             ItemList.Remove(item);

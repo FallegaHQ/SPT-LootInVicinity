@@ -10,7 +10,7 @@ internal static class VicinityTakeFinalize{
     /// </summary>
     /// <param name="itemController"></param>
     /// <returns>Whether the controller is <see cref="VicinityRaidServices.VicinityTrader"/> or the local player.</returns>
-    public static bool IsVicinityPanelController(TraderControllerClass itemController){
+    private static bool IsVicinityPanelController(TraderControllerClass itemController){
         if(itemController == null) return false;
 
         return itemController == VicinityRaidServices.VicinityTrader
@@ -23,7 +23,7 @@ internal static class VicinityTakeFinalize{
     /// <param name="item"></param>
     /// <param name="to">Destination after move; ignored when null.</param>
     /// <returns>Whether this item should run vicinity take cleanup now.</returns>
-    public static bool ShouldRunTakeCleanup(Item item, ItemAddress to = null){
+    private static bool ShouldRunTakeCleanup(Item item, ItemAddress to = null){
         if(item == null) return false;
 
         if(VicinityPanelPresenter.IsInventoryClosing) return false;
@@ -32,11 +32,7 @@ internal static class VicinityTakeFinalize{
 
         if(to != null && VicinityStashGrid.IsVicinityStashAddress(to)) return false;
 
-        if(VicinityLootSession.HasListedWorldBinding(item)) return true;
-
-        var grid = VicinityLootSession.GetVicinityGrid();
-
-        return grid != null && grid.Contains(item);
+        return VicinityLootSession.HasListedWorldBinding(item);
     }
 
     /// <summary>
@@ -44,10 +40,13 @@ internal static class VicinityTakeFinalize{
     /// <see cref="LootInVicinityPlugin.Instance"/> exists so other mods postfixes (e.g. UIFixes) run first.
     /// </summary>
     /// <param name="item"></param>
-    /// <param name="destinationAfterTake">Player inventory address after take; falls back to <see cref="Item.CurrentAddress"/>.</param>
+    /// <param name="to"></param>
+    /// <param name="simulate"></param>
+    /// <param name="succeeded"></param>
     public static void OnMoveSucceeded(Item item, ItemAddress to, bool simulate, bool succeeded){
-        if(simulate || !succeeded) return;
+        if(simulate || !succeeded || item == null) return;
 
+        TryUpdateStagingAfterTransfer(item, to);
         TryFinalizeListedTake(item, to);
     }
 
@@ -56,6 +55,7 @@ internal static class VicinityTakeFinalize{
     ){
         if(simulate || item == null || !succeeded || !IsVicinityPanelController(controller)) return;
 
+        TryUpdateStagingAfterTransfer(item, item.CurrentAddress);
         TryFinalizeListedTake(item, item.CurrentAddress);
     }
 
@@ -64,7 +64,26 @@ internal static class VicinityTakeFinalize{
     ){
         if(simulate || itemContext?.Item == null || failed || !IsVicinityPanelController(controller)) return;
 
-        TryFinalizeListedTake(itemContext.Item, itemContext.Item.CurrentAddress);
+        var item = itemContext.Item;
+
+        TryUpdateStagingAfterTransfer(item, item.CurrentAddress);
+        TryFinalizeListedTake(item, item.CurrentAddress);
+    }
+
+    private static void TryUpdateStagingAfterTransfer(Item item, ItemAddress destination){
+        if(!Settings.AllowVicinityStaging.Value || item == null) return;
+
+        if(destination != null
+        && VicinityStashGrid.IsVicinityStashAddress(destination)
+        && !VicinityLootSession.HasListedWorldBinding(item)){
+            VicinityStagingRegistry.Register(item);
+
+            return;
+        }
+
+        if(VicinityStagingRegistry.IsStaged(item)
+        && (destination == null || !VicinityStashGrid.IsVicinityStashAddress(destination)))
+            VicinityStagingRegistry.Unregister(item);
     }
 
     public static void ApplyListedQuickFindFlags(

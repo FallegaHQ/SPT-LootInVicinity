@@ -30,7 +30,7 @@ internal static class VicinityTakeCleanup{
         LootInVicinityPlugin.Instance.StartCoroutine(DeferredDestroyWorldLootRoutine(worldLoot, item));
     }
 
-    public static void CompleteTakeFromPanel(Item item, ItemAddress destinationAfterTake = null){
+    private static void CompleteTakeFromPanel(Item item, ItemAddress destinationAfterTake = null){
         if(item == null) return;
 
         VicinityListedLootRegistry.TryGetWorldLoot(item, out var worldLoot);
@@ -62,6 +62,10 @@ internal static class VicinityTakeCleanup{
         PendingTakeIds.Clear();
     }
 
+    public static bool IsPendingTake(string itemId){
+        return !string.IsNullOrEmpty(itemId) && PendingTakeIds.Contains(itemId);
+    }
+
     private static IEnumerator DeferredDestroyWorldLootRoutine(LootItem worldLoot, Item takenItem){
         yield return null;
 
@@ -83,33 +87,18 @@ internal static class VicinityTakeCleanup{
         }
     }
 
-    internal static void DestroyWorldLootRepresentation(LootItem worldLoot, Item takenItem){
+    private static void DestroyWorldLootRepresentation(LootItem worldLoot, Item takenItem){
         if(!worldLoot) return;
 
-        if(takenItem != null && worldLoot.Item != null && ReferenceEquals(worldLoot.Item, takenItem)){
-            DestroyWorldLootGameObjectOnly(worldLoot);
+        if(takenItem != null && worldLoot.Item != null && !ReferenceEquals(worldLoot.Item, takenItem)) return;
 
-            return;
-        }
-
-        if(!Singleton<GameWorld>.Instantiated) return;
-
-        try{
-            Singleton<GameWorld>.Instance.DestroyLoot(worldLoot);
-        }
-        catch(Exception ex){
-            LootInVicinityPlugin.Log?.LogWarning(
-                                                 PluginInfo.Format(
-                                                                   $"DestroyLoot failed for {worldLoot.Item?.TemplateId}: {ex}"
-                                                                  )
-                                                );
-
-            DestroyWorldLootGameObjectOnly(worldLoot);
-        }
+        DestroyWorldLootGameObjectOnly(worldLoot);
     }
 
     internal static void DestroyWorldLootGameObjectOnly(LootItem worldLoot){
         if(!worldLoot) return;
+
+        UnregisterWorldLootFromGameWorld(worldLoot);
 
         try{
             worldLoot.enabled = false;
@@ -119,6 +108,23 @@ internal static class VicinityTakeCleanup{
         }
 
         if(worldLoot.gameObject) UnityEngine.Object.Destroy(worldLoot.gameObject);
+    }
+
+    private static void UnregisterWorldLootFromGameWorld(LootItem worldLoot){
+        if(!worldLoot || !Singleton<GameWorld>.Instantiated) return;
+
+        try{
+            var lootList = Singleton<GameWorld>.Instance.LootList;
+
+            lootList?.Remove(worldLoot);
+        }
+        catch(Exception ex){
+            LootInVicinityPlugin.Log?.LogDebug(
+                                               PluginInfo.Format(
+                                                                 $"Could not remove world loot from LootList: {ex.Message}"
+                                                                )
+                                              );
+        }
     }
 
     private static void TrySyncCurrentAddressAfterTake(Item item, ItemAddress destination){

@@ -130,7 +130,7 @@ putting it out there.
 
 ## Support the author
 
-Maintenance and compatibility work takes time. If this mod saves you frustration in raids, consider 
+Maintenance and compatibility work takes time. If this mod saves you frustration in raids, consider
 **[supporting on GitHub Sponsors](https://github.com/sponsors/FallegaHQ)**. There is no paywall--everything stays free
 under the licence below.
 

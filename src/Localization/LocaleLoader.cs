@@ -46,13 +46,13 @@ internal static class LocaleLoader{
     public static string Get(string key){
         if(string.IsNullOrEmpty(key)) return string.Empty;
 
-        var localized = GameLocaleAccess.TryLocalize(key);
-
-        if(!string.IsNullOrEmpty(localized)) return localized;
-
         var fromPack = TryGet(key);
 
-        return !string.IsNullOrEmpty(fromPack) ? fromPack : key;
+        if(!string.IsNullOrEmpty(fromPack)) return fromPack;
+
+        var localized = GameLocaleAccess.TryLocalize(key);
+
+        return !string.IsNullOrEmpty(localized) ? localized : key;
     }
 
     public static string Get(string key, params object[] args){

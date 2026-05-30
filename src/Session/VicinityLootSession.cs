@@ -74,6 +74,7 @@ internal static class VicinityLootSession{
     public static void ResetRaidState(){
         UnbindTraderEvents(VicinityRaidServices.VicinityTrader);
         VicinityListedLootRegistry.Clear();
+        VicinityStagingRegistry.Clear();
         VicinityTakeCleanup.ClearPendingTakes();
     }
 
@@ -83,8 +84,16 @@ internal static class VicinityLootSession{
         _suppressWorldSync = true;
 
         try{
+            VicinityStagingDrop.DropAllBeforeClear();
+
             if(grid != null){
                 foreach(var item in grid.Items.ToList()){
+                    if(VicinityStagingRegistry.IsStaged(item)){
+                        grid.ForceRemoveListedItem(item);
+
+                        continue;
+                    }
+
                     VicinityListedLootRegistry.UnsubscribeWorldOwner(item);
                     grid.ForceRemoveListedItem(item);
                 }
@@ -140,16 +149,8 @@ internal static class VicinityLootSession{
         VicinityTakeCleanup.ScheduleTakeFromPanel(item, destinationAfterTake);
     }
 
-    public static void CompleteTakeFromPanel(Item item, ItemAddress destinationAfterTake = null){
-        VicinityTakeCleanup.CompleteTakeFromPanel(item, destinationAfterTake);
-    }
-
     public static void UnlistFromPanelWithoutDestroyingWorld(Item item){
         VicinityTakeCleanup.UnlistFromPanelWithoutDestroyingWorld(item);
-    }
-
-    internal static void DestroyWorldLootRepresentation(LootItem worldLoot, Item takenItem){
-        VicinityTakeCleanup.DestroyWorldLootRepresentation(worldLoot, takenItem);
     }
 
     internal static void DestroyWorldLootGameObjectOnly(LootItem worldLoot){
@@ -176,7 +177,7 @@ internal static class VicinityLootSession{
     /// Subscribed in <see cref="BindTraderEvents"/>. Dragging or quick-moving from the vicinity panel removes the row
     /// from the fake trader grid at move start, which raises this callback before the item is in player inventory and
     /// while <see cref="ItemAddress"/> may still point at the vicinity stash.
-    /// Do not call <see cref="ScheduleTakeFromPanel"/> or <see cref="CompleteTakeFromPanel"/> here. Early clean-up
+    /// Do not call <see cref="ScheduleTakeFromPanel"/> here. Early clean-up
     /// drops the ListedToWorld binding before move or quick-find succeeds and causes ghost UI rows or a broken item.
     /// When the take actually completes, use <see cref="VicinityTakeFinalize.TryFinalizeListedTake"/> from
     /// <see cref="Softwyx.LootInVicinity.Patches.VicinityInteractionsMovePatch"/>,

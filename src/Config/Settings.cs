@@ -18,6 +18,7 @@ internal static class Settings{
     public static ConfigEntry<bool>  MainScanRequireLineOfSight;
     public static ConfigEntry<int>   MaxItemsInPanel;
     public static ConfigEntry<bool>  HidePanelWhenEmpty;
+    public static ConfigEntry<bool>  AllowVicinityStaging;
     public static ConfigEntry<bool>  RouteQuestItemsToTaskStash;
     public static ConfigEntry<bool>  ShowQuestItemsInVicinity;
 
@@ -103,6 +104,19 @@ internal static class Settings{
                                                                      Advanced()
                                                                     )
                                                                )
+                         );
+
+        ConfigEntries.Add(
+                          AllowVicinityStaging = config.Bind(
+                                                             InventorySectionTitle,
+                                                             "Allow staging in vicinity panel",
+                                                             true,
+                                                             new ConfigDescription(
+                                                                  "Drag items from your inventory into the nearby panel to reorganize. Staged items drop at your feet when you close inventory",
+                                                                  null,
+                                                                  Basic()
+                                                                 )
+                                                            )
                          );
 
         ConfigEntries.Add(

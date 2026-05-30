@@ -15,8 +15,10 @@ global using Softwyx.LootInVicinity.World;
 
 // Operation results (GStruct154 envelope)
 global using MoveResult = GStruct154<GClass3411>;
+global using DiscardResult = GStruct154<GClass3408>;
 global using QuickFindResult = GStruct154<GInterface424>;
 global using ItemUiQuickFindResult = GStruct153;
+global using InventoryStringError = GClass1522;
 
 // Stash grid
 global using StashGridCollectionClass = GClass3120;
@@ -33,6 +35,4 @@ global using RemoveItemEventArgs = GEventArgs3;
 
 // UI item contexts
 global using RaidInventoryItemContext = GClass3459;
-
-// Physics -- nearest hit along a ray (occlusion / line of sight)
-global using NearestHitRaycast = GClass943;
+global using TransferItemContext = GClass3461;
