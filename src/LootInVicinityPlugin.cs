@@ -28,6 +28,7 @@ public class LootInVicinityPlugin : BaseUnityPlugin{
         EnablePatch<DestroyLootPatch>("DestroyLootPatch");
         EnablePatch<BotItemTakerRefreshPatch>("BotItemTakerRefreshPatch");
         EnablePatch<VicinityListedQuickFindFlagsPatch>("VicinityListedQuickFindFlagsPatch");
+        EnablePatch<VicinityItemUiListedQuickFindPatch>("VicinityItemUiListedQuickFindPatch");
         EnablePatch<VicinityInteractionsMovePatch>("VicinityInteractionsMovePatch");
         EnablePatch<VicinityQuickFindPatch>("VicinityQuickFindPatch");
         EnablePatch<VicinityItemUiQuickFindPatch>("VicinityItemUiQuickFindPatch");
