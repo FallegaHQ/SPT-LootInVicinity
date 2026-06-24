@@ -142,8 +142,7 @@ internal static class VicinityLootScanner{
         if(!mainScanRequireLineOfSight || loot.Item.QuestItem) return true;
 
         var losCollider = hitCollider ?? loot.GetComponent<Collider>() ?? loot.GetComponentInChildren<Collider>();
-        var lootPoint   = loot.TrackableTransform.position;
 
-        return losCollider && LineOfSight.CanSeeLoot(player, losCollider, lootPoint);
+        return losCollider && LineOfSight.CanSeeLoot(player, losCollider, loot.TrackableTransform.position);
     }
 }

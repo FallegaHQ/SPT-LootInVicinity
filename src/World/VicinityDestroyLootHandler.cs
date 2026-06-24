@@ -20,10 +20,12 @@ internal static class VicinityDestroyLootHandler{
         if(VicinityLootSession.HasListedWorldBinding(item)
         || VicinityListedLootRegistry.IsRegisteredWorldLoot(worldLoot)
         || VicinityTakeCleanup.IsPendingTake(item.Id)){
+            VicinityListedWorldCleanup.TryCleanupOnDestroyLoot(worldLoot, item);
+
             LootInVicinityPlugin.Log?.LogDebug(
                                                PluginInfo.Format(
-                                                                 $"DestroyLoot skipped for vicinity-listed item "
-                                                               + $"{item.TemplateId} (deferred cleanup)."
+                                                                 $"DestroyLoot handled for vicinity item "
+                                                               + $"{item.TemplateId}."
                                                                 )
                                               );
 

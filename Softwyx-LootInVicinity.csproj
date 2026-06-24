@@ -8,7 +8,7 @@
         <Nullable>disable</Nullable>
         <Configurations>Debug;Release;Package</Configurations>
         <!-- Patch is auto-incremented on each build (see scripts/IncrementVersion.ps1). Edit major/minor here. -->
-        <Version>2.15.600</Version>
+        <Version>2.15.624</Version>
         <!-- Set -p:IncrementVersionOnBuild=false to skip auto-bump (e.g. rebuild without changing version). -->
         <IncrementVersionOnBuild Condition="'$(IncrementVersionOnBuild)' == ''">true</IncrementVersionOnBuild>
         <AssemblyVersion>$(Version)</AssemblyVersion>

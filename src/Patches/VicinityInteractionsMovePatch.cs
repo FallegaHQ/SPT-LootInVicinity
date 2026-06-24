@@ -20,10 +20,18 @@ internal sealed class VicinityInteractionsMovePatch : ModulePatch{
                                  );
     }
 
+    [PatchPrefix]
+    public static void CaptureMoveFromAddress(Item item, ref ItemAddress __state){
+        __state = item?.CurrentAddress;
+    }
+
     [PatchPostfix]
     public static void PatchPostfix(
-        Item item, ItemAddress to, TraderControllerClass itemController, bool simulate, ref MoveResult __result
+        Item        item, ItemAddress to, TraderControllerClass itemController, bool simulate, ref MoveResult __result,
+        ItemAddress __state
     ){
         VicinityTakeFinalize.OnMoveSucceeded(item, to, simulate, __result.Succeeded);
+        VicinityListedWorldCleanup.TryCleanupAfterInventoryMutation(item, simulate, __result.Succeeded);
+        VicinityListedWorldCleanup.TryCleanupAfterMoveFromAddress(__state, simulate, __result.Succeeded);
     }
 }

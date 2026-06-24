@@ -26,16 +26,12 @@ internal static class VicinityWorldOwnerRemoveHandler{
             if(owner != null) VicinityItemOwnerEvents.RemoveRemoveHandler(owner, OnRemoveItem);
         }
 
-        if(VicinityPlayerInventory.IsInLocalPlayerInventory(args.Item)
-        || (VicinityListedLootRegistry.TryGetWorldLoot(args.Item, out var worldLoot)
-         && worldLoot.Item is{
-                                 StackObjectsCount: <= 0
-                             })){
+        if(VicinityPlayerInventory.IsInLocalPlayerInventory(args.Item)){
             VicinityTakeFinalize.TryFinalizeListedTake(args.Item, args.Location);
 
             return;
         }
 
-        VicinityLootSession.UnlistFromPanelWithoutDestroyingWorld(args.Item);
+        VicinityListedWorldCleanup.TryCleanupListedWorldRepresentation(args.Item);
     }
 }

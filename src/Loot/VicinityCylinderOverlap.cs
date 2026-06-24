@@ -13,28 +13,31 @@ internal static class VicinityCylinderOverlap{
     public static int OverlapCylinderNonAlloc(
         Vector3 center, Vector3 up, float radius, float height, Collider[] results, int layerMask
     ){
-        if(results == null || results.Length == 0 || radius <= 0f || height <= 0f) return 0;
+        if(results is not{
+                             Length: > 0
+                         }
+        || radius <= 0f
+        || height <= 0f)
+            return 0;
 
         up = up.sqrMagnitude > 0.0001f ? up.normalized : Vector3.up;
 
         var innerHalf = Mathf.Max(height * 0.5f - radius, 0f);
-        var p0        = center + up * innerHalf;
-        var p1        = center - up * innerHalf;
-
-        var count = Physics.OverlapCapsuleNonAlloc(p0, p1, radius, results, layerMask, QueryTriggerInteraction.Collide);
+        var count = Physics.OverlapCapsuleNonAlloc(
+                                                   center + up * innerHalf,
+                                                   center - up * innerHalf,
+                                                   radius,
+                                                   results,
+                                                   layerMask,
+                                                   QueryTriggerInteraction.Collide
+                                                  );
 
         var validCount = 0;
 
         for(var i = 0; i < count; i++){
             var collider = results[i];
-
-            if(!collider) continue;
-
-            var closest = collider.ClosestPoint(center);
-
-            if(!IsInsideCylinder(closest, center, up, radius, height)) continue;
-
-            results[validCount++] = collider;
+            if(collider && IsInsideCylinder(collider.ClosestPoint(center), center, up, radius, height))
+                results[validCount++] = collider;
         }
 
         return validCount;

@@ -19,9 +19,8 @@ internal static class VicinityTakeCleanup{
         VicinityListedLootRegistry.TryGetWorldLoot(item, out var worldLoot);
 
         var inInventory = VicinityPlayerInventory.IsInLocalPlayerInventory(item);
-        var depletedOnWorld = worldLoot?.Item is{
-                                                    StackObjectsCount: <= 0
-                                                };
+        var depletedOnWorld = worldLoot?.Item != null
+                           && VicinityListedWorldCleanup.IsWorldRepresentationObsolete(worldLoot.Item);
 
         if(!inInventory && !depletedOnWorld) return;
 
@@ -88,9 +87,8 @@ internal static class VicinityTakeCleanup{
 
             if(takenItem != null
             && !VicinityPlayerInventory.IsInLocalPlayerInventory(takenItem)
-            && worldLoot.Item is not{
-                                        StackObjectsCount: <= 0
-                                    })
+            && worldLoot.Item != null
+            && !VicinityListedWorldCleanup.IsWorldRepresentationObsolete(worldLoot.Item))
                 yield break;
 
             if(VicinityListedLootRegistry.OtherListedItemsShareWorldLoot(worldLoot, itemId)) yield break;
@@ -109,7 +107,7 @@ internal static class VicinityTakeCleanup{
 
         var worldItem = worldLoot.Item;
 
-        if(worldItem.StackObjectsCount <= 0) return true;
+        if(VicinityListedWorldCleanup.IsWorldRepresentationObsolete(worldItem)) return true;
 
         if(!ReferenceEquals(worldItem, takenItem)) return false;
 
@@ -121,7 +119,7 @@ internal static class VicinityTakeCleanup{
 
         var worldItem = worldLoot.Item;
 
-        if(worldItem.StackObjectsCount <= 0){
+        if(VicinityListedWorldCleanup.IsWorldRepresentationObsolete(worldItem)){
             DestroyWorldLootGameObjectOnly(worldLoot);
 
             return;
