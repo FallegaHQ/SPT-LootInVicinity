@@ -18,9 +18,18 @@ internal static class VicinityTakeCleanup{
 
         VicinityListedLootRegistry.TryGetWorldLoot(item, out var worldLoot);
 
+        var inInventory = VicinityPlayerInventory.IsInLocalPlayerInventory(item);
+        var depletedOnWorld = worldLoot?.Item is{
+                                                    StackObjectsCount: <= 0
+                                                };
+
+        if(!inInventory && !depletedOnWorld) return;
+
         var grid = VicinityLootSession.GetVicinityGrid();
 
         if(!VicinityListedLootRegistry.HasBinding(item) && (grid == null || !grid.Contains(item))) return;
+
+        if(!IsListedTakeComplete(item, worldLoot)) return;
 
         CompleteTakeFromPanel(item, destinationAfterTake);
 
@@ -77,7 +86,12 @@ internal static class VicinityTakeCleanup{
 
             if(!Singleton<GameWorld>.Instantiated) yield break;
 
-            if(takenItem != null && !VicinityPlayerInventory.IsInLocalPlayerInventory(takenItem)) yield break;
+            if(takenItem != null
+            && !VicinityPlayerInventory.IsInLocalPlayerInventory(takenItem)
+            && worldLoot.Item is not{
+                                        StackObjectsCount: <= 0
+                                    })
+                yield break;
 
             if(VicinityListedLootRegistry.OtherListedItemsShareWorldLoot(worldLoot, itemId)) yield break;
 
@@ -88,10 +102,32 @@ internal static class VicinityTakeCleanup{
         }
     }
 
-    private static void DestroyWorldLootRepresentation(LootItem worldLoot, Item takenItem){
-        if(!worldLoot) return;
+    private static bool IsListedTakeComplete(Item takenItem, LootItem worldLoot){
+        if(takenItem == null) return false;
 
-        if(takenItem != null && worldLoot.Item != null && !ReferenceEquals(worldLoot.Item, takenItem)) return;
+        if(worldLoot?.Item == null) return true;
+
+        var worldItem = worldLoot.Item;
+
+        if(worldItem.StackObjectsCount <= 0) return true;
+
+        if(!ReferenceEquals(worldItem, takenItem)) return false;
+
+        return VicinityPlayerInventory.IsInLocalPlayerInventory(takenItem);
+    }
+
+    private static void DestroyWorldLootRepresentation(LootItem worldLoot, Item takenItem){
+        if(worldLoot?.Item == null) return;
+
+        var worldItem = worldLoot.Item;
+
+        if(worldItem.StackObjectsCount <= 0){
+            DestroyWorldLootGameObjectOnly(worldLoot);
+
+            return;
+        }
+
+        if(takenItem != null && !ReferenceEquals(worldItem, takenItem)) return;
 
         DestroyWorldLootGameObjectOnly(worldLoot);
     }

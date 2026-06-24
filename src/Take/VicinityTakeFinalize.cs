@@ -32,7 +32,14 @@ internal static class VicinityTakeFinalize{
 
         if(to != null && VicinityStashGrid.IsVicinityStashAddress(to)) return false;
 
-        return VicinityLootSession.HasListedWorldBinding(item);
+        if(!VicinityLootSession.HasListedWorldBinding(item)) return false;
+
+        if(VicinityPlayerInventory.IsInLocalPlayerInventory(item)) return true;
+
+        return VicinityListedLootRegistry.TryGetWorldLoot(item, out var worldLoot)
+            && worldLoot.Item is{
+                                    StackObjectsCount: <= 0
+                                };
     }
 
     /// <summary>

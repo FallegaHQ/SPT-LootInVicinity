@@ -26,10 +26,11 @@ internal static class VicinityWorldOwnerRemoveHandler{
             if(owner != null) VicinityItemOwnerEvents.RemoveRemoveHandler(owner, OnRemoveItem);
         }
 
-        var leavingForPlayer = VicinityLootSession.HasLeftVicinityStash(args.Item)
-                            || (args.Location != null && !VicinityStashGrid.IsVicinityStashAddress(args.Location));
-
-        if(leavingForPlayer){
+        if(VicinityPlayerInventory.IsInLocalPlayerInventory(args.Item)
+        || (VicinityListedLootRegistry.TryGetWorldLoot(args.Item, out var worldLoot)
+         && worldLoot.Item is{
+                                 StackObjectsCount: <= 0
+                             })){
             VicinityTakeFinalize.TryFinalizeListedTake(args.Item, args.Location);
 
             return;
