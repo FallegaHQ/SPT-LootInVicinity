@@ -1,12 +1,13 @@
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using EFT.InventoryLogic;
 using HarmonyLib;
 using SPT.Reflection.Patching;
-using System.Reflection;
 
 namespace Softwyx.LootInVicinity.Patches;
 
-/// <summary>Postfix on handler <see cref="InteractionsHandlerClass.QuickFindAppropriatePlace"/>.</summary>
+/// <summary>Postfix on handler <see cref="InteractionsHandlerClass.QuickFindAppropriatePlace" />.</summary>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 internal sealed class VicinityQuickFindPatch : ModulePatch{
     protected override MethodBase GetTargetMethod(){
@@ -15,7 +16,7 @@ internal sealed class VicinityQuickFindPatch : ModulePatch{
                                   nameof(InteractionsHandlerClass.QuickFindAppropriatePlace),
                                   [
                                       typeof(Item), typeof(TraderControllerClass),
-                                      typeof(System.Collections.Generic.IEnumerable<CompoundItem>),
+                                      typeof(IEnumerable<CompoundItem>),
                                       typeof(InteractionsHandlerClass.EMoveItemOrder), typeof(bool)
                                   ]
                                  );

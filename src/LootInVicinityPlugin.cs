@@ -1,8 +1,9 @@
+using System;
+using System.Collections;
 using BepInEx;
 using BepInEx.Logging;
 using Softwyx.LootInVicinity.Patches;
 using SPT.Reflection.Patching;
-using System.Collections;
 
 namespace Softwyx.LootInVicinity;
 
@@ -51,7 +52,7 @@ public class LootInVicinityPlugin : BaseUnityPlugin{
             new T().Enable();
             Log.LogInfo(PluginInfo.Format($"{name} enabled."));
         }
-        catch(System.Exception ex){
+        catch(Exception ex){
             Log.LogError(PluginInfo.Format($"{name} failed: {ex}"));
         }
     }

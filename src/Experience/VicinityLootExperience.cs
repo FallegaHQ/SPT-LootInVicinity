@@ -1,10 +1,10 @@
-using EFT.InventoryLogic;
 using System;
+using EFT.InventoryLogic;
 
 namespace Softwyx.LootInVicinity.Experience;
 
 /// <summary>
-/// Awards raid XP/skills when items are taken via the vicinity panel.
+///     Awards raid XP/skills when items are taken via the vicinity panel.
 /// </summary>
 internal static class VicinityLootExperience{
     public static void TryGrantForTake(Item item){

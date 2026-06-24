@@ -35,10 +35,10 @@ $newVersion = '{0}.{1}.{2}' -f $major, $minor, $patch
 $utf8NoBom = New-Object System.Text.UTF8Encoding $false
 
 $csprojText = [regex]::Replace(
-        $csprojText,
-        '<Version>\d+\.\d+\.\d+</Version>',
-        "<Version>$newVersion</Version>",
-        1
+    $csprojText,
+    '<Version>\d+\.\d+\.\d+</Version>',
+    "<Version>$newVersion</Version>",
+    1
 )
 [System.IO.File]::WriteAllText($csprojPath, $csprojText, $utf8NoBom)
 

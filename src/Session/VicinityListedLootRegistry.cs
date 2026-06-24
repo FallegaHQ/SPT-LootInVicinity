@@ -1,11 +1,11 @@
-using EFT.Interactive;
-using EFT.InventoryLogic;
 using System.Collections.Generic;
 using System.Linq;
+using EFT.Interactive;
+using EFT.InventoryLogic;
 
 namespace Softwyx.LootInVicinity.Session;
 
-/// <summary>Maps listed panel rows to world <see cref="LootItem"/> piles and world-owner subscriptions.</summary>
+/// <summary>Maps listed panel rows to world <see cref="LootItem" /> piles and world-owner subscriptions.</summary>
 internal static class VicinityListedLootRegistry{
     private static readonly Dictionary<string, LootItem> ListedToWorld = new();
 

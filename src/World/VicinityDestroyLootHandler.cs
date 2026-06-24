@@ -7,7 +7,7 @@ namespace Softwyx.LootInVicinity.World;
 /// <summary>DestroyLoot prefix -- skip vanilla destroy for vicinity-listed loot and in-inventory pickups.</summary>
 internal static class VicinityDestroyLootHandler{
     /// <param name="loot"></param>
-    /// <returns>Whether vanilla <see cref="GameWorld.DestroyLoot(IKillableLootItem)"/> should run.</returns>
+    /// <returns>Whether vanilla <see cref="GameWorld.DestroyLoot(IKillableLootItem)" /> should run.</returns>
     public static bool ShouldRunVanillaDestroyLoot(IKillableLootItem loot){
         if(loot is not LootItem worldLoot) return true;
 

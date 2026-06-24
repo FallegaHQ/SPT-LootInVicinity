@@ -1,5 +1,5 @@
-using BepInEx.Configuration;
 using System.Collections.Generic;
+using BepInEx.Configuration;
 using UnityEngine;
 
 namespace Softwyx.LootInVicinity.Config;
@@ -12,6 +12,8 @@ internal static class Settings{
     private const string InventorySectionTitle = "2. Inventory panel";
     private const string ScanSectionTitle      = "3. Scanning";
     private const string QuestSectionTitle     = "4. Quest items";
+
+    private const float ScanRadiusStep = 0.05f;
 
     public static ConfigEntry<bool>  Enabled;
     public static ConfigEntry<float> ScanRadius;
@@ -187,8 +189,6 @@ internal static class Settings{
         RecalcOrder();
         ConfigFloatUi.SnapEntries(ConfigEntries, step: ScanRadiusStep);
     }
-
-    private const float ScanRadiusStep = 0.05f;
 
     private static ConfigurationManagerAttributes Basic(){
         return new ConfigurationManagerAttributes{

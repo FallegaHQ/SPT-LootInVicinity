@@ -1,13 +1,15 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using EFT.InventoryLogic;
 using HarmonyLib;
 using SPT.Reflection.Patching;
-using System.Reflection;
 
 namespace Softwyx.LootInVicinity.Patches;
 
-/// <summary>Prefix on <see cref="InteractionsHandlerClass.Discard"/> --
-/// blocks discard for items listed in the vicinity panel grid.</summary>
+/// <summary>
+///     Prefix on <see cref="InteractionsHandlerClass.Discard" /> --
+///     blocks discard for items listed in the vicinity panel grid.
+/// </summary>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 internal sealed class VicinityDiscardPatch : ModulePatch{
     protected override MethodBase GetTargetMethod(){

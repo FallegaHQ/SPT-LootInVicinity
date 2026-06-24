@@ -1,13 +1,15 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using EFT.InventoryLogic;
 using HarmonyLib;
 using SPT.Reflection.Patching;
-using System.Reflection;
 
 namespace Softwyx.LootInVicinity.Patches;
 
-/// <summary>Postfix on <see cref="InteractionsHandlerClass.Move"/> --
-/// delegates to <see cref="VicinityTakeFinalize.OnMoveSucceeded"/>.</summary>
+/// <summary>
+///     Postfix on <see cref="InteractionsHandlerClass.Move" /> --
+///     delegates to <see cref="VicinityTakeFinalize.OnMoveSucceeded" />.
+/// </summary>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 internal sealed class VicinityInteractionsMovePatch : ModulePatch{
     protected override MethodBase GetTargetMethod(){

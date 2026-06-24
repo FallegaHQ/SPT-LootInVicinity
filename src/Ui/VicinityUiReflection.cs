@@ -1,9 +1,10 @@
+using System;
+using System.Linq;
+using System.Reflection;
 using EFT.InventoryLogic;
 using EFT.UI;
 using EFT.UI.DragAndDrop;
 using HarmonyLib;
-using System.Linq;
-using System.Reflection;
 using UnityEngine;
 
 namespace Softwyx.LootInVicinity.Ui;
@@ -97,10 +98,7 @@ internal static class VicinityUiReflection{
                        ?? AccessTools.GetDeclaredFields(typeof(ItemUiContext)).
                                       FirstOrDefault(
                                                      f => f.FieldType == typeof(Transform)
-                                                       && f.Name.IndexOf(
-                                                                         "drag",
-                                                                         System.StringComparison.OrdinalIgnoreCase
-                                                                        )
+                                                       && f.Name.IndexOf("drag", StringComparison.OrdinalIgnoreCase)
                                                        >= 0
                                                     );
 

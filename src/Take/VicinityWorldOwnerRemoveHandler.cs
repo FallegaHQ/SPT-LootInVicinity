@@ -4,7 +4,7 @@ using EFT.InventoryLogic;
 
 namespace Softwyx.LootInVicinity.Take;
 
-/// <summary>Routes world <see cref="IItemOwner"/> remove events for listed vicinity loot into take or unlist logic.</summary>
+/// <summary>Routes world <see cref="IItemOwner" /> remove events for listed vicinity loot into take or unlist logic.</summary>
 internal static class VicinityWorldOwnerRemoveHandler{
     public static void OnRemoveItem(RemoveItemEventArgs args){
         if(args is null) return;

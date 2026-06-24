@@ -12,7 +12,7 @@ internal static class VicinityStashItemContext{
         if(panelHost != null){
             var transferRoot = new TransferItemContext(EItemViewType.InventoryWithoutDiscard, panelHost);
 
-            return transferRoot.CreatePlayerSideChild(stash, false);
+            return transferRoot.CreatePlayerSideChild(stash);
         }
 
         if(sourceContext != null) return sourceContext.CreateChild(stash);
@@ -23,7 +23,7 @@ internal static class VicinityStashItemContext{
 
         var root = new RaidInventoryItemContext(
                                                 inventory.Equipment,
-                                                RaidInventoryItemContext.EItemType.Inventory,
+                                                GClass3459.EItemType.Inventory,
                                                 inventory.FavoriteItemsStorage,
                                                 false
                                                );

@@ -1,6 +1,6 @@
+using System.Collections.Generic;
 using EFT.InventoryLogic;
 using EFT.UI.DragAndDrop;
-using System.Collections.Generic;
 
 namespace Softwyx.LootInVicinity.Grid;
 

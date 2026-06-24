@@ -8,12 +8,6 @@ internal static class VicinityLocalPlayer{
     private static Player              _raidPlayer;
     private static InventoryController _cachedController;
 
-    public static Player Find(){
-        TryBind();
-
-        return _raidPlayer;
-    }
-
     public static Inventory Inventory => InventoryController?.Inventory;
 
     public static InventoryController InventoryController{
@@ -22,6 +16,12 @@ internal static class VicinityLocalPlayer{
 
             return _cachedController;
         }
+    }
+
+    public static Player Find(){
+        TryBind();
+
+        return _raidPlayer;
     }
 
     public static bool MatchesInventoryController(InventoryController inventoryController){

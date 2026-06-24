@@ -1,7 +1,7 @@
-using EFT.InventoryLogic;
-using EFT.UI;
 using System.Collections;
 using System.Threading.Tasks;
+using EFT.InventoryLogic;
+using EFT.UI;
 
 namespace Softwyx.LootInVicinity.Ui.Handlers;
 

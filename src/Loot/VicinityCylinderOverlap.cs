@@ -2,14 +2,14 @@ using UnityEngine;
 
 namespace Softwyx.LootInVicinity.Loot;
 
-/// <summary>Capsule query plus flat-ended cylinder test (see <see cref="OverlapCylinderNonAlloc"/>).</summary>
+/// <summary>Capsule query plus flat-ended cylinder test (see <see cref="OverlapCylinderNonAlloc" />).</summary>
 internal static class VicinityCylinderOverlap{
     /// <summary>
-    /// Fills <paramref name="results"/> with colliders inside a flat-ended cylinder. Uses
-    /// <see cref="Physics.OverlapCapsuleNonAlloc(Vector3,Vector3,float,Collider[],int,QueryTriggerInteraction)"/>
-    /// then <see cref="IsInsideCylinder"/> on each hit's closest point.
+    ///     Fills <paramref name="results" /> with colliders inside a flat-ended cylinder. Uses
+    ///     <see cref="Physics.OverlapCapsuleNonAlloc(Vector3,Vector3,float,Collider[],int,QueryTriggerInteraction)" />
+    ///     then <see cref="IsInsideCylinder" /> on each hit's closest point.
     /// </summary>
-    /// <returns>Number of colliders written to <paramref name="results"/>.</returns>
+    /// <returns>Number of colliders written to <paramref name="results" />.</returns>
     public static int OverlapCylinderNonAlloc(
         Vector3 center, Vector3 up, float radius, float height, Collider[] results, int layerMask
     ){
@@ -41,7 +41,7 @@ internal static class VicinityCylinderOverlap{
     }
 
     /// <summary>
-    /// Whether <paramref name="point"/> lies inside a cylinder aligned on <paramref name="up"/>.
+    ///     Whether <paramref name="point" /> lies inside a cylinder aligned on <paramref name="up" />.
     /// </summary>
     /// <param name="point"></param>
     /// <param name="center"></param>

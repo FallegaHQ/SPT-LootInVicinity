@@ -1,12 +1,12 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using EFT.UI;
 using HarmonyLib;
 using SPT.Reflection.Patching;
-using System.Reflection;
 
 namespace Softwyx.LootInVicinity.Patches;
 
-/// <summary>Postfix on <see cref="ItemUiContext.QuickFindAppropriatePlace"/> (Ctrl+click).</summary>
+/// <summary>Postfix on <see cref="ItemUiContext.QuickFindAppropriatePlace" /> (Ctrl+click).</summary>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 internal sealed class VicinityItemUiQuickFindPatch : ModulePatch{
     protected override MethodBase GetTargetMethod(){

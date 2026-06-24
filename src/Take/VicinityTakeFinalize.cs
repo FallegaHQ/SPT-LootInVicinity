@@ -1,15 +1,15 @@
-using EFT.InventoryLogic;
 using System.Collections;
+using EFT.InventoryLogic;
 
 namespace Softwyx.LootInVicinity.Take;
 
 /// <summary>Shared take-finalization gates used by Move / QuickFind / ItemUiContext patches.</summary>
 internal static class VicinityTakeFinalize{
     /// <summary>
-    /// Identifies move/quick-find sources for the fake vicinity stash or local raid inventory.
+    ///     Identifies move/quick-find sources for the fake vicinity stash or local raid inventory.
     /// </summary>
     /// <param name="itemController"></param>
-    /// <returns>Whether the controller is <see cref="VicinityRaidServices.VicinityTrader"/> or the local player.</returns>
+    /// <returns>Whether the controller is <see cref="VicinityRaidServices.VicinityTrader" /> or the local player.</returns>
     private static bool IsVicinityPanelController(TraderControllerClass itemController){
         if(itemController == null) return false;
 
@@ -18,7 +18,7 @@ internal static class VicinityTakeFinalize{
     }
 
     /// <summary>
-    /// Central gate before <see cref="VicinityLootSession.ScheduleTakeFromPanel"/> runs from patch or world-owner paths.
+    ///     Central gate before <see cref="VicinityLootSession.ScheduleTakeFromPanel" /> runs from patch or world-owner paths.
     /// </summary>
     /// <param name="item"></param>
     /// <param name="to">Destination after move; ignored when null.</param>
@@ -36,8 +36,8 @@ internal static class VicinityTakeFinalize{
     }
 
     /// <summary>
-    /// Removes the vicinity row and schedules world destroy after a successful take. Defers one frame when
-    /// <see cref="LootInVicinityPlugin.Instance"/> exists so other mods postfixes (e.g. UIFixes) run first.
+    ///     Removes the vicinity row and schedules world destroy after a successful take. Defers one frame when
+    ///     <see cref="LootInVicinityPlugin.Instance" /> exists so other mods postfixes (e.g. UIFixes) run first.
     /// </summary>
     /// <param name="item"></param>
     /// <param name="to"></param>
@@ -113,7 +113,7 @@ internal static class VicinityTakeFinalize{
     }
 
     /// <summary>
-    /// One-frame delay before <see cref="VicinityLootSession.ScheduleTakeFromPanel"/>.
+    ///     One-frame delay before <see cref="VicinityLootSession.ScheduleTakeFromPanel" />.
     /// </summary>
     /// <param name="item"></param>
     /// <param name="destination"></param>

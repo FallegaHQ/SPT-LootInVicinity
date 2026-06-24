@@ -9,7 +9,7 @@ internal static class QuestItemMoveHandler{
     /// <param name="itemController"></param>
     /// <param name="simulate"></param>
     /// <param name="result"></param>
-    /// <returns>Whether vanilla <see cref="InteractionsHandlerClass.Move"/> should run.</returns>
+    /// <returns>Whether vanilla <see cref="InteractionsHandlerClass.Move" /> should run.</returns>
     public static bool TryInterceptMove(
         Item item, ItemAddress to, TraderControllerClass itemController, bool simulate, out MoveResult result
     ){
@@ -26,7 +26,7 @@ internal static class QuestItemMoveHandler{
 
         if(inventoryController?.Inventory?.QuestRaidItems == null) return true;
 
-        if(to.IsChildOf(inventoryController.Inventory.QuestRaidItems, false)) return true;
+        if(to.IsChildOf(inventoryController.Inventory.QuestRaidItems)) return true;
 
         if(!QuestLootRouting.TryMoveToQuestRaid(item, inventoryController, false, out var questOperation)) return true;
 

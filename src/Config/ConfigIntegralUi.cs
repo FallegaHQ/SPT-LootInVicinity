@@ -1,7 +1,7 @@
-using BepInEx.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using BepInEx.Configuration;
 using UnityEngine;
 
 namespace Softwyx.LootInVicinity.Config;
@@ -12,16 +12,6 @@ internal static class ConfigIntegralUi{
 
     private static readonly Dictionary<int, IntFieldState>  IntEditStates  = new();
     private static readonly Dictionary<int, LongFieldState> LongEditStates = new();
-
-    private sealed class IntFieldState{
-        public string Text;
-        public bool   WasFocused;
-    }
-
-    private sealed class LongFieldState{
-        public string Text;
-        public bool   WasFocused;
-    }
 
     public static ConfigurationManagerAttributes IntAttributes(bool isAdvanced, int step = 0){
         return new ConfigurationManagerAttributes{
@@ -249,5 +239,15 @@ internal static class ConfigIntegralUi{
 
                    GUILayout.EndHorizontal();
                };
+    }
+
+    private sealed class IntFieldState{
+        public string Text;
+        public bool   WasFocused;
+    }
+
+    private sealed class LongFieldState{
+        public string Text;
+        public bool   WasFocused;
     }
 }

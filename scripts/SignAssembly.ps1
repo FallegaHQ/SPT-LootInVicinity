@@ -79,14 +79,14 @@ function Find-CertInStore([string]$store, [string]$subject)
 
     $now = Get-Date
     return Get-ChildItem $store -ErrorAction SilentlyContinue |
-            Where-Object {
-                $_.Subject -eq $subject -and
-                        $_.NotBefore -le $now -and
-                        $_.NotAfter -gt $now -and
-                        $_.HasPrivateKey
-            } |
-            Sort-Object NotAfter -Descending |
-            Select-Object -First 1
+        Where-Object {
+            $_.Subject -eq $subject -and
+                $_.NotBefore -le $now -and
+                $_.NotAfter -gt $now -and
+                $_.HasPrivateKey
+        } |
+        Sort-Object NotAfter -Descending |
+        Select-Object -First 1
 }
 
 function New-CodeSigningCert([string]$subject, [string]$store)
@@ -111,9 +111,9 @@ function New-CodeSigningCert([string]$subject, [string]$store)
 }
 
 function Export-CertToPfx(
-        [System.Security.Cryptography.X509Certificates.X509Certificate2]$cert,
-        [string]$exportPath,
-        [string]$pwd
+    [System.Security.Cryptography.X509Certificates.X509Certificate2]$cert,
+    [string]$exportPath,
+    [string]$pwd
 )
 {
     $dir = Split-Path $exportPath -Parent
@@ -126,15 +126,15 @@ function Export-CertToPfx(
     {
         $secure = ConvertTo-SecureString $pwd -AsPlainText -Force
         $pfxBytes = $cert.Export(
-                [System.Security.Cryptography.X509Certificates.X509ContentType]::Pfx,
-                $secure
+            [System.Security.Cryptography.X509Certificates.X509ContentType]::Pfx,
+            $secure
         )
     }
     else
     {
         $pfxBytes = $cert.Export(
-                [System.Security.Cryptography.X509Certificates.X509ContentType]::Pfx,
-                [string]::Empty
+            [System.Security.Cryptography.X509Certificates.X509ContentType]::Pfx,
+            [string]::Empty
         )
     }
 

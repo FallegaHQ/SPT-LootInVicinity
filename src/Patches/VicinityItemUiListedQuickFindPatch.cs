@@ -1,13 +1,15 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using EFT.UI;
 using HarmonyLib;
 using SPT.Reflection.Patching;
-using System.Reflection;
 
 namespace Softwyx.LootInVicinity.Patches;
 
-/// <summary>Prefix on <see cref="ItemUiContext.QuickFindAppropriatePlace"/> --
-/// listed world rows quick-move to player equipment.</summary>
+/// <summary>
+///     Prefix on <see cref="ItemUiContext.QuickFindAppropriatePlace" /> --
+///     listed world rows quick-move to player equipment.
+/// </summary>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 internal sealed class VicinityItemUiListedQuickFindPatch : ModulePatch{
     protected override MethodBase GetTargetMethod(){
@@ -27,12 +29,12 @@ internal sealed class VicinityItemUiListedQuickFindPatch : ModulePatch{
         bool                     displayWarnings, bool                  simulate,   ref ItemUiQuickFindResult __result
     ){
         return VicinityListedQuickFindHandler.TryQuickFindListedWorldItemToPlayer(
-                                                                                  itemContext,
-                                                                                  controller,
-                                                                                  forcePutInStash,
-                                                                                  displayWarnings,
-                                                                                  simulate,
-                                                                                  out __result
-                                                                                 );
+             itemContext,
+             controller,
+             forcePutInStash,
+             displayWarnings,
+             simulate,
+             out __result
+            );
     }
 }

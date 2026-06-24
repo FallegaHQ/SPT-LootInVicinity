@@ -1,5 +1,5 @@
-using EFT.InventoryLogic;
 using System.Collections.Generic;
+using EFT.InventoryLogic;
 
 namespace Softwyx.LootInVicinity.Session;
 

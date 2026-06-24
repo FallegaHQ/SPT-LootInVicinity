@@ -1,16 +1,18 @@
-using EFT.InventoryLogic;
-using EFT.UI;
-using HarmonyLib;
-using SPT.Reflection.Patching;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using EFT.InventoryLogic;
+using EFT.UI;
+using HarmonyLib;
+using SPT.Reflection.Patching;
 
 namespace Softwyx.LootInVicinity.Patches;
 
-/// <summary>Postfix on <see cref="ItemsPanel.Show"/> --
-/// delegates to <see cref="VicinityItemsPanelOpenHandler"/>.</summary>
+/// <summary>
+///     Postfix on <see cref="ItemsPanel.Show" /> --
+///     delegates to <see cref="VicinityItemsPanelOpenHandler" />.
+/// </summary>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 internal sealed class LootPanelOpenPatch : ModulePatch{
     protected override MethodBase GetTargetMethod(){

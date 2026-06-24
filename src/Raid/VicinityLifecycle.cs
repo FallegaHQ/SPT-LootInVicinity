@@ -6,6 +6,17 @@ internal static class VicinityLifecycle{
         private set;
     }
 
+    public static bool PanelTakeCleanupActive =>
+        Settings.Enabled.Value
+     && RaidSessionActive
+     && VicinityPanelPresenter.IsPanelVisible
+     && VicinityRaidBootstrap.IsRegisteredInWorld
+     && !UiAccess.IsWorldContainerLootOpen()
+     && !VicinityPanelPresenter.IsInventoryClosing;
+
+    public static bool QuestRoutingActive =>
+        Settings.Enabled.Value && Settings.RouteQuestItemsToTaskStash.Value && PanelTakeCleanupActive;
+
     public static void OnRaidStarted(){
         RaidSessionActive = true;
         VicinityLocalPlayer.Clear();
@@ -23,15 +34,4 @@ internal static class VicinityLifecycle{
         VicinityRaidBootstrap.Release();
         VicinityPanelPresenter.ResetPanelState();
     }
-
-    public static bool PanelTakeCleanupActive =>
-        Settings.Enabled.Value
-     && RaidSessionActive
-     && VicinityPanelPresenter.IsPanelVisible
-     && VicinityRaidBootstrap.IsRegisteredInWorld
-     && !UiAccess.IsWorldContainerLootOpen()
-     && !VicinityPanelPresenter.IsInventoryClosing;
-
-    public static bool QuestRoutingActive =>
-        Settings.Enabled.Value && Settings.RouteQuestItemsToTaskStash.Value && PanelTakeCleanupActive;
 }

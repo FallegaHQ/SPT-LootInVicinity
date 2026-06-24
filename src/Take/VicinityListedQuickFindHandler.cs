@@ -1,13 +1,12 @@
-using EFT.Communications;
 using EFT.InventoryLogic;
 using EFT.UI;
 
 namespace Softwyx.LootInVicinity.Take;
 
 /// <summary>
-/// Routes Ctrl+quick-move for listed world rows to player equipment. Vanilla
-/// <see cref="ItemUiContext.QuickFindAppropriatePlace"/> picks <c>compoundItem_0</c> (the vicinity stash) when the
-/// item is not a child of that stash, which leaves world-listed rows with no valid destination.
+///     Routes Ctrl+quick-move for listed world rows to player equipment. Vanilla
+///     <see cref="ItemUiContext.QuickFindAppropriatePlace" /> picks <c>compoundItem_0</c> (the vicinity stash) when the
+///     item is not a child of that stash, which leaves world-listed rows with no valid destination.
 /// </summary>
 internal static class VicinityListedQuickFindHandler{
     private static readonly CompoundItem[] EquipmentTargets = new CompoundItem[1];
@@ -18,9 +17,9 @@ internal static class VicinityListedQuickFindHandler{
     /// <param name="displayWarnings"></param>
     /// <param name="simulate"></param>
     /// <param name="result"></param>
-    /// <returns>Whether vanilla <see cref="ItemUiContext.QuickFindAppropriatePlace"/> should run.</returns>
+    /// <returns>Whether vanilla <see cref="ItemUiContext.QuickFindAppropriatePlace" /> should run.</returns>
     public static bool TryQuickFindListedWorldItemToPlayer(
-        ItemContextAbstractClass itemContext, TraderControllerClass controller, bool forcePutInStash,
+        ItemContextAbstractClass itemContext,     TraderControllerClass controller, bool forcePutInStash,
         bool                     displayWarnings, bool                  simulate,   out ItemUiQuickFindResult result
     ){
         result = default;
@@ -42,12 +41,12 @@ internal static class VicinityListedQuickFindHandler{
                   | InteractionsHandlerClass.EMoveItemOrder.IgnoreItemParent;
 
         var quickFind = InteractionsHandlerClass.QuickFindAppropriatePlace(
-                                                                         item,
-                                                                         inventoryController,
-                                                                         EquipmentTargets,
-                                                                         order,
-                                                                         simulate
-                                                                        );
+                                                                           item,
+                                                                           inventoryController,
+                                                                           EquipmentTargets,
+                                                                           order,
+                                                                           simulate
+                                                                          );
 
         if(quickFind.Failed && displayWarnings) DisplayQuickFindWarning(quickFind);
 
@@ -66,7 +65,9 @@ internal static class VicinityListedQuickFindHandler{
     private static void DisplayQuickFindWarning(QuickFindResult result){
         if(!result.Failed) return;
 
-        var text           = result.Error is InventoryError inventoryError ? inventoryError.GetLocalizedDescription() : result.Error.ToString();
+        var text = result.Error is InventoryError inventoryError
+                       ? inventoryError.GetLocalizedDescription()
+                       : result.Error.ToString();
 
         NotificationManagerClass.DisplayWarningNotification(text.Localized());
     }

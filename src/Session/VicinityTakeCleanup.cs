@@ -1,10 +1,11 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using Comfort.Common;
 using EFT;
 using EFT.Interactive;
 using EFT.InventoryLogic;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using Object = UnityEngine.Object;
 
 namespace Softwyx.LootInVicinity.Session;
 
@@ -107,7 +108,7 @@ internal static class VicinityTakeCleanup{
             // ignored
         }
 
-        if(worldLoot.gameObject) UnityEngine.Object.Destroy(worldLoot.gameObject);
+        if(worldLoot.gameObject) Object.Destroy(worldLoot.gameObject);
     }
 
     private static void UnregisterWorldLootFromGameWorld(LootItem worldLoot){
@@ -153,7 +154,7 @@ internal static class VicinityTakeCleanup{
         try{
             if(!target.Equals(item.CurrentAddress)) item.CurrentAddress = target;
 
-            item.RaiseRefreshEvent(false, true);
+            item.RaiseRefreshEvent();
 
             LootInVicinityPlugin.Log?.LogDebug(
                                                PluginInfo.Format(

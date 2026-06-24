@@ -16,8 +16,8 @@ internal static class VicinityLootScanner{
     private static readonly List<LootItem> PassResults    = new(MaxColliderBuffer);
 
     /// <summary>
-    /// Fills <paramref name="candidates"/> from the main scan cylinder. Used by
-    /// <see cref="Softwyx.LootInVicinity.Ui.VicinityPanelPresenter.AttachNearbyPanelRoutine"/>.
+    ///     Fills <paramref name="candidates" /> from the main scan cylinder. Used by
+    ///     <see cref="Softwyx.LootInVicinity.Ui.VicinityPanelPresenter.AttachNearbyPanelRoutine" />.
     /// </summary>
     /// <param name="candidates">Loot piles to show in the vicinity panel; appended, not cleared.</param>
     /// <param name="seenItemIds">Item ids already listed this attach; skips duplicates across both passes.</param>
@@ -104,7 +104,7 @@ internal static class VicinityLootScanner{
     }
 
     /// <summary>
-    /// Per-collider filter after cylinder overlap (profile, optional <see cref="LineOfSight.CanSeeLoot"/>).
+    ///     Per-collider filter after cylinder overlap (profile, optional <see cref="LineOfSight.CanSeeLoot" />).
     /// </summary>
     /// <param name="player"></param>
     /// <param name="loot"></param>

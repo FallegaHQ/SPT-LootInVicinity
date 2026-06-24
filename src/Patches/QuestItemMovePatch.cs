@@ -1,13 +1,15 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using EFT.InventoryLogic;
 using HarmonyLib;
 using SPT.Reflection.Patching;
-using System.Reflection;
 
 namespace Softwyx.LootInVicinity.Patches;
 
-/// <summary>Prefix on <see cref="InteractionsHandlerClass.Move"/> for quest items --
-/// delegates to <see cref="QuestItemMoveHandler"/>.</summary>
+/// <summary>
+///     Prefix on <see cref="InteractionsHandlerClass.Move" /> for quest items --
+///     delegates to <see cref="QuestItemMoveHandler" />.
+/// </summary>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 internal sealed class QuestItemMovePatch : ModulePatch{
     protected override MethodBase GetTargetMethod(){

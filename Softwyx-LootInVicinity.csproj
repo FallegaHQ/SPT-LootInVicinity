@@ -8,7 +8,7 @@
         <Nullable>disable</Nullable>
         <Configurations>Debug;Release;Package</Configurations>
         <!-- Patch is auto-incremented on each build (see scripts/IncrementVersion.ps1). Edit major/minor here. -->
-        <Version>2.15.422</Version>
+        <Version>2.15.591</Version>
         <!-- Set -p:IncrementVersionOnBuild=false to skip auto-bump (e.g. rebuild without changing version). -->
         <IncrementVersionOnBuild Condition="'$(IncrementVersionOnBuild)' == ''">true</IncrementVersionOnBuild>
         <AssemblyVersion>$(Version)</AssemblyVersion>
@@ -77,11 +77,11 @@
 
     <Target Name="ValidateTarkovInstall" BeforeTargets="ResolveAssemblyReferences">
         <Error
-                Condition="!Exists('$(TarkovManagedDir)\Assembly-CSharp.dll')"
-                Text="EFT assemblies not found. Set TarkovDir in Directory.Build.props (current: $(TarkovDir))."/>
+            Condition="!Exists('$(TarkovManagedDir)\Assembly-CSharp.dll')"
+            Text="EFT assemblies not found. Set TarkovDir in Directory.Build.props (current: $(TarkovDir))."/>
         <Error
-                Condition="!Exists('$(TarkovBepInExDir)\core\BepInEx.dll')"
-                Text="BepInEx not found. Set TarkovDir in Directory.Build.props (current: $(TarkovDir))."/>
+            Condition="!Exists('$(TarkovBepInExDir)\core\BepInEx.dll')"
+            Text="BepInEx not found. Set TarkovDir in Directory.Build.props (current: $(TarkovDir))."/>
     </Target>
 
     <PropertyGroup>
@@ -105,112 +105,112 @@
 
         <!-- Create plugin directory -->
         <Message
-                Importance="high"
-                Text="========================================================================="
-                Condition="Exists('$(TarkovPluginsDir)')"/>
+            Importance="high"
+            Text="========================================================================="
+            Condition="Exists('$(TarkovPluginsDir)')"/>
 
         <MakeDir
-                Directories="$(ModPluginDir)"
-                Condition="Exists('$(TarkovPluginsDir)')"/>
+            Directories="$(ModPluginDir)"
+            Condition="Exists('$(TarkovPluginsDir)')"/>
 
         <Message
-                Importance="high"
-                Text="Created plugin directory: $(ModPluginDir)"
-                Condition="Exists('$(TarkovPluginsDir)')"/>
+            Importance="high"
+            Text="Created plugin directory: $(ModPluginDir)"
+            Condition="Exists('$(TarkovPluginsDir)')"/>
 
         <!-- Deploy DLL -->
         <Message
-                Importance="high"
-                Text="========================================================================="
-                Condition="'$(DeployToPlugins)'=='true' and Exists('$(TarkovPluginsDir)')"/>
+            Importance="high"
+            Text="========================================================================="
+            Condition="'$(DeployToPlugins)'=='true' and Exists('$(TarkovPluginsDir)')"/>
 
         <Copy
-                SourceFiles="$(TargetPath)"
-                DestinationFolder="$(ModPluginDir)"
-                SkipUnchangedFiles="true"
-                Condition="'$(DeployToPlugins)'=='true' and Exists('$(TarkovPluginsDir)')"/>
+            SourceFiles="$(TargetPath)"
+            DestinationFolder="$(ModPluginDir)"
+            SkipUnchangedFiles="true"
+            Condition="'$(DeployToPlugins)'=='true' and Exists('$(TarkovPluginsDir)')"/>
 
         <ItemGroup
-                Condition="'$(DeployToPlugins)'=='true' and Exists('$(TarkovPluginsDir)') and Exists('$(MSBuildProjectDirectory)\locales')">
+            Condition="'$(DeployToPlugins)'=='true' and Exists('$(TarkovPluginsDir)') and Exists('$(MSBuildProjectDirectory)\locales')">
             <_LocaleFiles Include="$(MSBuildProjectDirectory)\locales\**\*"/>
         </ItemGroup>
 
         <Copy
-                SourceFiles="@(_LocaleFiles)"
-                DestinationFiles="@(_LocaleFiles->'$(ModPluginDir)\locales\%(RecursiveDir)%(Filename)%(Extension)')"
-                SkipUnchangedFiles="true"
-                Condition="'$(DeployToPlugins)'=='true' and Exists('$(TarkovPluginsDir)') and '@(_LocaleFiles)' != ''"/>
+            SourceFiles="@(_LocaleFiles)"
+            DestinationFiles="@(_LocaleFiles->'$(ModPluginDir)\locales\%(RecursiveDir)%(Filename)%(Extension)')"
+            SkipUnchangedFiles="true"
+            Condition="'$(DeployToPlugins)'=='true' and Exists('$(TarkovPluginsDir)') and '@(_LocaleFiles)' != ''"/>
 
         <Message
-                Importance="high"
-                Text="Deployed $(TargetFileName) -> $(ModPluginDir)"
-                Condition="'$(DeployToPlugins)'=='true' and Exists('$(TarkovPluginsDir)')"/>
+            Importance="high"
+            Text="Deployed $(TargetFileName) -> $(ModPluginDir)"
+            Condition="'$(DeployToPlugins)'=='true' and Exists('$(TarkovPluginsDir)')"/>
 
         <!-- Deploy PDB only for Debug -->
         <Message
-                Importance="high"
-                Text="========================================================================="
-                Condition="
+            Importance="high"
+            Text="========================================================================="
+            Condition="
             '$(Configuration)' == 'Debug'
             and Exists('$(TarkovPluginsDir)')
             and Exists('$(TargetDir)$(TargetName).pdb')"/>
 
         <Copy
-                SourceFiles="$(TargetDir)$(TargetName).pdb"
-                DestinationFolder="$(ModPluginDir)"
-                SkipUnchangedFiles="false"
-                Condition="
+            SourceFiles="$(TargetDir)$(TargetName).pdb"
+            DestinationFolder="$(ModPluginDir)"
+            SkipUnchangedFiles="false"
+            Condition="
             '$(Configuration)' == 'Debug'
             and Exists('$(TarkovPluginsDir)')
             and Exists('$(TargetDir)$(TargetName).pdb')"/>
 
         <Message
-                Importance="high"
-                Text="Deployed debug symbols: $(TargetName).pdb"
-                Condition="
+            Importance="high"
+            Text="Deployed debug symbols: $(TargetName).pdb"
+            Condition="
             '$(Configuration)' == 'Debug'
             and Exists('$(TarkovPluginsDir)')
             and Exists('$(TargetDir)$(TargetName).pdb')"/>
 
         <!-- Remove old flat plugin copy -->
         <Message
-                Importance="high"
-                Text="========================================================================="
-                Condition="'$(_HadFlatPlugin)' == 'true'"/>
+            Importance="high"
+            Text="========================================================================="
+            Condition="'$(_HadFlatPlugin)' == 'true'"/>
 
         <Delete
-                Files="$(TarkovPluginsDir)\$(TargetFileName)"
-                Condition="'$(_HadFlatPlugin)' == 'true'"/>
+            Files="$(TarkovPluginsDir)\$(TargetFileName)"
+            Condition="'$(_HadFlatPlugin)' == 'true'"/>
 
         <Message
-                Importance="high"
-                Text="Removed old flat plugin copy: $(TarkovPluginsDir)\$(TargetFileName)"
-                Condition="'$(_HadFlatPlugin)' == 'true'"/>
+            Importance="high"
+            Text="Removed old flat plugin copy: $(TarkovPluginsDir)\$(TargetFileName)"
+            Condition="'$(_HadFlatPlugin)' == 'true'"/>
 
         <!-- Remove config -->
         <Message
-                Importance="high"
-                Text="========================================================================="
-                Condition="'$(_ModHadConfig)' == 'true'"/>
+            Importance="high"
+            Text="========================================================================="
+            Condition="'$(_ModHadConfig)' == 'true'"/>
 
         <Delete
-                Files="$(ModConfigPath)"
-                Condition="Exists('$(TarkovPluginsDir)') and Exists('$(ModConfigPath)')"/>
+            Files="$(ModConfigPath)"
+            Condition="Exists('$(TarkovPluginsDir)') and Exists('$(ModConfigPath)')"/>
 
         <Message
-                Importance="high"
-                Text="Removed config (fresh defaults on next launch): $(ModConfigPath)"
-                Condition="'$(_ModHadConfig)' == 'true'"/>
+            Importance="high"
+            Text="Removed config (fresh defaults on next launch): $(ModConfigPath)"
+            Condition="'$(_ModHadConfig)' == 'true'"/>
 
         <!-- Missing plugins dir -->
         <Message
-                Importance="high"
-                Text="========================================================================="
-                Condition="!Exists('$(TarkovPluginsDir)')"/>
+            Importance="high"
+            Text="========================================================================="
+            Condition="!Exists('$(TarkovPluginsDir)')"/>
 
         <Warning
-                Text="Plugins folder not found: $(TarkovPluginsDir)"
-                Condition="!Exists('$(TarkovPluginsDir)')"/>
+            Text="Plugins folder not found: $(TarkovPluginsDir)"
+            Condition="!Exists('$(TarkovPluginsDir)')"/>
 
     </Target>
 

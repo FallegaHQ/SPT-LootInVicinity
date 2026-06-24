@@ -1,9 +1,9 @@
-using EFT.Interactive;
-using EFT.InventoryLogic;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using EFT.Interactive;
+using EFT.InventoryLogic;
 
 namespace Softwyx.LootInVicinity.Session;
 
@@ -12,14 +12,16 @@ internal static class VicinityLootSession{
     public const string OwnerId = "com.softwyx.lootinvicinity.trader";
 
     private static Action<RemoveItemEventArgs> _traderRemoveHandler;
-    private static bool                        _suppressWorldSync;
 
     public static bool IsPopulating{
         get;
         private set;
     }
 
-    internal static bool SuppressWorldSync => _suppressWorldSync;
+    internal static bool SuppressWorldSync{
+        get;
+        private set;
+    }
 
     public static int ListedCount => VicinityListedLootRegistry.Count;
 
@@ -81,7 +83,7 @@ internal static class VicinityLootSession{
     public static void ClearStashContents(){
         var grid = GetVicinityGrid();
 
-        _suppressWorldSync = true;
+        SuppressWorldSync = true;
 
         try{
             VicinityStagingDrop.DropAllBeforeClear();
@@ -106,7 +108,7 @@ internal static class VicinityLootSession{
             VicinityTakeCleanup.ClearPendingTakes();
         }
         finally{
-            _suppressWorldSync = false;
+            SuppressWorldSync = false;
         }
     }
 
@@ -169,21 +171,21 @@ internal static class VicinityLootSession{
     }
 
     /// <summary>
-    /// !! IMPORTANT !! To any dev who wants to extend this mod
-    /// <see cref="VicinityItemOwnerEvents"/> handler on <see cref="VicinityRaidServices.VicinityTrader"/>. Intentionally
-    /// empty.
+    ///     !! IMPORTANT !! To any dev who wants to extend this mod
+    ///     <see cref="VicinityItemOwnerEvents" /> handler on <see cref="VicinityRaidServices.VicinityTrader" />. Intentionally
+    ///     empty.
     /// </summary>
     /// <remarks>
-    /// Subscribed in <see cref="BindTraderEvents"/>. Dragging or quick-moving from the vicinity panel removes the row
-    /// from the fake trader grid at move start, which raises this callback before the item is in player inventory and
-    /// while <see cref="ItemAddress"/> may still point at the vicinity stash.
-    /// Do not call <see cref="ScheduleTakeFromPanel"/> here. Early clean-up
-    /// drops the ListedToWorld binding before move or quick-find succeeds and causes ghost UI rows or a broken item.
-    /// When the take actually completes, use <see cref="VicinityTakeFinalize.TryFinalizeListedTake"/> from
-    /// <see cref="Softwyx.LootInVicinity.Patches.VicinityInteractionsMovePatch"/>,
-    /// <see cref="Softwyx.LootInVicinity.Patches.VicinityQuickFindPatch"/>,
-    /// <see cref="Softwyx.LootInVicinity.Patches.VicinityItemUiQuickFindPatch"/>, or
-    /// <see cref="VicinityWorldOwnerRemoveHandler.OnRemoveItem"/>.
+    ///     Subscribed in <see cref="BindTraderEvents" />. Dragging or quick-moving from the vicinity panel removes the row
+    ///     from the fake trader grid at move start, which raises this callback before the item is in player inventory and
+    ///     while <see cref="ItemAddress" /> may still point at the vicinity stash.
+    ///     Do not call <see cref="ScheduleTakeFromPanel" /> here. Early clean-up
+    ///     drops the ListedToWorld binding before move or quick-find succeeds and causes ghost UI rows or a broken item.
+    ///     When the take actually completes, use <see cref="VicinityTakeFinalize.TryFinalizeListedTake" /> from
+    ///     <see cref="Softwyx.LootInVicinity.Patches.VicinityInteractionsMovePatch" />,
+    ///     <see cref="Softwyx.LootInVicinity.Patches.VicinityQuickFindPatch" />,
+    ///     <see cref="Softwyx.LootInVicinity.Patches.VicinityItemUiQuickFindPatch" />, or
+    ///     <see cref="VicinityWorldOwnerRemoveHandler.OnRemoveItem" />.
     /// </remarks>
     /// <param name="args"></param>
     private static void OnTraderRemoveItem(RemoveItemEventArgs args){}

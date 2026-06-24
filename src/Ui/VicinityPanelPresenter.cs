@@ -1,9 +1,9 @@
-using EFT.Interactive;
-using EFT.InventoryLogic;
-using EFT.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using EFT.Interactive;
+using EFT.InventoryLogic;
+using EFT.UI;
 using UnityEngine;
 
 namespace Softwyx.LootInVicinity.Ui;
@@ -39,7 +39,7 @@ internal static class VicinityPanelPresenter{
 
         LootInVicinityPlugin.Log?.LogError(
                                            PluginInfo.Format("Could not resolve ItemsPanel simple stash panel ")
-                                         + $"field for UI attach."
+                                         + "field for UI attach."
                                           );
 
         return false;
@@ -74,16 +74,18 @@ internal static class VicinityPanelPresenter{
     }
 
     /// <summary>
-    /// Scans nearby loot, fills <see cref="VicinityRaidServices.RadiusStash"/>, and shows it on
-    /// <paramref name="simpleStashPanel"/>. Started from
-    /// <see cref="Softwyx.LootInVicinity.Patches.LootPanelOpenPatch"/>.
+    ///     Scans nearby loot, fills <see cref="VicinityRaidServices.RadiusStash" />, and shows it on
+    ///     <paramref name="simpleStashPanel" />. Started from
+    ///     <see cref="Softwyx.LootInVicinity.Patches.LootPanelOpenPatch" />.
     /// </summary>
-    /// <param name="itemsPanel">Raid tab <see cref="ItemsPanel"/> receiving the vicinity stash.</param>
-    /// <param name="simpleStashPanel">Right-hand <see cref="SimpleStashPanel"/> to call
-    /// <see cref="SimpleStashPanel.Show"/> on.</param>
+    /// <param name="itemsPanel">Raid tab <see cref="ItemsPanel" /> receiving the vicinity stash.</param>
+    /// <param name="simpleStashPanel">
+    ///     Right-hand <see cref="SimpleStashPanel" /> to call
+    ///     <see cref="SimpleStashPanel.Show" /> on.
+    /// </param>
     /// <param name="inventoryController">Local player inventory for the panel.</param>
     /// <param name="sourceContext">Parent item context; used to build the stash context child.</param>
-    /// <param name="currentTab">Active <see cref="ItemsPanel.EItemsTab"/> passed to Show.</param>
+    /// <param name="currentTab">Active <see cref="ItemsPanel.EItemsTab" /> passed to Show.</param>
     /// <param name="uiDisposableList">Optional disposables list; panel is registered when non-null.</param>
     /// <returns>Yields while scan, stash populate, and panel show run.</returns>
     public static IEnumerator AttachNearbyPanelRoutine(

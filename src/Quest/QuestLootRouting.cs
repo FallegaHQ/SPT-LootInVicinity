@@ -8,9 +8,9 @@ internal static class QuestLootRouting{
     private static MethodInfo _quickFindMethod;
 
     /// <summary>
-    /// Quick-moves a listed quest item into <see cref="Inventory.QuestRaidItems"/> via reflected
-    /// <see cref="InteractionsHandlerClass.QuickFindAppropriatePlace"/>. Used by
-    /// <see cref="Softwyx.LootInVicinity.Patches.QuestItemMovePatch"/>.
+    ///     Quick-moves a listed quest item into <see cref="Inventory.QuestRaidItems" /> via reflected
+    ///     <see cref="InteractionsHandlerClass.QuickFindAppropriatePlace" />. Used by
+    ///     <see cref="Softwyx.LootInVicinity.Patches.QuestItemMovePatch" />.
     /// </summary>
     /// <param name="item"></param>
     /// <param name="controller"></param>

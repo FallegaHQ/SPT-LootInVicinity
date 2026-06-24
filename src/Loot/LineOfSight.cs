@@ -10,10 +10,10 @@ internal static class LineOfSight{
     private static readonly RaycastHit[] InteractiveHits = new RaycastHit[32];
 
     /// <summary>
-    /// Line of sight for main scan. Uses <see cref="GameWorld.LootMaskObstruction"/> then
-    /// interactive ray hits on <see cref="GameWorld.InteractiveLootMaskWPlayer"/>.
-    /// Nearest blocking hit must be <paramref name="lootCollider"/> or its parent or child.
-    /// Other <see cref="LootItem"/> piles and <see cref="Corpse"/> do not block.
+    ///     Line of sight for main scan. Uses <see cref="GameWorld.LootMaskObstruction" /> then
+    ///     interactive ray hits on <see cref="GameWorld.InteractiveLootMaskWPlayer" />.
+    ///     Nearest blocking hit must be <paramref name="lootCollider" /> or its parent or child.
+    ///     Other <see cref="LootItem" /> piles and <see cref="Corpse" /> do not block.
     /// </summary>
     /// <param name="player"></param>
     /// <param name="lootCollider"></param>

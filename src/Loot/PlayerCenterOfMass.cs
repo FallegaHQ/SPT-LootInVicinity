@@ -9,37 +9,37 @@ internal static class PlayerCenterOfMass{
     private const float MainAboveHeadMeters = 1f;
 
     /// <summary>
-    /// Vertical axis for <see cref="VicinityCylinderOverlap"/> queries on
-    /// <paramref name="player"/>.
+    ///     Vertical axis for <see cref="VicinityCylinderOverlap" /> queries on
+    ///     <paramref name="player" />.
     /// </summary>
     /// <param name="player"></param>
     /// <returns>
-    /// Normalized <see cref="Transform.up"/> on the player, or <see cref="Vector3.up"/> when
-    /// <paramref name="player"/> or its transform is missing.
+    ///     Normalized <see cref="Transform.up" /> on the player, or <see cref="Vector3.up" /> when
+    ///     <paramref name="player" /> or its transform is missing.
     /// </returns>
     private static Vector3 GetPlayerUp(Player player){
         return player?.Transform != null ? player.Transform.up.normalized : Vector3.up;
     }
 
     /// <summary>
-    /// Main scan cylinder: from feet minus 0.5 m to head plus 1 m along
-    /// <see cref="GetPlayerUp"/>.
+    ///     Main scan cylinder: from feet minus 0.5 m to head plus 1 m along
+    ///     <see cref="GetPlayerUp" />.
     /// </summary>
     /// <param name="player"></param>
     /// <param name="center">Midpoint between the flat bottom and top caps.</param>
-    /// <param name="up">Cylinder axis from <see cref="GetPlayerUp"/>.</param>
-    /// <param name="height">Extent along <paramref name="up"/> between the caps.</param>
+    /// <param name="up">Cylinder axis from <see cref="GetPlayerUp" />.</param>
+    /// <param name="height">Extent along <paramref name="up" /> between the caps.</param>
     public static void GetMainScanCylinder(Player player, out Vector3 center, out Vector3 up, out float height){
         GetCylinderFromFeetAndHead(player, MainBelowFeetMeters, MainAboveHeadMeters, out center, out up, out height);
     }
 
     /// <summary>
-    /// Eye position for <see cref="LineOfSight.CanSeeLoot"/>. Uses
-    /// <see cref="Player.InteractionRay"/> when alive and ready, else body midpoint.
+    ///     Eye position for <see cref="LineOfSight.CanSeeLoot" />. Uses
+    ///     <see cref="Player.InteractionRay" /> when alive and ready, else body midpoint.
     /// </summary>
     /// <param name="player"></param>
     /// <returns>
-    /// World origin for LOS rays, or <see cref="Vector3.zero"/> when <paramref name="player"/> is null.
+    ///     World origin for LOS rays, or <see cref="Vector3.zero" /> when <paramref name="player" /> is null.
     /// </returns>
     public static Vector3 GetLineOfSightOrigin(Player player){
         if(!player) return Vector3.zero;
@@ -48,14 +48,14 @@ internal static class PlayerCenterOfMass{
     }
 
     /// <summary>
-    /// Builds a vertical cylinder from feet and head anchors along <see cref="GetPlayerUp"/>.
+    ///     Builds a vertical cylinder from feet and head anchors along <see cref="GetPlayerUp" />.
     /// </summary>
     /// <param name="player"></param>
-    /// <param name="belowFeet">Meters below <see cref="GetFeetPosition"/> along <paramref name="up"/>.</param>
-    /// <param name="aboveHead">Meters above <see cref="GetHeadPosition"/> along <paramref name="up"/>.</param>
+    /// <param name="belowFeet">Meters below <see cref="GetFeetPosition" /> along <paramref name="up" />.</param>
+    /// <param name="aboveHead">Meters above <see cref="GetHeadPosition" /> along <paramref name="up" />.</param>
     /// <param name="center">Midpoint between bottom and top caps.</param>
-    /// <param name="up">Cylinder axis from <see cref="GetPlayerUp"/>.</param>
-    /// <param name="height">Extent along <paramref name="up"/> between the caps.</param>
+    /// <param name="up">Cylinder axis from <see cref="GetPlayerUp" />.</param>
+    /// <param name="height">Extent along <paramref name="up" /> between the caps.</param>
     private static void GetCylinderFromFeetAndHead(
         Player player, float belowFeet, float aboveHead, out Vector3 center, out Vector3 up, out float height
     ){
@@ -72,12 +72,12 @@ internal static class PlayerCenterOfMass{
     }
 
     /// <summary>
-    /// Fallback LOS and scan anchor: midpoint between feet and head.
+    ///     Fallback LOS and scan anchor: midpoint between feet and head.
     /// </summary>
     /// <param name="player"></param>
     /// <returns>
-    /// Average of <see cref="GetFeetPosition"/> and <see cref="GetHeadPosition"/>, or
-    /// <see cref="Vector3.zero"/> when <paramref name="player"/> is null.
+    ///     Average of <see cref="GetFeetPosition" /> and <see cref="GetHeadPosition" />, or
+    ///     <see cref="Vector3.zero" /> when <paramref name="player" /> is null.
     /// </returns>
     private static Vector3 GetBodyMidpointOrigin(Player player){
         if(!player) return Vector3.zero;
@@ -89,11 +89,11 @@ internal static class PlayerCenterOfMass{
     }
 
     /// <summary>
-    /// Reads <see cref="Player.InteractionRay"/> origin for LOS when the ray is available.
+    ///     Reads <see cref="Player.InteractionRay" /> origin for LOS when the ray is available.
     /// </summary>
     /// <param name="player"></param>
     /// <param name="origin">Ray origin when the method succeeds.</param>
-    /// <returns>Whether <paramref name="origin"/> was set from the interaction ray.</returns>
+    /// <returns>Whether <paramref name="origin" /> was set from the interaction ray.</returns>
     private static bool TryGetInteractionRayOrigin(Player player, out Vector3 origin){
         origin = default;
 

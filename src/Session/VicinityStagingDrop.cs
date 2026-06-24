@@ -1,8 +1,8 @@
-using Comfort.Common;
-using EFT.InventoryLogic;
 using System;
 using System.Linq;
 using System.Reflection;
+using Comfort.Common;
+using EFT.InventoryLogic;
 using UnityEngine;
 
 namespace Softwyx.LootInVicinity.Session;
@@ -38,7 +38,7 @@ internal static class VicinityStagingDrop{
     ){
         try{
             if(grid.Contains(item)){
-                var remove = InteractionsHandlerClass.Remove(item, trader, false);
+                var remove = InteractionsHandlerClass.Remove(item, trader);
 
                 if(remove.Failed){
                     LootInVicinityPlugin.Log?.LogWarning(
