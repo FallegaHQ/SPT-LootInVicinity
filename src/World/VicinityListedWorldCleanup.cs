@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Linq;
 using EFT.Interactive;
 using EFT.InventoryLogic;
 
@@ -8,6 +10,11 @@ namespace Softwyx.LootInVicinity.World;
 ///     discarded, emptied, or otherwise no longer valid on the ground.
 /// </summary>
 internal static class VicinityListedWorldCleanup{
+    public static bool IsListedWorldCleanupActive =>
+        Settings.Enabled.Value
+     && VicinityLifecycle.PanelTakeCleanupActive
+     && !VicinityPanelPresenter.IsInventoryClosing;
+
     public static bool IsWorldRepresentationObsolete(Item item){
         return item switch{
                    null
@@ -33,6 +40,25 @@ internal static class VicinityListedWorldCleanup{
     }
 
     /// <param name="item"></param>
+    public static void ScheduleObsoleteListedWorldCleanup(Item item){
+        if(item == null || !IsListedWorldCleanupActive) return;
+
+        if(!LootInVicinityPlugin.Instance){
+            TryCleanupOnItemRefresh(item);
+
+            return;
+        }
+
+        LootInVicinityPlugin.Instance.StartCoroutine(DeferredObsoleteListedWorldCleanupRoutine(item));
+    }
+
+    private static IEnumerator DeferredObsoleteListedWorldCleanupRoutine(Item item){
+        yield return null;
+
+        if(item != null) TryCleanupOnItemRefresh(item);
+    }
+
+    /// <param name="item"></param>
     /// <param name="simulate"></param>
     /// <param name="succeeded"></param>
     public static void TryCleanupAfterInventoryMutation(Item item, bool simulate, bool succeeded){
@@ -45,9 +71,12 @@ internal static class VicinityListedWorldCleanup{
     /// <param name="simulate"></param>
     /// <param name="succeeded"></param>
     public static void TryCleanupAfterMoveFromAddress(ItemAddress fromAddress, bool simulate, bool succeeded){
-        if(simulate || !succeeded || fromAddress == null) return;
+        if(!IsListedWorldCleanupActive || simulate || !succeeded || fromAddress == null) return;
 
-        foreach(var parentItem in fromAddress.GetAllParentItems()) TryCleanupIfObsoletePanelItem(parentItem);
+        var parentItems = fromAddress.GetAllParentItems().
+                                      ToList();
+
+        foreach(var parentItem in parentItems) TryCleanupIfObsoletePanelItem(parentItem);
     }
 
     public static void TryCleanupOnDestroyLoot(LootItem worldLoot, Item item){
@@ -91,9 +120,7 @@ internal static class VicinityListedWorldCleanup{
     }
 
     private static void TryCleanupIfObsoletePanelItem(Item item){
-        if(item == null) return;
-
-        if(!VicinityLifecycle.PanelTakeCleanupActive || VicinityPanelPresenter.IsInventoryClosing) return;
+        if(item == null || !IsListedWorldCleanupActive) return;
 
         if(VicinityTakeCleanup.IsPendingTake(item.Id)) return;
 

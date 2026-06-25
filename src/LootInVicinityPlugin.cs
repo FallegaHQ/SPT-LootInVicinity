@@ -36,7 +36,9 @@ public class LootInVicinityPlugin : BaseUnityPlugin{
         EnablePatch<QuestItemMovePatch>("QuestItemMovePatch");
         EnablePatch<VicinityDiscardPatch>("VicinityDiscardPatch");
         EnablePatch<VicinityDiscardResultPatch>("VicinityDiscardResultPatch");
-        EnablePatch<VicinityItemRefreshPatch>("VicinityItemRefreshPatch");
+        EnablePatch<VicinityItemUseCleanupPatch>("VicinityItemUseCleanupPatch");
+        EnablePatch<VicinityItemUseAllCleanupPatch>("VicinityItemUseAllCleanupPatch");
+        EnablePatch<VicinityRemoveItemPatch>("VicinityRemoveItemPatch");
 
         Log.LogInfo(PluginInfo.Format($"{PluginInfo.PLUGIN_NAME} v{PluginInfo.PLUGIN_VERSION} loaded."));
     }

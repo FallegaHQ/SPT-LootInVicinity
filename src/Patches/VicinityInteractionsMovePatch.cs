@@ -31,6 +31,9 @@ internal sealed class VicinityInteractionsMovePatch : ModulePatch{
         ItemAddress __state
     ){
         VicinityTakeFinalize.OnMoveSucceeded(item, to, simulate, __result.Succeeded);
+
+        if(!VicinityListedWorldCleanup.IsListedWorldCleanupActive) return;
+
         VicinityListedWorldCleanup.TryCleanupAfterInventoryMutation(item, simulate, __result.Succeeded);
         VicinityListedWorldCleanup.TryCleanupAfterMoveFromAddress(__state, simulate, __result.Succeeded);
     }
