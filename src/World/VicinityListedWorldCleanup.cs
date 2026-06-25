@@ -15,13 +15,21 @@ internal static class VicinityListedWorldCleanup{
      && VicinityLifecycle.PanelTakeCleanupActive
      && !VicinityPanelPresenter.IsInventoryClosing;
 
+    /// <summary>
+    /// Whether the item no longer exists as real loot and only a stale world/panel representation remains.
+    /// An empty <see cref="MagazineItemClass"/> is a valid item and is never obsolete, but an emptied
+    /// <see cref="AmmoBox"/> (ammo pack) is removed to match vanilla unload behavior. A vanished stack or a
+    /// fully consumed med/food also qualifies.
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns>Whether the world representation for <paramref name="item"/> should be removed.</returns>
     public static bool IsWorldRepresentationObsolete(Item item){
         return item switch{
                    null
                      or{
                            StackObjectsCount: <= 0
                        }
-                    or IAmmoContainer{
+                    or AmmoBox{
                            Count: <= 0
                        }
                     or MedsItemClass{
