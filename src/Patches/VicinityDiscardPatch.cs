@@ -1,7 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using Diz.LanguageExtensions;
 using EFT.InventoryLogic;
 using HarmonyLib;
+using Softwyx.LootInVicinity.Session;
 using SPT.Reflection.Patching;
 
 namespace Softwyx.LootInVicinity.Patches;
@@ -21,10 +23,10 @@ internal sealed class VicinityDiscardPatch : ModulePatch{
     }
 
     [PatchPrefix]
-    public static bool PatchPrefix(Item item, ref DiscardResult __result){
+    public static bool PatchPrefix(Item item, ref OperationResult<DiscardResult> __result){
         if(!VicinityDiscardGuard.ShouldBlockDiscard(item)) return true;
 
-        __result = new InventoryStringError("Cannot discard from vicinity panel");
+        __result = new StringError("Cannot discard from vicinity panel");
 
         return false;
     }

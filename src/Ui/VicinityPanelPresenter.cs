@@ -4,6 +4,11 @@ using System.Collections.Generic;
 using EFT.Interactive;
 using EFT.InventoryLogic;
 using EFT.UI;
+using Softwyx.LootInVicinity.Config;
+using Softwyx.LootInVicinity.LivPlayer;
+using Softwyx.LootInVicinity.Loot;
+using Softwyx.LootInVicinity.Raid;
+using Softwyx.LootInVicinity.Session;
 using UnityEngine;
 
 namespace Softwyx.LootInVicinity.Ui;

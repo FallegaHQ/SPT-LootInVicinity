@@ -1,4 +1,8 @@
 using EFT.InventoryLogic;
+using Softwyx.LootInVicinity.Config;
+using Softwyx.LootInVicinity.Raid;
+using Softwyx.LootInVicinity.Ui;
+using Softwyx.LootInVicinity.World;
 
 namespace Softwyx.LootInVicinity.Session;
 

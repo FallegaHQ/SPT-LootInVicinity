@@ -1,8 +1,10 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using Diz.LanguageExtensions;
 using EFT.InventoryLogic;
 using EFT.UI;
 using HarmonyLib;
+using Softwyx.LootInVicinity.Take;
 using SPT.Reflection.Patching;
 
 namespace Softwyx.LootInVicinity.Patches;
@@ -27,7 +29,7 @@ internal sealed class VicinityItemUiListedQuickFindPatch : ModulePatch{
     [PatchPrefix]
     public static bool PatchPrefix(
         ItemContext itemContext,     ItemController controller, bool forcePutInStash,
-        bool                     displayWarnings, bool                  simulate,   ref ItemUiQuickFindResult __result
+        bool                     displayWarnings, bool                  simulate,   ref OperationResult<IItemOperationResult> __result
     ){
         return VicinityListedQuickFindHandler.TryQuickFindListedWorldItemToPlayer(
              itemContext,

@@ -1,3 +1,6 @@
+using Softwyx.LootInVicinity.Config;
+using Softwyx.LootInVicinity.Session;
+
 namespace Softwyx.LootInVicinity.Ui.Handlers;
 
 /// <summary>Inventory screen close -- hide vicinity panel before vanilla close finishes.</summary>

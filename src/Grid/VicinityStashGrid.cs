@@ -1,7 +1,14 @@
 using System.Collections.Generic;
+using Diz.LanguageExtensions;
 using EFT;
 using EFT.InventoryLogic;
 using EFT.UI.DragAndDrop;
+using Softwyx.LootInVicinity.Config;
+using Softwyx.LootInVicinity.LivPlayer;
+using Softwyx.LootInVicinity.Raid;
+using Softwyx.LootInVicinity.Session;
+using StashGridClass = EFT.InventoryLogic.Grid;
+
 
 namespace Softwyx.LootInVicinity.Grid;
 
@@ -12,7 +19,7 @@ internal class VicinityStashGrid(string id, CompoundItem parentItem)
         set;
     }
 
-    public override StashGridCollectionClass ItemCollection{
+    public override GridItemCollection ItemCollection{
         get;
     } = new VicinityStashGridCollection();
 
@@ -49,60 +56,60 @@ internal class VicinityStashGrid(string id, CompoundItem parentItem)
         return !VicinityLootSession.IsShownInVicinityPanel(item) ? null : base.FindFreeSpace(item);
     }
 
-    public override ContainerAddEventResultStruct AddInternal(
+    public override OperationResult<GridAddResult> AddInternal(
         Item item, LocationInGrid location, bool simulate, bool ignoreRestrictions
     ){
         if(UsesRealInventoryMove(item, ignoreRestrictions))
             return base.AddInternal(item, location, simulate, ignoreRestrictions);
 
         if(location == null)
-            return new ContainerAddEventResultStruct(new GridNullLocationInventoryError(item, null, this));
+            return new OperationResult<GridAddResult>(new WontFitToGridError(item, null, this));
 
-        if(item == null) return new ContainerAddEventResultStruct(new GridFilterInventoryError(null, location, this));
+        if(item == null) return new OperationResult<GridAddResult>(new PlaceTakenByAnotherItemError(null, location, this));
 
         if(!ignoreRestrictions && !CheckCompatibility(item))
-            return new ContainerAddEventResultStruct(new GridFilterInventoryError(item, location, this));
+            return new OperationResult<GridAddResult>(new PlaceTakenByAnotherItemError(item, location, this));
 
         var address    = CreateItemAddress(location);
         var stackCount = item.StackObjectsCount;
 
         if(simulate)
-            return new ContainerAddEventResultStruct(
-                                                     new ContainerAddEventClass(
-                                                                                this,
-                                                                                item,
-                                                                                address,
-                                                                                stackCount,
-                                                                                null,
-                                                                                true
-                                                                               )
-                                                    );
+            return new OperationResult<GridAddResult>(
+                                                      new GridAddResult(
+                                                                        this,
+                                                                        item,
+                                                                        address,
+                                                                        stackCount,
+                                                                        null,
+                                                                        true
+                                                                       )
+                                                     );
 
         PlaceItem(item, location);
 
-        return new ContainerAddEventResultStruct(
-                                                 new ContainerAddEventClass(
-                                                                            this,
-                                                                            item,
-                                                                            address,
-                                                                            stackCount,
-                                                                            null,
-                                                                            false
-                                                                           )
+        return new OperationResult<GridAddResult>(
+                                                 new GridAddResult(
+                                                                   this,
+                                                                   item,
+                                                                   address,
+                                                                   stackCount,
+                                                                   null,
+                                                                   false
+                                                                  )
                                                 );
     }
 
-    public override ContainerRemoveEventResultStruct RemoveInternal(Item item, bool simulate, bool ignoreRestrictions){
+    public override OperationResult<ContainerRemoveResult> RemoveInternal(Item item, bool simulate, bool ignoreRestrictions){
         if(UsesRealInventoryRemove(item)) return base.RemoveInternal(item, simulate, ignoreRestrictions);
 
-        if(!Contains(item)) return new ContainerRemoveEventResultStruct(new GridRemoveInventoryError(item, this));
+        if(!Contains(item)) return new OperationResult<ContainerRemoveResult>(new NoFreeSpaceError(item, this));
 
         var locationInGrid = ItemCollection[item];
         var fromAddress    = CreateItemAddress(locationInGrid);
 
         if(!simulate) RemoveItem(item, locationInGrid);
 
-        return new ContainerRemoveEventResultStruct(new ContainerRemoveEventClass(item, fromAddress, simulate));
+        return new OperationResult<ContainerRemoveResult>(new ContainerRemoveResult(item, fromAddress, simulate));
     }
 
     private void DetachListedItem(Item item){
@@ -177,7 +184,7 @@ internal class VicinityStashGrid(string id, CompoundItem parentItem)
         return item.CurrentAddress?.GetOwnerOrNull() == VicinityRaidServices.VicinityTrader;
     }
 
-    private sealed class VicinityStashGridCollection : StashGridCollectionClass{
+    private sealed class VicinityStashGridCollection : GridItemCollection{
         private Dictionary<Item, LocationInGrid> ItemLocations => Items;
 
         public override void Add(Item item, StashGridClass grid, LocationInGrid location){

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BepInEx.Configuration;
+using Softwyx.LootInVicinity.Localization;
 using UnityEngine;
 
 namespace Softwyx.LootInVicinity.Config;

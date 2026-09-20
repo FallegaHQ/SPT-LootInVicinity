@@ -3,6 +3,7 @@ using System.Reflection;
 using EFT.HealthSystem;
 using EFT.InventoryLogic;
 using HarmonyLib;
+using Softwyx.LootInVicinity.World;
 using SPT.Reflection.Patching;
 
 namespace Softwyx.LootInVicinity.Patches;

@@ -5,6 +5,8 @@ using EFT.InventoryLogic;
 using EFT.UI;
 using EFT.UI.DragAndDrop;
 using HarmonyLib;
+using Softwyx.LootInVicinity.Grid;
+using Softwyx.LootInVicinity.Interop;
 using UnityEngine;
 
 namespace Softwyx.LootInVicinity.Ui;

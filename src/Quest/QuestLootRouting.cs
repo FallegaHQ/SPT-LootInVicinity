@@ -1,4 +1,5 @@
 using System.Reflection;
+using Diz.LanguageExtensions;
 using EFT.InventoryLogic;
 using HarmonyLib;
 
@@ -18,7 +19,7 @@ internal static class QuestLootRouting{
     /// <param name="operation"></param>
     /// <returns>Whether quick-find into quest raid items inventory succeeded.</returns>
     public static bool TryMoveToQuestRaid(
-        Item item, InventoryController controller, bool simulate, out QuickFindResult operation
+        Item item, InventoryController controller, bool simulate, out OperationResult<IItemOperationResult> operation
     ){
         operation = default;
 
@@ -33,7 +34,7 @@ internal static class QuestLootRouting{
 
         if(method == null) return false;
 
-        operation = (QuickFindResult) method.Invoke(
+        operation = (OperationResult<IItemOperationResult>) method.Invoke(
                                                     null,
                                                     [
                                                         item,

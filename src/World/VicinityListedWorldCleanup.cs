@@ -2,6 +2,11 @@ using System.Collections;
 using System.Linq;
 using EFT.Interactive;
 using EFT.InventoryLogic;
+using Softwyx.LootInVicinity.Config;
+using Softwyx.LootInVicinity.LivPlayer;
+using Softwyx.LootInVicinity.Raid;
+using Softwyx.LootInVicinity.Session;
+using Softwyx.LootInVicinity.Ui;
 
 namespace Softwyx.LootInVicinity.World;
 
@@ -17,7 +22,7 @@ internal static class VicinityListedWorldCleanup{
 
     /// <summary>
     /// Whether the item no longer exists as real loot and only a stale world/panel representation remains.
-    /// An empty <see cref="MagazineItemClass"/> is a valid item and is never obsolete, but an emptied
+    /// An empty <see cref="CylinderMagazine"/> is a valid item and is never obsolete, but an emptied
     /// <see cref="AmmoBox"/> (ammo pack) is removed to match vanilla unload behavior. A vanished stack or a
     /// fully consumed med/food also qualifies.
     /// </summary>

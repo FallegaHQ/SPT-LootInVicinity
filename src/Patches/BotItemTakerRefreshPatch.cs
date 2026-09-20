@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using HarmonyLib;
+using Softwyx.LootInVicinity.Config;
 using SPT.Reflection.Patching;
 
 namespace Softwyx.LootInVicinity.Patches;

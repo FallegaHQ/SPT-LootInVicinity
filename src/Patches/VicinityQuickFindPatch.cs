@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using Diz.LanguageExtensions;
 using EFT.InventoryLogic;
 using HarmonyLib;
+using Softwyx.LootInVicinity.Take;
 using SPT.Reflection.Patching;
 
 namespace Softwyx.LootInVicinity.Patches;
@@ -25,7 +27,7 @@ internal sealed class VicinityQuickFindPatch : ModulePatch{
     [PatchPostfix]
     public static void PatchPostfix(
         Item                item, ItemController controller, ItemManipulator.EMoveItemOrder order, bool simulate,
-        ref QuickFindResult __result
+        ref OperationResult<IItemOperationResult> __result
     ){
         VicinityTakeFinalize.OnHandlerQuickFindSucceeded(item, controller, simulate, __result.Succeeded);
     }

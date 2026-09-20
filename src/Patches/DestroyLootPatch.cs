@@ -1,12 +1,13 @@
 using System.Reflection;
 using EFT;
 using HarmonyLib;
+using Softwyx.LootInVicinity.World;
 using SPT.Reflection.Patching;
 
 namespace Softwyx.LootInVicinity.Patches;
 
 /// <summary>
-///     Prefix on <see cref="GameWorld.DestroyLoot(IKillableLootItem)" /> --
+///     Prefix on <see cref="GameWorld.DestroyLoot(IKillable)" /> --
 ///     delegates to <see cref="VicinityDestroyLootHandler" />.
 /// </summary>
 internal sealed class DestroyLootPatch : ModulePatch{

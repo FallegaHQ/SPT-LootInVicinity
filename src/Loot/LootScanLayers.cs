@@ -3,41 +3,39 @@ using UnityEngine;
 namespace Softwyx.LootInVicinity.Loot;
 
 internal static class LootScanLayers{
-    private static int  _lootLayer = -1;
-    private static int  _cachedMask;
     private static bool _maskDirty = true;
 
     private static int LootLayerIndex{
         get{
-            if(_lootLayer >= 0) return _lootLayer;
+            if(field >= 0) return field;
 
-            _lootLayer = LayerMask.NameToLayer("Loot");
+            field = LayerMask.NameToLayer("Loot");
 
-            if(_lootLayer < 0) _lootLayer = 15;
+            if(field < 0) field = 15;
 
-            return _lootLayer;
+            return field;
         }
-    }
+    } = -1;
 
     internal static int ScanLayerMask{
         get{
-            if(!_maskDirty) return _cachedMask;
+            if(!_maskDirty) return field;
 
-            _cachedMask = LayerMask.GetMask("Interactive");
+            field = LayerMask.GetMask("Interactive");
 
-            if(_cachedMask == 0){
+            if(field == 0){
                 var interactive = LayerMask.NameToLayer("Interactive");
 
                 if(interactive < 0) interactive = 22;
 
-                _cachedMask = 1 << interactive;
+                field = 1 << interactive;
             }
 
-            _cachedMask |= 1 << LootLayerIndex;
+            field |= 1 << LootLayerIndex;
 
             _maskDirty = false;
 
-            return _cachedMask;
+            return field;
         }
     }
 }

@@ -1,7 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using Diz.LanguageExtensions;
 using EFT.InventoryLogic;
 using HarmonyLib;
+using Softwyx.LootInVicinity.Quest;
 using SPT.Reflection.Patching;
 
 namespace Softwyx.LootInVicinity.Patches;
@@ -22,7 +24,7 @@ internal sealed class QuestItemMovePatch : ModulePatch{
 
     [PatchPrefix]
     public static bool PatchPrefix(
-        Item item, ItemAddress to, ItemController itemController, bool simulate, ref MoveResult __result
+        Item item, ItemAddress to, ItemController itemController, bool simulate, ref OperationResult<MoveResult> __result
     ){
         return QuestItemMoveHandler.TryInterceptMove(item, to, itemController, simulate, out __result);
     }

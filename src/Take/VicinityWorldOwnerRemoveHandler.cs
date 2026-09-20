@@ -1,6 +1,11 @@
 using Comfort.Common;
 using EFT;
 using EFT.InventoryLogic;
+using Softwyx.LootInVicinity.Grid;
+using Softwyx.LootInVicinity.Interop;
+using Softwyx.LootInVicinity.LivPlayer;
+using Softwyx.LootInVicinity.Session;
+using Softwyx.LootInVicinity.World;
 
 namespace Softwyx.LootInVicinity.Take;
 

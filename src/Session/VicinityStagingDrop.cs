@@ -4,6 +4,10 @@ using System.Reflection;
 using Comfort.Common;
 using EFT;
 using EFT.InventoryLogic;
+using Softwyx.LootInVicinity.Config;
+using Softwyx.LootInVicinity.Grid;
+using Softwyx.LootInVicinity.LivPlayer;
+using Softwyx.LootInVicinity.Raid;
 using UnityEngine;
 
 namespace Softwyx.LootInVicinity.Session;

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using EFT;
 using HarmonyLib;
+using Softwyx.LootInVicinity.Localization;
 
 namespace Softwyx.LootInVicinity.Interop;
 

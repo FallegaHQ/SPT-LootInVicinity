@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using EFT.InventoryLogic;
 using HarmonyLib;
+using Softwyx.LootInVicinity.Take;
 using SPT.Reflection.Patching;
 
 namespace Softwyx.LootInVicinity.Patches;

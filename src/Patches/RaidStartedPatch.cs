@@ -1,5 +1,7 @@
 using System.Reflection;
 using EFT;
+using Softwyx.LootInVicinity.Config;
+using Softwyx.LootInVicinity.Raid;
 using SPT.Reflection.Patching;
 
 namespace Softwyx.LootInVicinity.Patches;

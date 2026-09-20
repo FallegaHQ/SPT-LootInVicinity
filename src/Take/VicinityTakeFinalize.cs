@@ -1,5 +1,11 @@
 using System.Collections;
 using EFT.InventoryLogic;
+using Softwyx.LootInVicinity.Config;
+using Softwyx.LootInVicinity.Grid;
+using Softwyx.LootInVicinity.LivPlayer;
+using Softwyx.LootInVicinity.Raid;
+using Softwyx.LootInVicinity.Session;
+using Softwyx.LootInVicinity.Ui;
 
 namespace Softwyx.LootInVicinity.Take;
 

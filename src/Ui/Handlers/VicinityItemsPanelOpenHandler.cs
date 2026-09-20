@@ -2,6 +2,8 @@ using System.Collections;
 using System.Threading.Tasks;
 using EFT.InventoryLogic;
 using EFT.UI;
+using Softwyx.LootInVicinity.Config;
+using Softwyx.LootInVicinity.Raid;
 
 namespace Softwyx.LootInVicinity.Ui.Handlers;
 

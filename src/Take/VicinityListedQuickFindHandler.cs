@@ -1,7 +1,11 @@
+using Diz.LanguageExtensions;
 using EFT;
 using EFT.Communications;
 using EFT.InventoryLogic;
 using EFT.UI;
+using Softwyx.LootInVicinity.LivPlayer;
+using Softwyx.LootInVicinity.Raid;
+using Softwyx.LootInVicinity.Session;
 
 namespace Softwyx.LootInVicinity.Take;
 
@@ -22,7 +26,7 @@ internal static class VicinityListedQuickFindHandler{
     /// <returns>Whether vanilla <see cref="ItemUiContext.QuickFindAppropriatePlace" /> should run.</returns>
     public static bool TryQuickFindListedWorldItemToPlayer(
         ItemContext itemContext,     ItemController controller, bool forcePutInStash,
-        bool                     displayWarnings, bool                  simulate,   out ItemUiQuickFindResult result
+        bool                     displayWarnings, bool                  simulate,   out OperationResult<IItemOperationResult> result
     ){
         result = default;
 
@@ -64,7 +68,7 @@ internal static class VicinityListedQuickFindHandler{
             || VicinityLocalPlayer.MatchesInventoryController(itemController as InventoryController);
     }
 
-    private static void DisplayQuickFindWarning(QuickFindResult result){
+    private static void DisplayQuickFindWarning(OperationResult<IItemOperationResult> result){
         if(!result.Failed) return;
 
         var text = result.Error is InventoryError inventoryError

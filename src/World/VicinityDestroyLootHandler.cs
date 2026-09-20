@@ -1,6 +1,9 @@
 using Comfort.Common;
 using EFT;
 using EFT.Interactive;
+using Softwyx.LootInVicinity.Config;
+using Softwyx.LootInVicinity.LivPlayer;
+using Softwyx.LootInVicinity.Session;
 
 namespace Softwyx.LootInVicinity.World;
 

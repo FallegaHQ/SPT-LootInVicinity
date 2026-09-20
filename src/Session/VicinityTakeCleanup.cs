@@ -5,6 +5,10 @@ using Comfort.Common;
 using EFT;
 using EFT.Interactive;
 using EFT.InventoryLogic;
+using Softwyx.LootInVicinity.Experience;
+using Softwyx.LootInVicinity.Grid;
+using Softwyx.LootInVicinity.LivPlayer;
+using Softwyx.LootInVicinity.World;
 using Object = UnityEngine.Object;
 
 namespace Softwyx.LootInVicinity.Session;
@@ -32,7 +36,7 @@ internal static class VicinityTakeCleanup{
 
         CompleteTakeFromPanel(item, destinationAfterTake);
 
-        if(!worldLoot || LootInVicinityPlugin.Instance == null) return;
+        if(!worldLoot || !LootInVicinityPlugin.Instance) return;
 
         if(!PendingTakeIds.Add(item.Id)) return;
 
@@ -56,15 +60,6 @@ internal static class VicinityTakeCleanup{
         VicinityLootSession.TryRevalidateGrid(grid);
 
         VicinityLootExperience.TryGrantForTake(item);
-    }
-
-    public static void UnlistFromPanelWithoutDestroyingWorld(Item item){
-        if(item == null || !VicinityListedLootRegistry.Remove(item.Id)) return;
-
-        VicinityListedLootRegistry.UnsubscribeWorldOwner(item);
-
-        VicinityLootSession.GetVicinityGrid()?.
-                            ForceRemoveListedItem(item);
     }
 
     public static void ClearPendingTakes(){
@@ -109,9 +104,7 @@ internal static class VicinityTakeCleanup{
 
         if(VicinityListedWorldCleanup.IsWorldRepresentationObsolete(worldItem)) return true;
 
-        if(!ReferenceEquals(worldItem, takenItem)) return false;
-
-        return VicinityPlayerInventory.IsInLocalPlayerInventory(takenItem);
+        return ReferenceEquals(worldItem, takenItem) && VicinityPlayerInventory.IsInLocalPlayerInventory(takenItem);
     }
 
     private static void DestroyWorldLootRepresentation(LootItem worldLoot, Item takenItem){

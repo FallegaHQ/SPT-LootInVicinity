@@ -1,7 +1,10 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using Diz.LanguageExtensions;
 using EFT.InventoryLogic;
 using HarmonyLib;
+using Softwyx.LootInVicinity.Take;
+using Softwyx.LootInVicinity.World;
 using SPT.Reflection.Patching;
 
 namespace Softwyx.LootInVicinity.Patches;
@@ -27,7 +30,7 @@ internal sealed class VicinityInteractionsMovePatch : ModulePatch{
 
     [PatchPostfix]
     public static void PatchPostfix(
-        Item        item, ItemAddress to, ItemController itemController, bool simulate, ref MoveResult __result,
+        Item        item, ItemAddress to, ItemController itemController, bool simulate, ref OperationResult<MoveResult> __result,
         ItemAddress __state
     ){
         VicinityTakeFinalize.OnMoveSucceeded(item, to, simulate, __result.Succeeded);
