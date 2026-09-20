@@ -4,6 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using EFT.Interactive;
 using EFT.InventoryLogic;
+using Softwyx.LootInVicinity.Grid;
+using Softwyx.LootInVicinity.Interop;
+using Softwyx.LootInVicinity.LivPlayer;
+using Softwyx.LootInVicinity.Raid;
+using Softwyx.LootInVicinity.Take;
 
 namespace Softwyx.LootInVicinity.Session;
 
@@ -41,10 +46,6 @@ internal static class VicinityLootSession{
         return grid != null && grid.Contains(item);
     }
 
-    public static bool HasLeftVicinityStash(Item item){
-        return HasListedWorldBinding(item) && !IsShownInVicinityPanel(item);
-    }
-
     public static bool ItemStillOnWorldLootAfterRemove(Item item, ItemAddress destination){
         return VicinityListedLootRegistry.ItemStillOnWorldLootAfterRemove(item, destination);
     }
@@ -59,7 +60,7 @@ internal static class VicinityLootSession{
                    : null;
     }
 
-    public static void BindTraderEvents(TraderControllerClass trader){
+    public static void BindTraderEvents(ItemController trader){
         if(trader == null) return;
 
         UnbindTraderEvents(trader);
@@ -67,7 +68,7 @@ internal static class VicinityLootSession{
         VicinityItemOwnerEvents.AddRemoveHandler(trader, _traderRemoveHandler);
     }
 
-    public static void UnbindTraderEvents(TraderControllerClass trader){
+    public static void UnbindTraderEvents(ItemController trader){
         if(trader == null || _traderRemoveHandler == null) return;
 
         VicinityItemOwnerEvents.RemoveRemoveHandler(trader, _traderRemoveHandler);
@@ -149,10 +150,6 @@ internal static class VicinityLootSession{
 
     public static void ScheduleTakeFromPanel(Item item, ItemAddress destinationAfterTake = null){
         VicinityTakeCleanup.ScheduleTakeFromPanel(item, destinationAfterTake);
-    }
-
-    public static void UnlistFromPanelWithoutDestroyingWorld(Item item){
-        VicinityTakeCleanup.UnlistFromPanelWithoutDestroyingWorld(item);
     }
 
     internal static void DestroyWorldLootGameObjectOnly(LootItem worldLoot){

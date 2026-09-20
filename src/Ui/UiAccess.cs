@@ -1,5 +1,7 @@
 using EFT.InventoryLogic;
 using EFT.UI;
+using Softwyx.LootInVicinity.Config;
+using Softwyx.LootInVicinity.LivPlayer;
 using UnityEngine;
 
 namespace Softwyx.LootInVicinity.Ui;
@@ -56,7 +58,7 @@ internal static class UiAccess{
                           );
     }
 
-    public static AddViewListClass GetItemsPanelUi(ItemsPanel itemsPanel){
+    public static UIParent GetItemsPanelUi(ItemsPanel itemsPanel){
         return VicinityUiReflection.GetItemsPanelUi(itemsPanel);
     }
 }

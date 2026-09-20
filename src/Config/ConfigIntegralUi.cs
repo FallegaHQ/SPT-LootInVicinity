@@ -22,6 +22,7 @@ internal static class ConfigIntegralUi{
                                                  };
     }
 
+    // ReSharper disable once UnusedMember.Global
     public static ConfigurationManagerAttributes LongAttributes(bool isAdvanced, long step = 0){
         return new ConfigurationManagerAttributes{
                                                      IsAdvanced   = isAdvanced,
@@ -30,6 +31,7 @@ internal static class ConfigIntegralUi{
                                                      StrToObj     = s => ParseLong(s)
                                                  };
     }
+
 
     private static void GetRange(ConfigEntry<int> cfg, out int min, out int max){
         var range = cfg.Description.AcceptableValues as AcceptableValueRange<int>;

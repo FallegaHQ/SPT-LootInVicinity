@@ -4,7 +4,7 @@ using EFT.InventoryLogic;
 namespace Softwyx.LootInVicinity.Session;
 
 internal static class VicinityStagingRegistry{
-    private static readonly HashSet<string> StagedItemIds = new();
+    private static readonly HashSet<string> StagedItemIds = [];
 
     public static void Register(Item item){
         if(item == null) return;

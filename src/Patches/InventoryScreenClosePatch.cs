@@ -1,6 +1,7 @@
 using System.Reflection;
 using EFT.UI;
 using HarmonyLib;
+using Softwyx.LootInVicinity.Ui.Handlers;
 using SPT.Reflection.Patching;
 
 namespace Softwyx.LootInVicinity.Patches;

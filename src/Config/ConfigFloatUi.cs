@@ -85,43 +85,31 @@ internal static class ConfigFloatUi{
     }
 
     private static float ParseForStrToObj(string text, int decimals){
-        if(!float.TryParse(text.Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out var value))
-            throw new FormatException(text);
-
-        return Round(value, decimals);
+        return !float.TryParse(text.Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out var value) ? throw new FormatException(text) : Round(value, decimals);
     }
 
-    private static bool TryCommitText(
-        ConfigEntry<float> cfg, ref string text, float min, float max, int decimals, float step
-    ){
-        if(string.IsNullOrWhiteSpace(text)){
+    private static void TryCommitText(ConfigEntry<float> cfg, ref string text, float min, float max, int decimals,
+                                      float              step){
+        if(string.IsNullOrWhiteSpace(text) || !float.TryParse(text.Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out var raw)){
             text = Format(Quantize(cfg.Value, min, max, decimals, step), decimals);
 
-            return false;
-        }
-
-        if(!float.TryParse(text.Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out var raw)){
-            text = Format(Quantize(cfg.Value, min, max, decimals, step), decimals);
-
-            return false;
+            return;
         }
 
         var quantized = Quantize(raw, min, max, decimals, step);
 
         cfg.Value = quantized;
         text      = Format(quantized, decimals);
-
-        return true;
     }
 
     private static FloatFieldState GetEditState(int id, float displayValue, int decimals){
-        if(!EditStates.TryGetValue(id, out var state)){
-            state = new FloatFieldState{
-                                           Text = Format(displayValue, decimals)
-                                       };
+        if(EditStates.TryGetValue(id, out var state)) return state;
 
-            EditStates[id] = state;
-        }
+        state = new FloatFieldState{
+                                       Text = Format(displayValue, decimals)
+                                   };
+
+        EditStates[id] = state;
 
         return state;
     }

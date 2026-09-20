@@ -1,4 +1,10 @@
+using Diz.LanguageExtensions;
 using EFT.InventoryLogic;
+using Softwyx.LootInVicinity.Grid;
+using Softwyx.LootInVicinity.LivPlayer;
+using Softwyx.LootInVicinity.Raid;
+using Softwyx.LootInVicinity.Session;
+using Softwyx.LootInVicinity.Take;
 
 namespace Softwyx.LootInVicinity.Quest;
 
@@ -9,9 +15,9 @@ internal static class QuestItemMoveHandler{
     /// <param name="itemController"></param>
     /// <param name="simulate"></param>
     /// <param name="result"></param>
-    /// <returns>Whether vanilla <see cref="InteractionsHandlerClass.Move" /> should run.</returns>
+    /// <returns>Whether vanilla <see cref="EFT.InventoryLogic.ItemManipulator.Move" /> should run.</returns>
     public static bool TryInterceptMove(
-        Item item, ItemAddress to, TraderControllerClass itemController, bool simulate, out MoveResult result
+        Item item, ItemAddress to, ItemController itemController, bool simulate, out OperationResult<MoveResult> result
     ){
         result = default;
 

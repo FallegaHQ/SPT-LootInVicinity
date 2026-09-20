@@ -5,6 +5,8 @@ using EFT.InventoryLogic;
 using EFT.UI;
 using EFT.UI.DragAndDrop;
 using HarmonyLib;
+using Softwyx.LootInVicinity.Grid;
+using Softwyx.LootInVicinity.Interop;
 using UnityEngine;
 
 namespace Softwyx.LootInVicinity.Ui;
@@ -78,12 +80,12 @@ internal static class VicinityUiReflection{
         return _panelInventoryField?.GetValue(itemsPanel) as Inventory;
     }
 
-    public static AddViewListClass GetItemsPanelUi(ItemsPanel itemsPanel){
+    public static UIParent GetItemsPanelUi(ItemsPanel itemsPanel){
         if(!itemsPanel) return null;
 
         _itemsPanelUiField ??= AccessTools.Field(typeof(UIElement), GameAssemblyNames.UiElementFields.Ui);
 
-        return _itemsPanelUiField?.GetValue(itemsPanel) as AddViewListClass;
+        return _itemsPanelUiField?.GetValue(itemsPanel) as UIParent;
     }
 
     public static Transform GetDragLayer(){

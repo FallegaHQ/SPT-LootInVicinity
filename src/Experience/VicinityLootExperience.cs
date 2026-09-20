@@ -1,5 +1,7 @@
 using System;
 using EFT.InventoryLogic;
+using Softwyx.LootInVicinity.LivPlayer;
+using Softwyx.LootInVicinity.Raid;
 
 namespace Softwyx.LootInVicinity.Experience;
 

@@ -1,10 +1,23 @@
 <Project>
+    <!-- User overrides first, so everything below sees them. Keep this the FIRST element. -->
+    <Import Project="$(MSBuildThisFileDirectory)Directory.Build.props.user"
+            Condition="Exists('$(MSBuildThisFileDirectory)Directory.Build.props.user')"/>
+
+    <!-- Game root -->
     <PropertyGroup>
         <!-- Override in Directory.Build.props.user if your install path differs -->
         <TarkovDir Condition="'$(TarkovDir)' == ''">D:\Games\Escape from Tarkov</TarkovDir>
-        <TarkovManagedDir>$(TarkovDir)\EscapeFromTarkov_Data\Managed</TarkovManagedDir>
-        <TarkovBepInExDir>$(TarkovDir)\BepInEx</TarkovBepInExDir>
-        <TarkovPluginsDir>$(TarkovBepInExDir)\plugins</TarkovPluginsDir>
+        <!-- strip stray whitespace and quotes (easy to paste in by accident when you use Microsoft explorer's "copy path" contextual option) -->
+        <TarkovDir>$([System.String]::Copy('$(TarkovDir)').Trim().Trim('"'))</TarkovDir>
+        <TarkovDir>$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)', '$(TarkovDir)'))</TarkovDir>
+        <TarkovDir>$([System.String]::Copy('$(TarkovDir)').TrimEnd('\'))</TarkovDir>
+    </PropertyGroup>
+
+    <!-- Derived paths: each can be overridden individually in Directory.Build.props.user -->
+    <PropertyGroup>
+        <TarkovManagedDir Condition="'$(TarkovManagedDir)' == ''">$([MSBuild]::NormalizePath('$(TarkovDir)', 'EscapeFromTarkov_Data', 'Managed'))</TarkovManagedDir>
+        <TarkovBepInExDir Condition="'$(TarkovBepInExDir)' == ''">$([MSBuild]::NormalizePath('$(TarkovDir)', 'BepInEx'))</TarkovBepInExDir>
+        <TarkovPluginsDir Condition="'$(TarkovPluginsDir)' == ''">$([MSBuild]::NormalizePath('$(TarkovBepInExDir)', 'plugins'))</TarkovPluginsDir>
     </PropertyGroup>
 
     <!-- Authenticode signing (opt-in). Secrets/paths belong in Directory.Build.props.user only. -->
@@ -20,6 +33,10 @@
         <SigningScriptPath Condition="'$(SigningScriptPath)' == ''">$(MSBuildThisFileDirectory)scripts\SignAssembly.ps1</SigningScriptPath>
     </PropertyGroup>
 
-    <Import Project="$(MSBuildThisFileDirectory)Directory.Build.props.user"
-            Condition="Exists('$(MSBuildThisFileDirectory)Directory.Build.props.user')"/>
+    <!-- Signing paths: make absolute relative to the repo root (only when explicit) -->
+    <PropertyGroup>
+        <SigningPfxPath Condition="'$(SigningPfxPath)' != ''">$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)', '$(SigningPfxPath)'))</SigningPfxPath>
+        <SigningPfxExportPath Condition="'$(SigningPfxExportPath)' != ''">$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)', '$(SigningPfxExportPath)'))</SigningPfxExportPath>
+        <SigningScriptPath>$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)', '$(SigningScriptPath)'))</SigningScriptPath>
+    </PropertyGroup>
 </Project>

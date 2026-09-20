@@ -1,14 +1,17 @@
 using Comfort.Common;
 using EFT;
 using EFT.Interactive;
+using Softwyx.LootInVicinity.Config;
+using Softwyx.LootInVicinity.LivPlayer;
+using Softwyx.LootInVicinity.Session;
 
 namespace Softwyx.LootInVicinity.World;
 
 /// <summary>DestroyLoot prefix -- skip vanilla destroy for vicinity-listed loot and in-inventory pickups.</summary>
 internal static class VicinityDestroyLootHandler{
     /// <param name="loot"></param>
-    /// <returns>Whether vanilla <see cref="GameWorld.DestroyLoot(IKillableLootItem)" /> should run.</returns>
-    public static bool ShouldRunVanillaDestroyLoot(IKillableLootItem loot){
+    /// <returns>Whether vanilla <see cref="GameWorld.DestroyLoot(IKillable)" /> should run.</returns>
+    public static bool ShouldRunVanillaDestroyLoot(IKillable loot){
         if(loot is not LootItem worldLoot) return true;
 
         if(!Settings.Enabled.Value || !Singleton<GameWorld>.Instantiated) return true;

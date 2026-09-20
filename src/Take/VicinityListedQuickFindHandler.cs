@@ -1,5 +1,11 @@
+using Diz.LanguageExtensions;
+using EFT;
+using EFT.Communications;
 using EFT.InventoryLogic;
 using EFT.UI;
+using Softwyx.LootInVicinity.LivPlayer;
+using Softwyx.LootInVicinity.Raid;
+using Softwyx.LootInVicinity.Session;
 
 namespace Softwyx.LootInVicinity.Take;
 
@@ -19,8 +25,8 @@ internal static class VicinityListedQuickFindHandler{
     /// <param name="result"></param>
     /// <returns>Whether vanilla <see cref="ItemUiContext.QuickFindAppropriatePlace" /> should run.</returns>
     public static bool TryQuickFindListedWorldItemToPlayer(
-        ItemContextAbstractClass itemContext,     TraderControllerClass controller, bool forcePutInStash,
-        bool                     displayWarnings, bool                  simulate,   out ItemUiQuickFindResult result
+        ItemContext itemContext,     ItemController controller, bool forcePutInStash,
+        bool                     displayWarnings, bool                  simulate,   out OperationResult<IItemOperationResult> result
     ){
         result = default;
 
@@ -37,10 +43,10 @@ internal static class VicinityListedQuickFindHandler{
 
         EquipmentTargets[0] = equipment;
 
-        var order = InteractionsHandlerClass.EMoveItemOrder.MoveToAnotherSide
-                  | InteractionsHandlerClass.EMoveItemOrder.IgnoreItemParent;
+        var order = ItemManipulator.EMoveItemOrder.MoveToAnotherSide
+                  | ItemManipulator.EMoveItemOrder.IgnoreItemParent;
 
-        var quickFind = InteractionsHandlerClass.QuickFindAppropriatePlace(
+        var quickFind = ItemManipulator.QuickFindAppropriatePlace(
                                                                            item,
                                                                            inventoryController,
                                                                            EquipmentTargets,
@@ -55,20 +61,20 @@ internal static class VicinityListedQuickFindHandler{
         return false;
     }
 
-    private static bool IsVicinityPanelController(TraderControllerClass itemController){
+    private static bool IsVicinityPanelController(ItemController itemController){
         if(itemController == null) return false;
 
         return itemController == VicinityRaidServices.VicinityTrader
             || VicinityLocalPlayer.MatchesInventoryController(itemController as InventoryController);
     }
 
-    private static void DisplayQuickFindWarning(QuickFindResult result){
+    private static void DisplayQuickFindWarning(OperationResult<IItemOperationResult> result){
         if(!result.Failed) return;
 
         var text = result.Error is InventoryError inventoryError
                        ? inventoryError.GetLocalizedDescription()
-                       : result.Error.ToString();
+                       : result.Error?.ToString();
 
-        NotificationManagerClass.DisplayWarningNotification(text.Localized());
+        NotificationManager.DisplayWarningNotification(text.Localized());
     }
 }

@@ -1,30 +1,32 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using Diz.LanguageExtensions;
 using EFT.InventoryLogic;
 using HarmonyLib;
+using Softwyx.LootInVicinity.Session;
 using SPT.Reflection.Patching;
 
 namespace Softwyx.LootInVicinity.Patches;
 
 /// <summary>
-///     Prefix on <see cref="InteractionsHandlerClass.Discard" /> --
+///     Prefix on <see cref="EFT.InventoryLogic.ItemManipulator.Discard(Item, ItemController, bool)" /> --
 ///     blocks discard for items listed in the vicinity panel grid.
 /// </summary>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 internal sealed class VicinityDiscardPatch : ModulePatch{
     protected override MethodBase GetTargetMethod(){
         return AccessTools.Method(
-                                  typeof(InteractionsHandlerClass),
-                                  nameof(InteractionsHandlerClass.Discard),
-                                  [typeof(Item), typeof(TraderControllerClass), typeof(bool)]
+                                  typeof(ItemManipulator),
+                                  nameof(ItemManipulator.Discard),
+                                  [typeof(Item), typeof(ItemController), typeof(bool)]
                                  );
     }
 
     [PatchPrefix]
-    public static bool PatchPrefix(Item item, ref DiscardResult __result){
+    public static bool PatchPrefix(Item item, ref OperationResult<DiscardResult> __result){
         if(!VicinityDiscardGuard.ShouldBlockDiscard(item)) return true;
 
-        __result = new InventoryStringError("Cannot discard from vicinity panel");
+        __result = new StringError("Cannot discard from vicinity panel");
 
         return false;
     }

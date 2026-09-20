@@ -1,4 +1,5 @@
 using System.Reflection;
+using Diz.LanguageExtensions;
 using EFT.InventoryLogic;
 using HarmonyLib;
 
@@ -9,7 +10,7 @@ internal static class QuestLootRouting{
 
     /// <summary>
     ///     Quick-moves a listed quest item into <see cref="Inventory.QuestRaidItems" /> via reflected
-    ///     <see cref="InteractionsHandlerClass.QuickFindAppropriatePlace" />. Used by
+    ///     <see cref="EFT.InventoryLogic.ItemManipulator.QuickFindAppropriatePlace" />. Used by
     ///     <see cref="Softwyx.LootInVicinity.Patches.QuestItemMovePatch" />.
     /// </summary>
     /// <param name="item"></param>
@@ -18,7 +19,7 @@ internal static class QuestLootRouting{
     /// <param name="operation"></param>
     /// <returns>Whether quick-find into quest raid items inventory succeeded.</returns>
     public static bool TryMoveToQuestRaid(
-        Item item, InventoryController controller, bool simulate, out QuickFindResult operation
+        Item item, InventoryController controller, bool simulate, out OperationResult<IItemOperationResult> operation
     ){
         operation = default;
 
@@ -33,7 +34,7 @@ internal static class QuestLootRouting{
 
         if(method == null) return false;
 
-        operation = (QuickFindResult) method.Invoke(
+        operation = (OperationResult<IItemOperationResult>) method.Invoke(
                                                     null,
                                                     [
                                                         item,
@@ -41,7 +42,7 @@ internal static class QuestLootRouting{
                                                         new[]{
                                                                  questRaid
                                                              },
-                                                        InteractionsHandlerClass.EMoveItemOrder.Apply,
+                                                        ItemManipulator.EMoveItemOrder.Apply,
                                                         simulate
                                                     ]
                                                    );
@@ -53,8 +54,8 @@ internal static class QuestLootRouting{
         if(_quickFindMethod != null) return _quickFindMethod;
 
         _quickFindMethod = AccessTools.Method(
-                                              typeof(InteractionsHandlerClass),
-                                              nameof(InteractionsHandlerClass.QuickFindAppropriatePlace)
+                                              typeof(ItemManipulator),
+                                              nameof(ItemManipulator.QuickFindAppropriatePlace)
                                              );
 
         return _quickFindMethod;

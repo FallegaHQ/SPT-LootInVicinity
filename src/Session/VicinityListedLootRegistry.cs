@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using EFT.Interactive;
 using EFT.InventoryLogic;
+using Softwyx.LootInVicinity.Interop;
+using Softwyx.LootInVicinity.Take;
 
 namespace Softwyx.LootInVicinity.Session;
 

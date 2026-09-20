@@ -2,13 +2,17 @@ using System;
 using System.Collections;
 using BepInEx;
 using BepInEx.Logging;
+using Softwyx.LootInVicinity.Config;
+using Softwyx.LootInVicinity.LivPlayer;
+using Softwyx.LootInVicinity.Localization;
 using Softwyx.LootInVicinity.Patches;
+using Softwyx.LootInVicinity.Raid;
 using SPT.Reflection.Patching;
 
 namespace Softwyx.LootInVicinity;
 
 [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
-[BepInDependency("com.SPT.core", "4.0.0")]
+[BepInDependency("com.SPT.core", "4.1.0")]
 public class LootInVicinityPlugin : BaseUnityPlugin{
     internal static ManualLogSource      Log;
     internal static LootInVicinityPlugin Instance;

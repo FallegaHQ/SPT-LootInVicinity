@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using EFT.InventoryLogic;
 using EFT.UI;
 using HarmonyLib;
+using Softwyx.LootInVicinity.Ui.Handlers;
 using SPT.Reflection.Patching;
 
 namespace Softwyx.LootInVicinity.Patches;
@@ -37,7 +38,7 @@ internal sealed class LootPanelOpenPatch : ModulePatch{
 
     [PatchPostfix]
     public static void PatchPostfix(
-        ItemsPanel          __instance, Task __result, ItemContextAbstractClass sourceContext, CompoundItem lootItem,
+        ItemsPanel          __instance,          Task __result, ItemContext sourceContext, CompoundItem lootItem,
         InventoryController inventoryController, ItemsPanel.EItemsTab currentTab
     ){
         VicinityItemsPanelOpenHandler.OnItemsPanelShow(

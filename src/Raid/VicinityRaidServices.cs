@@ -1,13 +1,15 @@
+using EFT.InventoryLogic;
+
 namespace Softwyx.LootInVicinity.Raid;
 
 /// <summary>Per-raid fake stash and trader controller used by the vicinity panel UI.</summary>
 internal static class VicinityRaidServices{
-    public static StashItemClass RadiusStash{
+    public static Stash RadiusStash{
         get;
         set;
     }
 
-    public static TraderControllerClass VicinityTrader{
+    public static ItemController VicinityTrader{
         get;
         set;
     }

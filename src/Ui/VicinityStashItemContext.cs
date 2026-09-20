@@ -1,16 +1,17 @@
 using EFT.InventoryLogic;
 using EFT.UI;
+using Softwyx.LootInVicinity.LivPlayer;
 
 namespace Softwyx.LootInVicinity.Ui;
 
 internal static class VicinityStashItemContext{
-    public static ItemContextAbstractClass Create(
-        ItemContextAbstractClass sourceContext, CompoundItem stash, SimpleStashPanel panelHost
+    public static ItemContext Create(
+        ItemContext sourceContext, CompoundItem stash, SimpleStashPanel panelHost
     ){
         if(stash == null) return null;
 
         if(panelHost != null){
-            var transferRoot = new TransferItemContext(EItemViewType.InventoryWithoutDiscard, panelHost);
+            var transferRoot = new ReferenceItemContext(EItemViewType.InventoryWithoutDiscard, panelHost);
 
             return transferRoot.CreatePlayerSideChild(stash);
         }
@@ -21,9 +22,9 @@ internal static class VicinityStashItemContext{
 
         if(inventory?.Equipment == null) return null;
 
-        var root = new RaidInventoryItemContext(
+        var root = new AreaStashItemContext(
                                                 inventory.Equipment,
-                                                GClass3459.EItemType.Inventory,
+                                                AreaStashItemContext.EItemType.Inventory,
                                                 inventory.FavoriteItemsStorage,
                                                 false
                                                );
