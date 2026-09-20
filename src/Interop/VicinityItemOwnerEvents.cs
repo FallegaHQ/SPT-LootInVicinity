@@ -9,7 +9,7 @@ internal static class VicinityItemOwnerEvents{
     private const string RemoveItemEventName = "RemoveItemEvent";
 
     private static readonly EventInfo RemoveItemEventInfo =
-        typeof(IItemOwner).GetEvent(RemoveItemEventName) ?? typeof(TraderControllerClass).GetEvent(RemoveItemEventName);
+        typeof(IItemOwner).GetEvent(RemoveItemEventName) ?? typeof(ItemController).GetEvent(RemoveItemEventName);
 
     public static void AddRemoveHandler(IItemOwner owner, Action<RemoveItemEventArgs> handler){
         if(owner == null || handler == null || RemoveItemEventInfo == null) return;

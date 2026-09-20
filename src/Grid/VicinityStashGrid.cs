@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using EFT;
 using EFT.InventoryLogic;
 using EFT.UI.DragAndDrop;
 
@@ -77,7 +78,7 @@ internal class VicinityStashGrid(string id, CompoundItem parentItem)
                                                                                )
                                                     );
 
-        PlaceItemInGrid(item, location);
+        PlaceItem(item, location);
 
         return new ContainerAddEventResultStruct(
                                                  new ContainerAddEventClass(
@@ -99,7 +100,7 @@ internal class VicinityStashGrid(string id, CompoundItem parentItem)
         var locationInGrid = ItemCollection[item];
         var fromAddress    = CreateItemAddress(locationInGrid);
 
-        if(!simulate) RemoveItemFromGrid(item, locationInGrid, true);
+        if(!simulate) RemoveItem(item, locationInGrid);
 
         return new ContainerRemoveEventResultStruct(new ContainerRemoveEventClass(item, fromAddress, simulate));
     }
@@ -109,7 +110,7 @@ internal class VicinityStashGrid(string id, CompoundItem parentItem)
 
         var locationInGrid = ItemCollection[item];
 
-        RemoveItemFromGrid(item, locationInGrid, true);
+        RemoveItem(item, locationInGrid);
     }
 
     public void ForceRemoveListedItem(Item item){
@@ -145,8 +146,8 @@ internal class VicinityStashGrid(string id, CompoundItem parentItem)
         foreach(var gridView in GridViews){
             if(!gridView) continue;
 
-            gridView.OnItemRemoved(new RemoveItemEventArgs(item, fromAddress, CommandStatus.Begin,   owner));
-            gridView.OnItemRemoved(new RemoveItemEventArgs(item, fromAddress, CommandStatus.Succeed, owner));
+            ((IRemoveHandler)gridView).OnItemRemoved(new RemoveItemEventArgs(item, fromAddress, CommandStatus.Begin,   owner));
+            ((IRemoveHandler)gridView).OnItemRemoved(new RemoveItemEventArgs(item, fromAddress, CommandStatus.Succeed, owner));
         }
     }
 
@@ -176,18 +177,8 @@ internal class VicinityStashGrid(string id, CompoundItem parentItem)
         return item.CurrentAddress?.GetOwnerOrNull() == VicinityRaidServices.VicinityTrader;
     }
 
-    private void PlaceItemInGrid(Item item, LocationInGrid location){
-        method_9(item, location);
-    }
-
-    private void RemoveItemFromGrid(Item item, LocationInGrid location, bool updateSpaceBuffer){
-        method_10(item, location, updateSpaceBuffer);
-    }
-
     private sealed class VicinityStashGridCollection : StashGridCollectionClass{
-        private Dictionary<Item, LocationInGrid> ItemLocations => Dictionary_0;
-
-        private List<Item> ItemList => List_0;
+        private Dictionary<Item, LocationInGrid> ItemLocations => Items;
 
         public override void Add(Item item, StashGridClass grid, LocationInGrid location){
             if(item == null) return;
@@ -199,7 +190,7 @@ internal class VicinityStashGrid(string id, CompoundItem parentItem)
             }
 
             ItemLocations[item] = location;
-            ItemList.Add(item);
+            ItemsList.Add(item);
         }
 
         public override void Remove(Item item, StashGridClass grid){
@@ -212,7 +203,7 @@ internal class VicinityStashGrid(string id, CompoundItem parentItem)
             }
 
             ItemLocations.Remove(item);
-            ItemList.Remove(item);
+            ItemsList.Remove(item);
         }
     }
 }

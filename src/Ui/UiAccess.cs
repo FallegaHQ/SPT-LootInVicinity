@@ -56,7 +56,7 @@ internal static class UiAccess{
                           );
     }
 
-    public static AddViewListClass GetItemsPanelUi(ItemsPanel itemsPanel){
+    public static UIParent GetItemsPanelUi(ItemsPanel itemsPanel){
         return VicinityUiReflection.GetItemsPanelUi(itemsPanel);
     }
 }

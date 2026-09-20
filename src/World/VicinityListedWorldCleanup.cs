@@ -32,10 +32,10 @@ internal static class VicinityListedWorldCleanup{
                     or AmmoBox{
                            Count: <= 0
                        }
-                    or MedsItemClass{
+                    or Meds{
                            MedKitComponent.HpResource: <= 0
                        }
-                    or FoodDrinkItemClass{
+                    or FoodDrink{
                            FoodDrinkComponent.HpPercent: <= 0
                        } => true,
                    _ => false

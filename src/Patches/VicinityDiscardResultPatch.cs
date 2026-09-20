@@ -6,14 +6,14 @@ using SPT.Reflection.Patching;
 
 namespace Softwyx.LootInVicinity.Patches;
 
-/// <summary>Postfix on <see cref="InteractionsHandlerClass.Discard" /> -- cleans up consumed vicinity loot.</summary>
+/// <summary>Postfix on <see cref="EFT.InventoryLogic.ItemManipulator.Discard" /> -- cleans up consumed vicinity loot.</summary>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 internal sealed class VicinityDiscardResultPatch : ModulePatch{
     protected override MethodBase GetTargetMethod(){
         return AccessTools.Method(
-                                  typeof(InteractionsHandlerClass),
-                                  nameof(InteractionsHandlerClass.Discard),
-                                  [typeof(Item), typeof(TraderControllerClass), typeof(bool)]
+                                  typeof(ItemManipulator),
+                                  nameof(ItemManipulator.Discard),
+                                  [typeof(Item), typeof(ItemController), typeof(bool)]
                                  );
     }
 

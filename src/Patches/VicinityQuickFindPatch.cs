@@ -7,24 +7,24 @@ using SPT.Reflection.Patching;
 
 namespace Softwyx.LootInVicinity.Patches;
 
-/// <summary>Postfix on handler <see cref="InteractionsHandlerClass.QuickFindAppropriatePlace" />.</summary>
+/// <summary>Postfix on handler <see cref="EFT.InventoryLogic.ItemManipulator.QuickFindAppropriatePlace" />.</summary>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 internal sealed class VicinityQuickFindPatch : ModulePatch{
     protected override MethodBase GetTargetMethod(){
         return AccessTools.Method(
-                                  typeof(InteractionsHandlerClass),
-                                  nameof(InteractionsHandlerClass.QuickFindAppropriatePlace),
+                                  typeof(ItemManipulator),
+                                  nameof(ItemManipulator.QuickFindAppropriatePlace),
                                   [
-                                      typeof(Item), typeof(TraderControllerClass),
+                                      typeof(Item), typeof(ItemController),
                                       typeof(IEnumerable<CompoundItem>),
-                                      typeof(InteractionsHandlerClass.EMoveItemOrder), typeof(bool)
+                                      typeof(ItemManipulator.EMoveItemOrder), typeof(bool)
                                   ]
                                  );
     }
 
     [PatchPostfix]
     public static void PatchPostfix(
-        Item item, TraderControllerClass controller, InteractionsHandlerClass.EMoveItemOrder order, bool simulate,
+        Item                item, ItemController controller, ItemManipulator.EMoveItemOrder order, bool simulate,
         ref QuickFindResult __result
     ){
         VicinityTakeFinalize.OnHandlerQuickFindSucceeded(item, controller, simulate, __result.Succeeded);

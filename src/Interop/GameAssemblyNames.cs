@@ -1,3 +1,5 @@
+using EFT;
+
 namespace Softwyx.LootInVicinity.Interop;
 
 /// <summary>Obfuscated Assembly-CSharp member names. Reference these instead of raw strings in mod logic.</summary>
@@ -11,7 +13,7 @@ internal static class GameAssemblyNames{
     }
 
     internal static class LocaleManagerMethods{
-        public const string UpdateApplicationLanguage = nameof(LocaleManagerClass.UpdateApplicationLanguage);
+        public const string UpdateApplicationLanguage = nameof(LocalizationManager.UpdateApplicationLanguage);
     }
 
     internal static class ItemUiContextFields{

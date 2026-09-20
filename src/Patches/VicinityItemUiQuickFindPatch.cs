@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using EFT.InventoryLogic;
 using EFT.UI;
 using HarmonyLib;
 using SPT.Reflection.Patching;
@@ -14,7 +15,7 @@ internal sealed class VicinityItemUiQuickFindPatch : ModulePatch{
                                   typeof(ItemUiContext),
                                   nameof(ItemUiContext.QuickFindAppropriatePlace),
                                   [
-                                      typeof(ItemContextAbstractClass), typeof(TraderControllerClass), typeof(bool),
+                                      typeof(ItemContext), typeof(ItemController), typeof(bool),
                                       typeof(bool), typeof(bool)
                                   ]
                                  );
@@ -22,7 +23,7 @@ internal sealed class VicinityItemUiQuickFindPatch : ModulePatch{
 
     [PatchPostfix]
     public static void PatchPostfix(
-        ItemContextAbstractClass itemContext,     TraderControllerClass controller, bool forcePutInStash,
+        ItemContext itemContext,     ItemController controller, bool forcePutInStash,
         bool                     displayWarnings, bool                  simulate,   ref ItemUiQuickFindResult __result
     ){
         VicinityTakeFinalize.OnUiQuickFindSucceeded(itemContext, controller, simulate, __result.Failed);

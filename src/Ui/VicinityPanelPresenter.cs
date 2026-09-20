@@ -89,8 +89,8 @@ internal static class VicinityPanelPresenter{
     /// <param name="uiDisposableList">Optional disposables list; panel is registered when non-null.</param>
     /// <returns>Yields while scan, stash populate, and panel show run.</returns>
     public static IEnumerator AttachNearbyPanelRoutine(
-        ItemsPanel               itemsPanel, SimpleStashPanel simpleStashPanel, InventoryController inventoryController,
-        ItemContextAbstractClass sourceContext, ItemsPanel.EItemsTab currentTab, AddViewListClass uiDisposableList
+        ItemsPanel  itemsPanel,    SimpleStashPanel simpleStashPanel, InventoryController inventoryController,
+        ItemContext sourceContext, ItemsPanel.EItemsTab currentTab, UIParent uiDisposableList
     ){
         if(IsAttachInProgress) yield break;
 

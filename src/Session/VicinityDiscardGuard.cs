@@ -8,7 +8,7 @@ internal static class VicinityDiscardGuard{
 
         if(!VicinityPanelPresenter.IsPanelVisible) return false;
 
-        // Consumed meds/food call Discard via GClass3017.RemoveItem; allow removal when depleted.
+        // Consumed meds/food call Discard via EFT.HealthSystem.MedEffectHelper.RemoveItem; allow removal when depleted.
         if(VicinityListedWorldCleanup.IsWorldRepresentationObsolete(item)) return false;
 
         var grid = VicinityLootSession.GetVicinityGrid();

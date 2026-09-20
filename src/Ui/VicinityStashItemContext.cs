@@ -4,8 +4,8 @@ using EFT.UI;
 namespace Softwyx.LootInVicinity.Ui;
 
 internal static class VicinityStashItemContext{
-    public static ItemContextAbstractClass Create(
-        ItemContextAbstractClass sourceContext, CompoundItem stash, SimpleStashPanel panelHost
+    public static ItemContext Create(
+        ItemContext sourceContext, CompoundItem stash, SimpleStashPanel panelHost
     ){
         if(stash == null) return null;
 
@@ -23,7 +23,7 @@ internal static class VicinityStashItemContext{
 
         var root = new RaidInventoryItemContext(
                                                 inventory.Equipment,
-                                                GClass3459.EItemType.Inventory,
+                                                AreaStashItemContext.EItemType.Inventory,
                                                 inventory.FavoriteItemsStorage,
                                                 false
                                                );

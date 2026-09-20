@@ -37,7 +37,7 @@ internal sealed class LootPanelOpenPatch : ModulePatch{
 
     [PatchPostfix]
     public static void PatchPostfix(
-        ItemsPanel          __instance, Task __result, ItemContextAbstractClass sourceContext, CompoundItem lootItem,
+        ItemsPanel          __instance,          Task __result, ItemContext sourceContext, CompoundItem lootItem,
         InventoryController inventoryController, ItemsPanel.EItemsTab currentTab
     ){
         VicinityItemsPanelOpenHandler.OnItemsPanelShow(

@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using EFT.InventoryLogic;
 using EFT.UI;
 using HarmonyLib;
 using SPT.Reflection.Patching;
@@ -17,7 +18,7 @@ internal sealed class VicinityItemUiListedQuickFindPatch : ModulePatch{
                                   typeof(ItemUiContext),
                                   nameof(ItemUiContext.QuickFindAppropriatePlace),
                                   [
-                                      typeof(ItemContextAbstractClass), typeof(TraderControllerClass), typeof(bool),
+                                      typeof(ItemContext), typeof(ItemController), typeof(bool),
                                       typeof(bool), typeof(bool)
                                   ]
                                  );
@@ -25,7 +26,7 @@ internal sealed class VicinityItemUiListedQuickFindPatch : ModulePatch{
 
     [PatchPrefix]
     public static bool PatchPrefix(
-        ItemContextAbstractClass itemContext,     TraderControllerClass controller, bool forcePutInStash,
+        ItemContext itemContext,     ItemController controller, bool forcePutInStash,
         bool                     displayWarnings, bool                  simulate,   ref ItemUiQuickFindResult __result
     ){
         return VicinityListedQuickFindHandler.TryQuickFindListedWorldItemToPlayer(

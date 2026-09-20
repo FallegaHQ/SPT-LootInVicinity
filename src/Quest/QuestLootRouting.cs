@@ -9,7 +9,7 @@ internal static class QuestLootRouting{
 
     /// <summary>
     ///     Quick-moves a listed quest item into <see cref="Inventory.QuestRaidItems" /> via reflected
-    ///     <see cref="InteractionsHandlerClass.QuickFindAppropriatePlace" />. Used by
+    ///     <see cref="EFT.InventoryLogic.ItemManipulator.QuickFindAppropriatePlace" />. Used by
     ///     <see cref="Softwyx.LootInVicinity.Patches.QuestItemMovePatch" />.
     /// </summary>
     /// <param name="item"></param>
@@ -41,7 +41,7 @@ internal static class QuestLootRouting{
                                                         new[]{
                                                                  questRaid
                                                              },
-                                                        InteractionsHandlerClass.EMoveItemOrder.Apply,
+                                                        ItemManipulator.EMoveItemOrder.Apply,
                                                         simulate
                                                     ]
                                                    );
@@ -53,8 +53,8 @@ internal static class QuestLootRouting{
         if(_quickFindMethod != null) return _quickFindMethod;
 
         _quickFindMethod = AccessTools.Method(
-                                              typeof(InteractionsHandlerClass),
-                                              nameof(InteractionsHandlerClass.QuickFindAppropriatePlace)
+                                              typeof(ItemManipulator),
+                                              nameof(ItemManipulator.QuickFindAppropriatePlace)
                                              );
 
         return _quickFindMethod;

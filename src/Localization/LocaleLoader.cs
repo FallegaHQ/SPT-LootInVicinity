@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using EFT;
 
 namespace Softwyx.LootInVicinity.Localization;
 
@@ -29,7 +30,7 @@ internal static class LocaleLoader{
 
         if(!_catalogue.TryGetValue(localeId, out var localeDict)) return;
 
-        var manager = LocaleManagerClass.LocaleManagerClass;
+        var manager = LocalizationManager.Instance;
 
         if(!manager.ContainsCulture(localeId)) return;
 
@@ -154,7 +155,7 @@ internal static class LocaleLoader{
     private static void ApplyValidatedCatalogToGame(){
         AppliedToGame.Clear();
 
-        var manager = LocaleManagerClass.LocaleManagerClass;
+        var manager = LocalizationManager.Instance;
 
         foreach(var pair in _catalogue.OrderBy(static p => p.Key, StringComparer.OrdinalIgnoreCase)){
             manager.UpdateLocales(pair.Key, CopyDictionary(pair.Value));

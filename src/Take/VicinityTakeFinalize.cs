@@ -10,7 +10,7 @@ internal static class VicinityTakeFinalize{
     /// </summary>
     /// <param name="itemController"></param>
     /// <returns>Whether the controller is <see cref="VicinityRaidServices.VicinityTrader" /> or the local player.</returns>
-    private static bool IsVicinityPanelController(TraderControllerClass itemController){
+    private static bool IsVicinityPanelController(ItemController itemController){
         if(itemController == null) return false;
 
         return itemController == VicinityRaidServices.VicinityTrader
@@ -58,7 +58,7 @@ internal static class VicinityTakeFinalize{
     }
 
     public static void OnHandlerQuickFindSucceeded(
-        Item item, TraderControllerClass controller, bool simulate, bool succeeded
+        Item item, ItemController controller, bool simulate, bool succeeded
     ){
         if(simulate || item == null || !succeeded || !IsVicinityPanelController(controller)) return;
 
@@ -67,7 +67,7 @@ internal static class VicinityTakeFinalize{
     }
 
     public static void OnUiQuickFindSucceeded(
-        ItemContextAbstractClass itemContext, TraderControllerClass controller, bool simulate, bool failed
+        ItemContext itemContext, ItemController controller, bool simulate, bool failed
     ){
         if(simulate || itemContext?.Item == null || failed || !IsVicinityPanelController(controller)) return;
 
@@ -94,13 +94,13 @@ internal static class VicinityTakeFinalize{
     }
 
     public static void ApplyListedQuickFindFlags(
-        Item item, TraderControllerClass controller, ref InteractionsHandlerClass.EMoveItemOrder order
+        Item item, ItemController controller, ref ItemManipulator.EMoveItemOrder order
     ){
         if(item == null || !VicinityLootSession.HasListedWorldBinding(item)) return;
 
         if(!IsVicinityPanelController(controller)) return;
 
-        order |= InteractionsHandlerClass.EMoveItemOrder.IgnoreItemParent;
+        order |= ItemManipulator.EMoveItemOrder.IgnoreItemParent;
     }
 
     public static void TryFinalizeListedTake(Item item, ItemAddress destinationAfterTake = null){

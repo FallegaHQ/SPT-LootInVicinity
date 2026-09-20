@@ -7,16 +7,16 @@ using SPT.Reflection.Patching;
 namespace Softwyx.LootInVicinity.Patches;
 
 /// <summary>
-///     Prefix on <see cref="InteractionsHandlerClass.Discard" /> --
+///     Prefix on <see cref="EFT.InventoryLogic.ItemManipulator.Discard(Item, ItemController, bool)" /> --
 ///     blocks discard for items listed in the vicinity panel grid.
 /// </summary>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 internal sealed class VicinityDiscardPatch : ModulePatch{
     protected override MethodBase GetTargetMethod(){
         return AccessTools.Method(
-                                  typeof(InteractionsHandlerClass),
-                                  nameof(InteractionsHandlerClass.Discard),
-                                  [typeof(Item), typeof(TraderControllerClass), typeof(bool)]
+                                  typeof(ItemManipulator),
+                                  nameof(ItemManipulator.Discard),
+                                  [typeof(Item), typeof(ItemController), typeof(bool)]
                                  );
     }
 

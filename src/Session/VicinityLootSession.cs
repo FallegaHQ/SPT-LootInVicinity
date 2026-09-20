@@ -59,7 +59,7 @@ internal static class VicinityLootSession{
                    : null;
     }
 
-    public static void BindTraderEvents(TraderControllerClass trader){
+    public static void BindTraderEvents(ItemController trader){
         if(trader == null) return;
 
         UnbindTraderEvents(trader);
@@ -67,7 +67,7 @@ internal static class VicinityLootSession{
         VicinityItemOwnerEvents.AddRemoveHandler(trader, _traderRemoveHandler);
     }
 
-    public static void UnbindTraderEvents(TraderControllerClass trader){
+    public static void UnbindTraderEvents(ItemController trader){
         if(trader == null || _traderRemoveHandler == null) return;
 
         VicinityItemOwnerEvents.RemoveRemoveHandler(trader, _traderRemoveHandler);

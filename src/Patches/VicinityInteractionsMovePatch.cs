@@ -7,16 +7,16 @@ using SPT.Reflection.Patching;
 namespace Softwyx.LootInVicinity.Patches;
 
 /// <summary>
-///     Postfix on <see cref="InteractionsHandlerClass.Move" /> --
+///     Postfix on <see cref="EFT.InventoryLogic.ItemManipulator.Move" /> --
 ///     delegates to <see cref="VicinityTakeFinalize.OnMoveSucceeded" />.
 /// </summary>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 internal sealed class VicinityInteractionsMovePatch : ModulePatch{
     protected override MethodBase GetTargetMethod(){
         return AccessTools.Method(
-                                  typeof(InteractionsHandlerClass),
-                                  nameof(InteractionsHandlerClass.Move),
-                                  [typeof(Item), typeof(ItemAddress), typeof(TraderControllerClass), typeof(bool)]
+                                  typeof(ItemManipulator),
+                                  nameof(ItemManipulator.Move),
+                                  [typeof(Item), typeof(ItemAddress), typeof(ItemController), typeof(bool)]
                                  );
     }
 
@@ -27,7 +27,7 @@ internal sealed class VicinityInteractionsMovePatch : ModulePatch{
 
     [PatchPostfix]
     public static void PatchPostfix(
-        Item        item, ItemAddress to, TraderControllerClass itemController, bool simulate, ref MoveResult __result,
+        Item        item, ItemAddress to, ItemController itemController, bool simulate, ref MoveResult __result,
         ItemAddress __state
     ){
         VicinityTakeFinalize.OnMoveSucceeded(item, to, simulate, __result.Succeeded);

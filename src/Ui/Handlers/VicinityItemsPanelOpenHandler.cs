@@ -10,7 +10,7 @@ internal static class VicinityItemsPanelOpenHandler{
     private static int _openGeneration;
 
     public static void OnItemsPanelShow(
-        ItemsPanel          itemsPanel, Task showTask, ItemContextAbstractClass sourceContext, CompoundItem lootItem,
+        ItemsPanel          itemsPanel,          Task showTask, ItemContext sourceContext, CompoundItem lootItem,
         InventoryController inventoryController, ItemsPanel.EItemsTab currentTab
     ){
         if(itemsPanel == null || showTask == null || !Settings.Enabled.Value || !VicinityLifecycle.RaidSessionActive)
@@ -55,8 +55,8 @@ internal static class VicinityItemsPanelOpenHandler{
 
     private static IEnumerator OpenAfterItemsPanelShow(
         int                  generation, ItemsPanel itemsPanel, Task showTask, SimpleStashPanel simpleStashPanel,
-        InventoryController  inventoryController, ItemContextAbstractClass sourceContext,
-        ItemsPanel.EItemsTab currentTab, AddViewListClass uiDisposableList
+        InventoryController  inventoryController, ItemContext sourceContext,
+        ItemsPanel.EItemsTab currentTab, UIParent uiDisposableList
     ){
         while(!showTask.IsCompleted){
             if(generation != _openGeneration) yield break;

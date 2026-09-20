@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using EFT.HealthSystem;
 using EFT.InventoryLogic;
 using HarmonyLib;
 using SPT.Reflection.Patching;
@@ -7,13 +8,13 @@ using SPT.Reflection.Patching;
 namespace Softwyx.LootInVicinity.Patches;
 
 /// <summary>
-///     Postfix on <see cref="GClass3017.RemoveItem" /> --
+///     Postfix on <see cref="EFT.HealthSystem.MedEffectHelper.RemoveItem" /> --
 ///     cleans up listed world loot after med/food consumption removes the item.
 /// </summary>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 internal sealed class VicinityRemoveItemPatch : ModulePatch{
     protected override MethodBase GetTargetMethod(){
-        return AccessTools.Method(typeof(GClass3017), nameof(GClass3017.RemoveItem), [typeof(Item)]);
+        return AccessTools.Method(typeof(MedEffectHelper), nameof(MedEffectHelper.RemoveItem), [typeof(Item)]);
     }
 
     [PatchPostfix]

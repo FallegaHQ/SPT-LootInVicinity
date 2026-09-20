@@ -11,11 +11,11 @@ namespace Softwyx.LootInVicinity.Patches;
 /// </summary>
 internal sealed class DestroyLootPatch : ModulePatch{
     protected override MethodBase GetTargetMethod(){
-        return AccessTools.Method(typeof(GameWorld), nameof(GameWorld.DestroyLoot), [typeof(IKillableLootItem)]);
+        return AccessTools.Method(typeof(GameWorld), nameof(GameWorld.DestroyLoot), [typeof(IKillable)]);
     }
 
     [PatchPrefix]
-    public static bool PatchPrefix(IKillableLootItem loot){
+    public static bool PatchPrefix(IKillable loot){
         return VicinityDestroyLootHandler.ShouldRunVanillaDestroyLoot(loot);
     }
 }

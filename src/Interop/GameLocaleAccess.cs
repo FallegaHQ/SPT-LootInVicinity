@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using EFT;
 using HarmonyLib;
 
 namespace Softwyx.LootInVicinity.Interop;
@@ -9,7 +10,7 @@ internal static class GameLocaleAccess{
         if(string.IsNullOrEmpty(key)) return null;
 
         try{
-            var manager = LocaleManagerClass.LocaleManagerClass;
+            var manager = LocalizationManager.Instance;
 
             if(manager == null) return null;
 

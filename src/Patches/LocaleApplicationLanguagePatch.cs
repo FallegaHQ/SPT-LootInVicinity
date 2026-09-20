@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using EFT;
 using HarmonyLib;
 using SPT.Reflection.Patching;
 
@@ -9,13 +10,13 @@ namespace Softwyx.LootInVicinity.Patches;
 internal sealed class LocaleApplicationLanguagePatch : ModulePatch{
     protected override MethodBase GetTargetMethod(){
         return AccessTools.Method(
-                                  typeof(LocaleManagerClass),
+                                  typeof(LocalizationManager),
                                   GameAssemblyNames.LocaleManagerMethods.UpdateApplicationLanguage
                                  );
     }
 
     [PatchPostfix]
-    private static void Postfix(LocaleManagerClass __instance){
+    private static void Postfix(LocalizationManager __instance){
         if(__instance == null) return;
 
         var localeId = Traverse.Create(__instance).
