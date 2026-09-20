@@ -9,20 +9,9 @@ namespace Softwyx.LootInVicinity.Localization;
 internal static class LocaleFileStore{
     public const string DefaultLocaleId = "en";
 
-    private static readonly Regex LocaleIdPattern = new(
-                                                        "^[a-z]{2}([_-][a-z]{2})?$",
-                                                        RegexOptions.Compiled | RegexOptions.CultureInvariant
-                                                       );
-
-    private static readonly Regex KeyPattern = new(
-                                                   $"^{Regex.Escape(LocaleKeys.KeyPrefix)}[a-z0-9_]+$",
-                                                   RegexOptions.Compiled | RegexOptions.CultureInvariant
-                                                  );
-
-    private static readonly JsonSerializerSettings SerializerSettings = new(){
-                                                                                 NullValueHandling =
-                                                                                     NullValueHandling.Ignore
-                                                                             };
+    private static readonly Regex LocaleIdPattern = new("^[a-z]{2}([_-][a-z]{2})?$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+    private static readonly Regex KeyPattern = new($"^{Regex.Escape(LocaleKeys.KeyPrefix)}[a-z0-9_]+$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+    private static readonly JsonSerializerSettings SerializerSettings = new(){ NullValueHandling = NullValueHandling.Ignore };
 
     public static string LocalesDirectory => PluginPaths.LocalesDirectory;
 
@@ -33,10 +22,7 @@ internal static class LocaleFileStore{
 
         foreach(var path in Directory.GetFiles(LocalesDirectory, "*.json")){
             var id = Path.GetFileNameWithoutExtension(path);
-
-            if(!IsValidLocaleId(id)) continue;
-
-            ids.Add(id);
+            if(IsValidLocaleId(id)) ids.Add(id);
         }
 
         ids.Sort(StringComparer.OrdinalIgnoreCase);
@@ -46,7 +32,7 @@ internal static class LocaleFileStore{
 
     public static bool TryLoadFile(string localeId, out Dictionary<string, string> entries, out string error){
         entries = null;
-        error   = null;
+        error = null;
 
         if(!IsValidLocaleId(localeId)){
             error = $"Invalid locale id '{localeId}'.";
@@ -61,6 +47,7 @@ internal static class LocaleFileStore{
         error = $"Locale file not found: {path}";
 
         return false;
+
     }
 
     private static bool IsValidLocaleId(string localeId){
@@ -70,22 +57,16 @@ internal static class LocaleFileStore{
     public static string NormalizeLocaleId(string localeId){
         if(string.IsNullOrWhiteSpace(localeId)) return DefaultLocaleId;
 
-        var trimmed = localeId.Trim().
-                               ToLowerInvariant();
-
+        var trimmed = localeId.Trim().ToLowerInvariant();
         return IsValidLocaleId(trimmed) ? trimmed : DefaultLocaleId;
     }
 
     private static bool TryReadValidatedFile(string path, out Dictionary<string, string> entries, out string error){
         entries = null;
-        error   = null;
+        error = null;
 
         try{
-            var raw = JsonConvert.DeserializeObject<Dictionary<string, string>>(
-                                                                                File.ReadAllText(path),
-                                                                                SerializerSettings
-                                                                               );
-
+            var raw = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(path), SerializerSettings);
             if(raw == null){
                 error = $"Locale file is empty or invalid: {path}";
 
@@ -128,10 +109,12 @@ internal static class LocaleFileStore{
             return false;
         }
 
-        if(value != null) return true;
+        if(value == null){
+            error = $"key '{key}' has null value";
 
-        error = $"key '{key}' has null value";
+            return false;
+        }
 
-        return false;
+        return true;
     }
 }

@@ -7,10 +7,8 @@ using Softwyx.LootInVicinity.Interop;
 namespace Softwyx.LootInVicinity.Localization;
 
 internal static class LocaleLoader{
-    private static readonly List<string> AppliedToGame = [];
+    private static readonly HashSet<string> AppliedToGame = [];
     private static Dictionary<string, Dictionary<string, string>> _catalogue = new(StringComparer.OrdinalIgnoreCase);
-
-    private static bool IsInitialized => _catalogue.Count > 0;
 
     public static bool PreloadDefaultLocale(out string error){
         error = null;
@@ -23,7 +21,7 @@ internal static class LocaleLoader{
     }
 
     public static void LoadLocale(string localeId){
-        if(!IsInitialized || string.IsNullOrWhiteSpace(localeId)) return;
+        if(string.IsNullOrWhiteSpace(localeId)) return;
 
         localeId = LocaleFileStore.NormalizeLocaleId(localeId);
 
@@ -35,7 +33,7 @@ internal static class LocaleLoader{
 
         if(!manager.ContainsCulture(localeId)) return;
 
-        manager.UpdateLocales(localeId, CopyDictionary(localeDict));
+        manager.UpdateLocales(localeId, localeDict);
         AppliedToGame.Add(localeId);
 
         LootInVicinityPlugin.Log?.LogInfo(
@@ -83,13 +81,7 @@ internal static class LocaleLoader{
             return false;
         }
 
-        if(!discoveredIds.Any(
-                              id => string.Equals(
-                                                  id,
-                                                  LocaleFileStore.DefaultLocaleId,
-                                                  StringComparison.OrdinalIgnoreCase
-                                                 )
-                             )){
+        if(!discoveredIds.Contains(LocaleFileStore.DefaultLocaleId, StringComparer.OrdinalIgnoreCase)){
             error = $"Required '{LocaleFileStore.DefaultLocaleId}.json' is missing from locale packs.";
 
             return false;
@@ -159,7 +151,7 @@ internal static class LocaleLoader{
         var manager = LocalizationManager.Instance;
 
         foreach(var pair in _catalogue.OrderBy(static p => p.Key, StringComparer.OrdinalIgnoreCase)){
-            manager.UpdateLocales(pair.Key, CopyDictionary(pair.Value));
+            manager.UpdateLocales(pair.Key, pair.Value);
             AppliedToGame.Add(pair.Key);
 
             LootInVicinityPlugin.Log?.LogInfo(
@@ -183,9 +175,5 @@ internal static class LocaleLoader{
                                                 );
             localeDict[englishEntry.Key] = englishEntry.Value;
         }
-    }
-
-    private static Dictionary<string, string> CopyDictionary(Dictionary<string, string> source){
-        return new Dictionary<string, string>(source, StringComparer.OrdinalIgnoreCase);
     }
 }
