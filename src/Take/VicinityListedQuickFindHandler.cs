@@ -26,7 +26,7 @@ internal static class VicinityListedQuickFindHandler{
     /// <returns>Whether vanilla <see cref="ItemUiContext.QuickFindAppropriatePlace" /> should run.</returns>
     public static bool TryQuickFindListedWorldItemToPlayer(
         ItemContext itemContext,     ItemController controller, bool forcePutInStash,
-        bool                     displayWarnings, bool                  simulate,   out OperationResult<IItemOperationResult> result
+        bool                     displayWarnings, bool                  simulate,   out OperationResult result
     ){
         result = default;
 
@@ -56,7 +56,7 @@ internal static class VicinityListedQuickFindHandler{
 
         if(quickFind.Failed && displayWarnings) DisplayQuickFindWarning(quickFind);
 
-        result = quickFind;
+        result = (OperationResult)quickFind;
 
         return false;
     }
@@ -68,7 +68,7 @@ internal static class VicinityListedQuickFindHandler{
             || VicinityLocalPlayer.MatchesInventoryController(itemController as InventoryController);
     }
 
-    private static void DisplayQuickFindWarning(OperationResult<IItemOperationResult> result){
+    private static void DisplayQuickFindWarning(OperationResult result){
         if(!result.Failed) return;
 
         var text = result.Error is InventoryError inventoryError

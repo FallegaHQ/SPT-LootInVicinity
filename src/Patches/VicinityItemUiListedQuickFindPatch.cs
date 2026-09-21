@@ -29,7 +29,7 @@ internal sealed class VicinityItemUiListedQuickFindPatch : ModulePatch{
     [PatchPrefix]
     public static bool PatchPrefix(
         ItemContext itemContext,     ItemController controller, bool forcePutInStash,
-        bool                     displayWarnings, bool                  simulate,   ref OperationResult<IItemOperationResult> __result
+        bool                     displayWarnings, bool                  simulate,   ref OperationResult __result
     ){
         return VicinityListedQuickFindHandler.TryQuickFindListedWorldItemToPlayer(
              itemContext,

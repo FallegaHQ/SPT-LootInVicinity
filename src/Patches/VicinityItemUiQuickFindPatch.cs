@@ -26,7 +26,7 @@ internal sealed class VicinityItemUiQuickFindPatch : ModulePatch{
     [PatchPostfix]
     public static void PatchPostfix(
         ItemContext itemContext,     ItemController controller, bool forcePutInStash,
-        bool                     displayWarnings, bool                  simulate,   ref OperationResult<IItemOperationResult> __result
+        bool                     displayWarnings, bool                  simulate,   ref OperationResult __result
     ){
         VicinityTakeFinalize.OnUiQuickFindSucceeded(itemContext, controller, simulate, __result.Failed);
     }
