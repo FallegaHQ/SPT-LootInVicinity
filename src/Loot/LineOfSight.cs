@@ -10,10 +10,11 @@ internal static class LineOfSight{
     private static readonly RaycastHit[] InteractiveHits = new RaycastHit[32];
 
     /// <summary>
-    ///     Line of sight for main scan. Uses <see cref="GameWorld.LootMaskObstruction" /> then
-    ///     interactive ray hits on <see cref="GameWorld.InteractiveLootMaskWPlayer" />.
-    ///     Nearest blocking hit must be <paramref name="lootCollider" /> or its parent or child.
-    ///     Other <see cref="LootItem" /> piles and <see cref="Corpse" /> do not block.
+    ///     Line of sight for main scan. Uses <see cref="GameWorld.LootMaskObstruction" /> plus
+    ///     <see cref="LayersMaskController.DoorLayer" /> for obstruction, then interactive ray hits
+    ///     on <see cref="GameWorld.InteractiveLootMaskWPlayer" />. Nearest blocking hit must be
+    ///     <paramref name="lootCollider" /> or its parent or child. Other <see cref="LootItem" />
+    ///     piles and <see cref="Corpse" /> do not block.
     /// </summary>
     /// <param name="player"></param>
     /// <param name="lootCollider"></param>
@@ -25,7 +26,8 @@ internal static class LineOfSight{
         var eye = PlayerCenterOfMass.GetLineOfSightOrigin(player);
 
         // Walls and doors; checked before which interactive collider was hit.
-        if(GameWorld.LootMaskObstruction != 0 && Physics.Linecast(eye, lootPoint, GameWorld.LootMaskObstruction))
+        var obstructionMask = GameWorld.LootMaskObstruction | (1 << LayersMaskController.DoorLayer);
+        if(obstructionMask != 0 && Physics.Linecast(eye, lootPoint, obstructionMask))
             return false;
 
         var delta    = lootPoint - eye;
