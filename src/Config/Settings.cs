@@ -126,10 +126,10 @@ internal static class Settings{
                           ScanRadius = config.Bind(
                                                    ScanSectionTitle,
                                                    "Scan radius (m)",
-                                                   3f,
+                                                   1.5f,
                                                    new ConfigDescription(
-                                                                         "Main scan radius (minimum 3 m).",
-                                                                         new AcceptableValueRange<float>(3f, 6f),
+                                                                         "Main scan radius (minimum 1 m).",
+                                                                         new AcceptableValueRange<float>(1f, 3f),
                                                                          BasicFloat()
                                                                         )
                                                   )

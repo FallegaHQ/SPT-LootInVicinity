@@ -2,5 +2,5 @@ namespace Softwyx.LootInVicinity;
 
 internal static partial class PluginInfo
 {
-    public const string PLUGIN_VERSION = "3.0.5";
+    public const string PLUGIN_VERSION = "3.0.6";
 }
